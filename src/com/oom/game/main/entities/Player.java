@@ -1,0 +1,58 @@
+package com.oom.game.main.entities;
+
+public class Player extends Creature implements ProgressiveCreature{
+
+    public Player(String name, int healthPoints, int attackPoints, int expPoints){
+        super(name, healthPoints, attackPoints, expPoints);
+    }
+
+    public void attack(Creature victim){
+        victim.addHealthPoints(-this.attackPoints);
+        if (!victim.isAlive()){
+            victim.onDeathAction();
+            int prevLevel = this.getLevel();
+            this.addExpPoints(victim.expPoints);
+            for (int i = prevLevel + 1; i <= this.getLevel(); i++){
+                this.onLevelUp(i);
+            }
+            return;
+        }
+        victim.counterAttack(this);
+    }
+
+    public void counterAttack(Creature attacker){
+        attacker.addHealthPoints(-this.getAttackPoints());
+    }
+
+    public void addExpPoints(int exp){
+        this.expPoints += exp;
+    }
+
+    /*
+        This function might be used in feature version for achievements, etc. That's why it's already
+        in the interface
+     */
+    public int getLevel() {
+        return this.expPoints / 10;
+    }
+
+    public void onLevelUp(int level){
+        System.out.println("Player " + this.name + " has gained level " + level);
+    }
+
+    public void onDeathAction(){
+        System.out.println("Player " + this.name + " has perished :(");
+    }
+
+    @Override
+    public String getInfo() {
+        return
+            "Player: " + this.name + "\n" +
+            "Level: " + this.getLevel() + "\n" +
+            "HP: " + this.getHealthPoints();
+    }
+
+    public void displayProgress() {
+        System.out.println(this.getInfo());
+    }
+}
