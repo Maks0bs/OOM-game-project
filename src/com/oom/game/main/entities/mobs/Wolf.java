@@ -5,7 +5,7 @@ package com.oom.game.main.entities.mobs;
  */
 
 import com.oom.game.main.entities.NPC;
-import com.oom.game.main.environment.Position;
+import com.oom.game.main.environment.utils.Position;
 
 public class Wolf extends NPC {
     public static final String NAME = "Wolf";
@@ -20,6 +20,10 @@ public class Wolf extends NPC {
         FIXME add a constructor to create a rabbit with custom stats
      */
 
+    /**
+     * {@link com.oom.game.main.entities.Entity}
+     * @return basic info of wolf
+     */
     @Override
     public String getInfo() {
         return

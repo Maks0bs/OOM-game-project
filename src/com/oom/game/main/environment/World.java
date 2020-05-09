@@ -1,32 +1,22 @@
 package com.oom.game.main.environment;
 
+import com.oom.game.main.entities.Entity;
+import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.environment.utils.Position;
+
 import java.util.ArrayList;
 
 public class World {
+    //FIXME add this interface to UML
     public static final int DEFAULT_TILE_COUNT = 64;
     private int blockCountX, blockCountY;
-    private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>()
+    private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
 
     public World(int blockCountX, int blockCountY){
         this.blockCountX = blockCountX;
         this.blockCountY = blockCountY;
-
-        /*
-            This kind of putting empty values into array is disguisting
-            there might be another, better way.
-         */
-        ArrayList<Block> emptyRow = new ArrayList<Block>();
-        for (int i = 0; i < blockCountX; i++){
-            emptyRow.add(new Block());
-        }
-        for (int i = 0; i < blockCountY; i++){
-            blocks.add(emptyRow);
-        }
     }
 
-    public World(){
-
-    }
 
     public int getBlockCountX() {
         return blockCountX;
@@ -44,26 +34,61 @@ public class World {
         this.blockCountY = blockCountY;
     }
 
-    public ArrayList<ArrayList<Block>> getBlocks() {
-        return blocks;
+    /**
+     *
+     * @param position position of the block the user wants to get
+     * @return requested block in this world
+     */
+    public Block getBlock(Position position) {
+        return blocks.get(position.getBlockY()).get(position.getBlockX());
     }
 
-    public void setBlocks(ArrayList<ArrayList<Block>> blocks) {
-        this.blocks = blocks;
+    /**
+     *
+     * @param newBlockCountX obvious
+     * @param newBlockCountY obvious
+     */
+    public void resize(int newBlockCountX, int newBlockCountY){
+        //FIXME implement this method
+    }
+
+    /**
+     *
+     * @param position position of the block to be added
+     * @param block new block to be added
+     */
+    public void addBlock(Position position, Block block){
+        //FIXME implement this method
+        //FIXME check if the block is OpenTop and if it is, then add block on top of the current stack
+    }
+
+    /**
+     *
+     * @param position position of the block to be added
+     * @param block new block to be updated for
+     */
+    public void updateBlock(Position position, Block block){
+        //FIXME implement this method
+        //FIXME check if the block is OpenTop and if it is, then update accordingly (not sure how exactly)
     }
 
 
+    /**
+     *
+     * @param position position of the block to be removed
+     */
+    public void removeBlock(Position position){
+        //FIXME implement this method
+        //FIXME check if the block is Stackable and if it is, then delete all of its children or delete only the block on top
+    }
 
-    public void resize(/*new size*/);
-
-    public void updateBlockOnTop(/*position, ?stackable? block to change*/);
-
-    public void addBlockOnTop(/*position, ?stackable? block to put on top*/);
-
-    public void removeBlockOnTop(/*position, ?stackable? block to remove from top*/);
-
-    public void addEntity(/*position, entity*/);
-    /*
-        There can only be one creature on a block
-    */
+    /**
+     *
+     * @param position position of the block you want to put the entity on
+     * @param entity the entity you want to add
+     */
+    public void addEntity(Position position, Entity entity){
+        //FIXME implement this method
+        //FIXME check if it is legal to add entities to this block!!!
+    }
 }

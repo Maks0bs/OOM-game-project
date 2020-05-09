@@ -1,9 +1,14 @@
 package com.oom.game.main;
 
+/*
+    No copyright :) (yet)
+ */
+
 
 import com.oom.game.main.process.Game;
 
-/*
+/**
+    !!!IMPORTANT NOTES!!!
     FIXME = things that need to be added on the next several commits (quick features / fixes, urgent)
     TODO = long-term stuff
  */

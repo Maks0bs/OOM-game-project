@@ -11,6 +11,10 @@ import java.util.Scanner;
 public class Game {
 
     /*
+    FIXME add docs to Game class
+     */
+
+    /*
         At the moment this is very inaccurate
         TODO improve random generation
         2/3 chance to generate a rabbit,
@@ -24,6 +28,7 @@ public class Game {
             return new Wolf();
         }
     }
+
 
     public static void run() {
         Scanner scanner = new Scanner(System.in);
