@@ -2,8 +2,8 @@ package com.oom.game.main.process;
 
 import com.oom.game.main.entities.Creature;
 import com.oom.game.main.entities.Player;
-import com.oom.game.main.entities.Rabbit;
-import com.oom.game.main.entities.Wolf;
+import com.oom.game.main.entities.mobs.Rabbit;
+import com.oom.game.main.entities.mobs.Wolf;
 
 import java.util.ArrayList;
 import java.util.Scanner;

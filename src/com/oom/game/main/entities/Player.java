@@ -1,11 +1,19 @@
 package com.oom.game.main.entities;
 
-public class Player extends Creature implements ProgressiveCreature{
+import com.oom.game.main.environment.Position;
 
-    public Player(String name, int healthPoints, int attackPoints, int expPoints){
-        super(name, healthPoints, attackPoints, expPoints);
+public class Player extends Creature implements ProgressiveCreature{
+    /*
+        Players exp influence their level
+     */
+    public Player(String name, Position position, int healthPoints, int attackPoints, int expPoints){
+        super(name, position, healthPoints, attackPoints, expPoints);
     }
 
+    /*
+        The process of attacking and counterattacking
+        TODO may be influenced by various effects of attacker / victim
+     */
     public void attack(Creature victim){
         victim.addHealthPoints(-this.attackPoints);
         if (!victim.isAlive()){
@@ -30,7 +38,9 @@ public class Player extends Creature implements ProgressiveCreature{
 
     /*
         This function might be used in feature version for achievements, etc. That's why it's already
-        in the interface
+        in the interface.
+        TODO currently level system is linear
+        TODO might need to change to gradual
      */
     public int getLevel() {
         return this.expPoints / 10;

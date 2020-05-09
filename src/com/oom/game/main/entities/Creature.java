@@ -1,5 +1,7 @@
 package com.oom.game.main.entities;
 
+import com.oom.game.main.environment.Position;
+
 /*
     Creature is an entity with stats and some props
  */
@@ -14,54 +16,17 @@ public abstract class Creature extends Entity {
     protected int healthPoints = 0, attackPoints = 0, expPoints = 0;
     protected String name = NAME_UNKNOWN;
 
-    public Creature(String name){
-        super();
-        this.name = name;
-    }
-
-
     /*
-    TODO reduce constructors for Creature
-    TODO add some interfaces for default actions
+        TODO reduce constructors for Creature
+        TODO add some interfaces for default actions
      */
 
-    public Creature(String name, int healthPoints, int attackPoints){
-        super();
-        this.name = name;
-        this.healthPoints = healthPoints;
-        this.attackPoints = attackPoints;
-    }
-
-    public Creature(String name, int healthPoints, int attackPoints, int expPoints){
-        super();
+    public Creature(String name, Position position, int healthPoints, int attackPoints, int expPoints){
+        super(position);
         this.name = name;
         this.healthPoints = healthPoints;
         this.attackPoints = attackPoints;
         this.expPoints = expPoints;
-    }
-
-    public Creature(String name, double x, double y) {
-        super(x, y);
-        this.name = name;
-    }
-
-    public Creature(String name, double x, double y, int healthPoints, int attackPoints){
-        super(x, y);
-        this.name = name;
-        this.healthPoints = healthPoints;
-        this.attackPoints = attackPoints;
-    }
-
-    public Creature(String name, double x, double y, int healthPoints, int attackPoints, int expPoints){
-        super(x, y);
-        this.name = name;
-        this.healthPoints = healthPoints;
-        this.attackPoints = attackPoints;
-        this.expPoints = expPoints;
-    }
-
-    public Creature(){
-        super();
     }
 
     public int getHealthPoints() {

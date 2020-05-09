@@ -1,35 +1,24 @@
 package com.oom.game.main.entities;
 
+import com.oom.game.main.environment.Position;
+
 /*
     Entity is a general class for all game game objects, which you can interact with
  */
 public abstract class Entity {
     // positions on the 2D game grid
-    protected double x = 0.0, y = 0.0;
+    protected Position position;
 
-    public Entity(double x, double y){
-        this.x = x;
-        this.y = y;
+    public Entity(Position position){
+        this.position = position;
     }
 
-    public Entity(){
-
+    public Position getPosition() {
+        return position;
     }
 
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     abstract String getInfo();

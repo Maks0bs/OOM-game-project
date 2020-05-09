@@ -1,20 +1,16 @@
 package com.oom.game.main.entities;
 
+import com.oom.game.main.environment.Position;
+
 public class NPC extends Creature {
+    /*
+        In this case this.expPoints is the reward
+        that players receive after defeating the NPC
+     */
     public static final int DEFAULT_EXP_KILL_REWARD = 5;
 
-    public NPC(String name, double x, double y, int healthPoints, int attackPoints){
-        super(name, x, y, healthPoints, attackPoints);
-        this.expPoints = DEFAULT_EXP_KILL_REWARD;
-    }
-
-    public NPC(String name, int healthPoints, int attackPoints){
-        super(name, healthPoints, attackPoints);
-        this.expPoints = DEFAULT_EXP_KILL_REWARD;
-    }
-
-    public NPC(String name, int healthPoints, int attackPoints, int expPoints) {
-        super(name, healthPoints, attackPoints, expPoints);
+    public NPC(String name, Position position, int healthPoints, int attackPoints, int expPoints) {
+        super(name, position, healthPoints, attackPoints, expPoints);
     }
 
 
