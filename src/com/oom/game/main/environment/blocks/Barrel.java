@@ -5,7 +5,6 @@ import com.oom.game.main.environment.utils.OpenBottom;
 import com.oom.game.main.environment.utils.OpenTop;
 
 public class Barrel extends Block implements OpenBottom, OpenTop {
-    //FIXME add this class to UML diagram
     private Block blockBelow = null, blockOnTop = null;
 
     /**

@@ -8,7 +8,6 @@ package com.oom.game.main.environment;
  */
 
 public class Position {
-    //FIXME add this class to UML
     public static final int BLOCK_SIZE = 64, DEFAULT_POSITION = 0;
     private int x = DEFAULT_POSITION, y = DEFAULT_POSITION;
 

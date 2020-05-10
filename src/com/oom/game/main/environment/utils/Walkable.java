@@ -5,7 +5,6 @@ package com.oom.game.main.environment.utils;
  */
 
 public interface Walkable {
-    //FIXME add this interface to UML
     int DEFAULT_WALKING_SPEED = 1;
 
     /**

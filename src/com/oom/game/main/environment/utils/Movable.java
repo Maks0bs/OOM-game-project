@@ -1,8 +1,6 @@
 package com.oom.game.main.environment.utils;
 
 public interface Movable {
-
-    //FIXME add this interface to UML
     /**
      *
      * @return value that defines, how fast a creature can move this block

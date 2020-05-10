@@ -15,10 +15,10 @@ import java.util.ArrayList;
  */
 
 public class World {
-    //FIXME add this class to UML
     public static final int DEFAULT_TILE_COUNT = 64;
     private int blockCountX, blockCountY;
     private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
+    private ArrayList<Entity> entities = new ArrayList<Entity>();
 
     public World(int blockCountX, int blockCountY){
         this.blockCountX = blockCountX;
@@ -100,12 +100,29 @@ public class World {
         //FIXME implement this method
     }
 
+    /*
+        TODO In order to remove and add entities more easily
+        TODO an ID field should be added to all game objects
+     */
     /**
      *
      * @param entity the entity you want to add. Should only be added on walkable blocks!!!
+     * @return true if it is legal to insert entity in current position, false otherwise
      */
-    public void addEntity(Entity entity){ //the data of entity already has position in it, no need to pass it as argument
+    public boolean addEntity(Entity entity){ //the data of entity already has position in it, no need to pass it as argument
         //FIXME implement this method
         //FIXME check if it is legal to add entities to this block!!!
+        return true;
+    }
+
+    /**
+     *
+     * @param entity the entity you want to delete from the world.
+     * @return true if it is legal to delete entity  , false otherwise
+     */
+    public boolean removeEntity(Entity entity){
+        //FIXME implement this method
+        //FIXME check if it is legal to remove entities
+        return true;
     }
 }
