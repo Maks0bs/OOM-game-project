@@ -5,7 +5,7 @@ package com.oom.game.main.entities.mobs;
  */
 
 import com.oom.game.main.entities.NPC;
-import com.oom.game.main.environment.utils.Position;
+import com.oom.game.main.environment.Position;
 
 public class Rabbit extends NPC {
     public static final String NAME = "Rabbit";

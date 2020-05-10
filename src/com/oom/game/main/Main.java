@@ -13,6 +13,10 @@ import com.oom.game.main.process.Game;
     TODO = long-term stuff
  */
 
+/*
+    FIXME replace some interfaces in blocks with abstract classes to encapsulate blockOnTop/blockBelow...
+ */
+
 public class Main {
 
     public static void main(String[] args) {

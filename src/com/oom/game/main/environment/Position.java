@@ -1,4 +1,4 @@
-package com.oom.game.main.environment.utils;
+package com.oom.game.main.environment;
 
 /*
     Added this class to better manage creature movement.
@@ -8,7 +8,6 @@ package com.oom.game.main.environment.utils;
  */
 
 public class Position {
-
     //FIXME add this class to UML
     public static final int BLOCK_SIZE = 64, DEFAULT_POSITION = 0;
     private int x = DEFAULT_POSITION, y = DEFAULT_POSITION;

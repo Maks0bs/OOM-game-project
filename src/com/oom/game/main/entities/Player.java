@@ -1,6 +1,6 @@
 package com.oom.game.main.entities;
 
-import com.oom.game.main.environment.utils.Position;
+import com.oom.game.main.environment.Position;
 
 public class Player extends Creature implements ProgressiveCreature{
     /*

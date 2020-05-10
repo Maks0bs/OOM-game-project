@@ -17,17 +17,23 @@ public class Grass extends Block implements Walkable, OpenTop {
         this is DISGUISTING. Might need to create a seperate class that implements OpenTop
         and should extend from that class. ATM it's not essential
      */
-    private Block blockOnTop;
+    private Block blockOnTop = null;
 
     /**
      * @param texture {@link Block}
      * @param hiddenEntity the entity (item in most cases) that is hidden in the grass. It gets revealed after you walk on the grass
-     * @param blockOnTop the block that sits on top of this grass block
      */
-    Grass(int texture, Entity hiddenEntity, Block blockOnTop){
+    Grass(int texture, Entity hiddenEntity){
         super(texture);
         this.hiddenEntity = hiddenEntity;
-        this.blockOnTop = blockOnTop;
+    }
+
+    /**
+     *
+     * @param texture {@link Block}
+     */
+    Grass(int texture){
+        super(texture);
     }
 
     /**
@@ -45,5 +51,16 @@ public class Grass extends Block implements Walkable, OpenTop {
     @Override
     public Block getBlockOnTop() {
         return blockOnTop;
+    }
+
+    /**
+     * {@link OpenTop}
+     * @param block block to add on top
+     */
+    @Override
+    public void addBlockOnTop(Block block) {
+        if (blockOnTop == null){
+            blockOnTop = block;
+        }
     }
 }

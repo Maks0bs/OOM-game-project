@@ -1,6 +1,6 @@
 package com.oom.game.main.entities;
 
-import com.oom.game.main.environment.utils.Position;
+import com.oom.game.main.environment.Position;
 
 /*
     Entity is a general class for all game game objects, which you can interact with

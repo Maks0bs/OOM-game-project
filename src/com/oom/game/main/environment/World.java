@@ -2,12 +2,20 @@ package com.oom.game.main.environment;
 
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.environment.utils.Block;
-import com.oom.game.main.environment.utils.Position;
 
 import java.util.ArrayList;
 
+/*
+    !!!IMPORTANT NOTICE!!!
+    It is not a good practice to have a lot of stacked blocks (e. g. 3 stacked barrels on a grass block)
+    Even though it is possible to achieve internally, it wouldn't be visible in the GUI.
+    Furthermore, after some research i have found no such 2D games that implement multi-level block stacking.
+    So you can at most have 1 basic block, that you can put others on (OpenTop) and on top of this one
+    !!!not more than one block!!!. Example: barrel on a grass block, but no barrels on that first barrel!
+ */
+
 public class World {
-    //FIXME add this interface to UML
+    //FIXME add this class to UML
     public static final int DEFAULT_TILE_COUNT = 64;
     private int blockCountX, blockCountY;
     private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
@@ -44,9 +52,9 @@ public class World {
     }
 
     /**
-     *
-     * @param newBlockCountX obvious
-     * @param newBlockCountY obvious
+     * Change the size of the world (increase / decrease ArrayList size)
+     * @param newBlockCountX obvious :)
+     * @param newBlockCountY obvious :)
      */
     public void resize(int newBlockCountX, int newBlockCountY){
         //FIXME implement this method
@@ -55,39 +63,48 @@ public class World {
     /**
      *
      * @param position position of the block to be added
-     * @param block new block to be added
+     * @param block new block to be added ON TOP of the current structure (if any).
+     *              If the current structure is Void {@link Void} then replace this block with this parameter completely
      */
     public void addBlock(Position position, Block block){
         //FIXME implement this method
-        //FIXME check if the block is OpenTop and if it is, then add block on top of the current stack
     }
 
     /**
      *
-     * @param position position of the block to be added
-     * @param block new block to be updated for
+     * @param position position of the block to be updated
+     * @param block new block that the current one should be replaced with
+     * @param onlyTop if true, that only the block on top updates (irrelevant if there are no blocks on top)
+     *                if false, then the whole block structure should be rewritten.
+     *                For example: if you call this function with onlyTop == false
+     *                and replace a grass block with campfire for a sand block with a barrel on it,
+     *                then the grass block and campfire get deleted completely and replaced with
+     *                the new structure
      */
-    public void updateBlock(Position position, Block block){
+    public void updateBlock(Position position, Block block, boolean onlyTop){
         //FIXME implement this method
-        //FIXME check if the block is OpenTop and if it is, then update accordingly (not sure how exactly)
     }
 
 
     /**
-     *
+     * NOTE: deletion shouldn't leave any null pointers. Please use the Void {@link Void} block as a placeholder.
      * @param position position of the block to be removed
+     * @param onlyTop if true, that only the block on top gets deleted (irrelevant if there are no blocks on top)
+     *                if false, then the whole block structure should be deleted.
+     *                For example: if you call this function with onlyTop == false
+     *                and delete a grass block with campfire for a sand block with a barrel on it,
+     *                then the grass block and campfire get deleted completely and replaced with
+     *                the new structure
      */
-    public void removeBlock(Position position){
+    public void removeBlock(Position position, boolean onlyTop){
         //FIXME implement this method
-        //FIXME check if the block is Stackable and if it is, then delete all of its children or delete only the block on top
     }
 
     /**
      *
-     * @param position position of the block you want to put the entity on
-     * @param entity the entity you want to add
+     * @param entity the entity you want to add. Should only be added on walkable blocks!!!
      */
-    public void addEntity(Position position, Entity entity){
+    public void addEntity(Entity entity){ //the data of entity already has position in it, no need to pass it as argument
         //FIXME implement this method
         //FIXME check if it is legal to add entities to this block!!!
     }

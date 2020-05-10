@@ -10,6 +10,7 @@ import com.oom.game.main.environment.utils.Block;
 
 public class Void extends Block {
     //FIXME add this interface to UML
+    //FIXME implements some functionality here. For example, if creature walks on the void, they die.
 
 
     Void(int texture){
