@@ -1,5 +1,7 @@
 package com.oom.game.main.entities;
 
+import com.oom.game.main.environment.Position;
+
 /*
     Creature is an entity with stats and some props
  */
@@ -14,54 +16,26 @@ public abstract class Creature extends Entity {
     protected int healthPoints = 0, attackPoints = 0, expPoints = 0;
     protected String name = NAME_UNKNOWN;
 
-    public Creature(String name){
-        super();
-        this.name = name;
-    }
-
-
     /*
-    TODO reduce constructors for Creature
-    TODO add some interfaces for default actions
+        TODO reduce constructors for Creature
+        TODO add some interfaces for default actions
      */
 
-    public Creature(String name, int healthPoints, int attackPoints){
-        super();
-        this.name = name;
-        this.healthPoints = healthPoints;
-        this.attackPoints = attackPoints;
-    }
-
-    public Creature(String name, int healthPoints, int attackPoints, int expPoints){
-        super();
-        this.name = name;
-        this.healthPoints = healthPoints;
-        this.attackPoints = attackPoints;
-        this.expPoints = expPoints;
-    }
-
-    public Creature(String name, double x, double y) {
-        super(x, y);
-        this.name = name;
-    }
-
-    public Creature(String name, double x, double y, int healthPoints, int attackPoints){
-        super(x, y);
-        this.name = name;
-        this.healthPoints = healthPoints;
-        this.attackPoints = attackPoints;
-    }
-
-    public Creature(String name, double x, double y, int healthPoints, int attackPoints, int expPoints){
-        super(x, y);
+    /**
+     * FIXME add constructor to UML diagram
+     * @param name name of the creature
+     * @param position position of the creature on the world
+     *
+     * @param healthPoints health points of new creature
+     * @param attackPoints attack points of new creature
+     * @param expPoints experience points of new creature
+     */
+    public Creature(String name, Position position, int healthPoints, int attackPoints, int expPoints){
+        super(position);
         this.name = name;
         this.healthPoints = healthPoints;
         this.attackPoints = attackPoints;
         this.expPoints = expPoints;
-    }
-
-    public Creature(){
-        super();
     }
 
     public int getHealthPoints() {
@@ -88,19 +62,44 @@ public abstract class Creature extends Entity {
         this.name = name;
     }
 
+    /**
+     * Method for adding HPs to creature
+     * may be as well used to decrease HP
+     * should be preferred instead of default setter for HP
+     * @param healthPoints HPs to add
+     */
     public void addHealthPoints(int healthPoints) {
         this.healthPoints += healthPoints;
     }
 
+    /**
+     * FIXME add method to UML diagram
+     * Check if creature is alive
+     * @return status of create (alive = true, dead = false) depending on the HP amount
+     */
     public boolean isAlive(){
         return this.healthPoints > 0;
     }
 
+    /**
+     * FIXME (maybe) add this method to UML diagram, even though it is already in the superclass
+     * {@link Entity}
+     * @return info of creature
+     */
+    @Override
     public String getInfo(){
         return "Creature: " + this.name;
     }
 
+    /**
+     * Action, that should be performed when the creature dies
+     */
     abstract void onDeathAction();
 
+    /**
+     * default counter attack action, when the creature is attacked
+     * FIXME add arrow pointing to itself (Creature -> Creature) to UML
+     * @param attacker the creature, that this one gets attacked by
+     */
     abstract void counterAttack(Creature attacker);
 }

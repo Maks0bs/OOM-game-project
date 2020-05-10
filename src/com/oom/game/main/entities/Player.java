@@ -1,11 +1,33 @@
 package com.oom.game.main.entities;
 
-public class Player extends Creature implements ProgressiveCreature{
+import com.oom.game.main.environment.Position;
 
-    public Player(String name, int healthPoints, int attackPoints, int expPoints){
-        super(name, healthPoints, attackPoints, expPoints);
+public class Player extends Creature implements ProgressiveCreature{
+    /*
+        Players exp influence their level
+     */
+    /**
+     *
+     * @param name name of the creature
+     * @param position position of the creature on the world
+     *
+     * @param healthPoints health points of new creature
+     * @param attackPoints attack points of new creature
+     * @param expPoints experience points of new creature (may be current exp points)
+     */
+    public Player(String name, Position position, int healthPoints, int attackPoints, int expPoints){
+        super(name, position, healthPoints, attackPoints, expPoints);
     }
 
+    /*
+        The process of attacking and counterattacking
+        TODO may be influenced by various effects of attacker / victim
+     */
+
+    /**
+     * Basic player attack functionality
+     * @param victim the creature that this player wants to attack
+     */
     public void attack(Creature victim){
         victim.addHealthPoints(-this.attackPoints);
         if (!victim.isAlive()){
@@ -20,30 +42,57 @@ public class Player extends Creature implements ProgressiveCreature{
         victim.counterAttack(this);
     }
 
+    /**
+     * {@link Creature}
+     * @param attacker the creature, that this one gets attacked by
+     */
+    @Override
     public void counterAttack(Creature attacker){
         attacker.addHealthPoints(-this.getAttackPoints());
     }
 
-    public void addExpPoints(int exp){
-        this.expPoints += exp;
+    /**
+     * {@link ProgressiveCreature}
+     * @param exp experience points to be added
+     */
+    @Override
+    public void addExpPoints(int exp) {
+
     }
 
-    /*
-        This function might be used in feature version for achievements, etc. That's why it's already
-        in the interface
+    /**
+     * TODO currently level system is linear
+     * TODO might need to change to gradual
+     * {@link ProgressiveCreature}
+     * @return current level of player
      */
+    @Override
     public int getLevel() {
         return this.expPoints / 10;
     }
 
+    /**
+     * {@link ProgressiveCreature}
+     * @param level current level of player
+     */
+    @Override
     public void onLevelUp(int level){
         System.out.println("Player " + this.name + " has gained level " + level);
     }
 
+    /**
+     * {@link Creature}
+     */
+    @Override
     public void onDeathAction(){
         System.out.println("Player " + this.name + " has perished :(");
     }
 
+
+    /**
+     * {@link Entity}
+     * @return basic stringified player info
+     */
     @Override
     public String getInfo() {
         return
@@ -52,6 +101,10 @@ public class Player extends Creature implements ProgressiveCreature{
             "HP: " + this.getHealthPoints();
     }
 
+    /**
+     * {@link ProgressiveCreature}
+     */
+    @Override
     public void displayProgress() {
         System.out.println(this.getInfo());
     }
