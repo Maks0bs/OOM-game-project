@@ -17,7 +17,7 @@ public class Position {
      * @param x x-coordinate of current object
      * @param y y-coordinate of object
      * @param isBlockPosition true if the given coordinates point to a block position,
-     *                        false if the giver coordinates point to exact position (e. g. for entities)
+     *                        false if the given coordinates point to exact position (e. g. for entities)
      */
     public Position(int x, int y, boolean isBlockPosition){
         if (isBlockPosition){

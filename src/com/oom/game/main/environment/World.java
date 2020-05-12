@@ -2,6 +2,7 @@ package com.oom.game.main.environment;
 
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.environment.utils.OpenBottom;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,16 @@ import java.util.ArrayList;
 public class World {
     public static final int DEFAULT_TILE_COUNT = 64;
     private int blockCountX, blockCountY;
+    /**
+        This ArrayList contains game world's coordinates, where inner blocks are Y-coordinates
+        and outer ones are X-coordinates.
+        It can also be seen as a table with X- and Y-axes.
+       y/x   0     1     2    ...
+        0   Block Block Block
+        1   Block Block Block
+        2   Block Block Block
+       ...
+    */
     private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
     private ArrayList<Entity> entities = new ArrayList<Entity>();
 
@@ -52,12 +63,26 @@ public class World {
     }
 
     /**
-     * Change the size of the world (increase / decrease ArrayList size)
+     * Change the size of the world (increase ArrayList size)
      * @param newBlockCountX obvious :)
      * @param newBlockCountY obvious :)
+     * Storing old values in a temporary variable, then replacing the old value with a new one.
+     * Then filling an array in a two-dimensional loop with new Blocks.
+     *
      */
-    public void resize(int newBlockCountX, int newBlockCountY){
-        //FIXME implement this method
+    public void increaseWorld(int newBlockCountX, int newBlockCountY){
+        int tempBlockCountX = this.blockCountX; 
+        int tempBlockCountY = this.blockCountY;
+        this.blockCountX = newBlockCountX;
+        this.blockCountY = newBlockCountY;
+        for (int i = tempBlockCountY; i < newBlockCountY; i++) {
+            blocks.add(new ArrayList<Block>());
+            for (int j = tempBlockCountX; j < newBlockCountX; j++) {
+                blocks.get(i).add(new Block(1)); // parameter texture is intentionally replaced with 1
+                                                        // so that the code does not lose its functionality
+            }
+        }
+
     }
 
     /**
@@ -67,7 +92,9 @@ public class World {
      *              If the current structure is Void {@link Void} then replace this block with this parameter completely
      */
     public void addBlock(Position position, Block block){
-        //FIXME implement this method
+        // if (blocks.get((OpenBottom.class.isAssignableFrom()))); will finish it a bit later
+        blocks.get(position.getY()).set(position.getX(), block); // replaces the current block
+                                                                // as I do not really now how to implement it on top
     }
 
     /**
@@ -82,7 +109,8 @@ public class World {
      *                the new structure
      */
     public void updateBlock(Position position, Block block, boolean onlyTop){
-        //FIXME implement this method
+        if (!onlyTop) blocks.get(position.getY()).set(position.getX(), block);
+        else; //the other case, where I do not know, what to do, as we have not discussed it yet :)
     }
 
 
@@ -97,7 +125,8 @@ public class World {
      *                the new structure
      */
     public void removeBlock(Position position, boolean onlyTop){
-        //FIXME implement this method
+        //FIXME this implementation resizes the array, change to normal
+        blocks.get(position.getY()).remove(position.getX());
     }
 
     /*

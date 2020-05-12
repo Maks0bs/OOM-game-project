@@ -13,7 +13,7 @@ import com.oom.game.main.environment.utils.Walkable;
 public class Grass extends Block implements Walkable, OpenTop {
     private Entity hiddenEntity; //might be redundant, added this member just for example (some item mey be hidden in the grass)
     /*
-        this is DISGUISTING. Might need to create a seperate class that implements OpenTop
+        this is DISGUSTING. Might need to create a separate class that implements OpenTop
         and should extend from that class. ATM it's not essential
      */
     private Block blockOnTop = null;
