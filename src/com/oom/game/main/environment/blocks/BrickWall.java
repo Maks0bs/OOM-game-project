@@ -6,7 +6,6 @@ import com.oom.game.main.environment.utils.OpenBottom;
 
 
 public class BrickWall extends Block implements Destructable, OpenBottom {
-    //FIXME add this interface to UML
     public static final double DEFAULT_THICKNESS = 1.0;
     private double thickness;
     private Block blockBelow;

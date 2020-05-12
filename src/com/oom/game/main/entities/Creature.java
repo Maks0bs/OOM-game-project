@@ -22,10 +22,8 @@ public abstract class Creature extends Entity {
      */
 
     /**
-     * FIXME add constructor to UML diagram
      * @param name name of the creature
      * @param position position of the creature on the world
-     *
      * @param healthPoints health points of new creature
      * @param attackPoints attack points of new creature
      * @param expPoints experience points of new creature
@@ -73,7 +71,6 @@ public abstract class Creature extends Entity {
     }
 
     /**
-     * FIXME add method to UML diagram
      * Check if creature is alive
      * @return status of create (alive = true, dead = false) depending on the HP amount
      */

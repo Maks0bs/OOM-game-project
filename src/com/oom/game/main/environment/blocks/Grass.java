@@ -11,7 +11,6 @@ import com.oom.game.main.environment.utils.Walkable;
     But you can put other blocks on it
  */
 public class Grass extends Block implements Walkable, OpenTop {
-    //FIXME add this interface to UML
     private Entity hiddenEntity; //might be redundant, added this member just for example (some item mey be hidden in the grass)
     /*
         this is DISGUSTING. Might need to create a separate class that implements OpenTop

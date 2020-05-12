@@ -5,7 +5,6 @@ import com.oom.game.main.environment.utils.ClickInteractable;
 import com.oom.game.main.environment.utils.OpenBottom;
 
 public class Campfire extends Block implements OpenBottom, ClickInteractable {
-    //FIXME add this interface to UML
     private Block blockBelow = null;
 
     /**

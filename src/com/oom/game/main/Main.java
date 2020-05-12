@@ -13,7 +13,9 @@ import com.oom.game.main.process.Game;
  */
 
 /*
-    FIXME replace some interfaces in blocks with abstract classes to encapsulate blockOnTop/blockBelow...
+    TODO replace some interfaces in blocks with abstract classes to encapsulate blockOnTop/blockBelow...
+    FIXME create uuid (unique id) fields for every game object to find and manipulate the easier.
+    * FIXME this will be useful to delete and add entities to world
  */
 
 public class Main {
