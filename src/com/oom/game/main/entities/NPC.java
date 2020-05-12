@@ -10,16 +10,12 @@ public class NPC extends Creature {
     public static final int DEFAULT_EXP_KILL_REWARD = 5;
 
     /**
-     *
-     * @param name name of the creature
-     * @param position position of the creature on the world
-     *
-     * @param healthPoints health points of new creature
-     * @param attackPoints attack points of new creature
-     * @param expPoints experience points of new creature (mainly kill reward for players)
+     * see constructor of {@link Creature}
      */
-    public NPC(String name, Position position, int healthPoints, int attackPoints, int expPoints) {
-        super(name, position, healthPoints, attackPoints, expPoints);
+    public NPC(String name, Position position, int sizeX, int sizeY,
+               int healthPoints, int attackPoints, int expPoints
+    ){
+        super(name, position, sizeX, sizeY, healthPoints, attackPoints, expPoints);
     }
 
 

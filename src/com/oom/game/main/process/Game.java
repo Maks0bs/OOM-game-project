@@ -5,6 +5,8 @@ import com.oom.game.main.entities.Player;
 import com.oom.game.main.entities.mobs.Rabbit;
 import com.oom.game.main.entities.mobs.Wolf;
 import com.oom.game.main.environment.Position;
+import com.oom.game.main.environment.World;
+import com.oom.game.main.environment.blocks.Grass;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -32,34 +34,30 @@ public class Game {
 
     /**
      * FIXME add description to this method
+     * method is responsible for executing world logic and adding stuff to it
      */
     public static void run() {
-        Scanner scanner = new Scanner(System.in);
-        Player player = new Player(
-                "Player1",
-                new Position(0, 0, true),
-                10,
-                0,
-                0
-        );
-        ArrayList<Creature> mobs = new ArrayList<Creature>();
-        mobs.add(generateRandomCreature());
-        mobs.add(generateRandomCreature());
-
-        while(player.isAlive()){
-            System.out.println(player.getInfo() + "\n");
-            System.out.println("Creatures around: ");
-            for (int i = 0; i < mobs.size(); i++) {
-                System.out.println(i + ":\n" + mobs.get(i).getInfo());
-            }
-            System.out.println("Enter the number of the creature to attack: ");
-            int num = scanner.nextInt();
-            player.attack(mobs.get(num));
-            if (!mobs.get(num).isAlive()){
-                mobs.set(num, generateRandomCreature());
+        World world = new World(10, 10);
+        for (int i = 0; i < 10; i++){
+            for (int j = 0; j < 10; j++){
+                world.addBlock(new Position(j, i, true), new Grass());
             }
         }
 
-        System.out.println("GAME OVER");
+        Player player = new Player("bruh", new Position(1, 1, false),
+                World.BLOCK_SIZE + 5, World.BLOCK_SIZE + 5, 2, 2, 2 );
+        Player p1 = new Player("1", new Position(2, 2, true),
+                64, 64, 1,1,1);
+        world.addEntity(player);
+        world.addEntity(p1);
+        System.out.println(world.getEntities().size());
+
+        for (int i = 0; i < world.getBlockCountY(); i++){
+            for (int j = 0; j < world.getBlockCountX(); j++){
+                world.getBlock(i, j).display();
+                System.out.print(" ");
+            }
+            System.out.print("\n");
+        }
     }
 }
