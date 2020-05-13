@@ -28,25 +28,6 @@ public class Block {
         return (this.blockOnTop != null);
     }
 
-    /**
-     * TEST / DEBUG
-     */
-    public void display(){
-        if (this instanceof BrickWall){
-            System.out.print("BW");
-        } else if (this instanceof Campfire){
-            System.out.print("CF");
-        } else if (this instanceof Chest){
-            System.out.print("CH");
-        } else if (this instanceof EmptyVoid){
-            System.out.print("EV");
-        } else if (this instanceof Grass){
-            System.out.print("GR");
-        } else {
-            System.out.print("NA");
-        }
-    }
-
     public int getTexture() {
         return texture;
     }

@@ -83,7 +83,6 @@ public class World {
 
     /**
      * TODO maybe replace boolean return type with exceptions
-     * FIXME apply changes to UML
      * @param position position of the block to be added
      * @param block new block to be added ON TOP of the current structure (if any).
      *              If the current structure is EmptyVoid {@link Void} then replace this block with this parameter completely

@@ -9,6 +9,14 @@ import com.oom.game.main.environment.Position;
 public abstract class Entity {
     // position of left top corner
     protected Position position;
+    /*
+        Clarification for sizeX and sizeY:
+        the entity takes up pixels on x-axis
+        from position.getX() to (position.get.getX() + sizeX - 1), both inclusive; The same for sizeY;
+        sizeX is simply the amount of pixels it takes up, but the pixel with coords
+        (position.getX(), position.getY()) is also a pixel, so we have to count it.
+        Furthermore, the coords calculation starts with 0
+     */
     protected int sizeX, sizeY;
 
     /**
@@ -23,7 +31,6 @@ public abstract class Entity {
     }
 
     /**
-     * FIXME add this method to UML
      * @param entity the entity you want to check if the current one overlaps with
      * @return true if entities overlap, false otherwise
      */
@@ -32,9 +39,8 @@ public abstract class Entity {
                 sx = entity.getSizeX(), sy = entity.getSizeY(),
                 x0 = this.position.getX(), y0 = this.position.getY();
 
-        //FIXME this doesn't work right, fix this plz
 
-        return !( (x > x0 + this.sizeX) || (x + sx < x0) || (y > y0) || (y + sy < y0));
+        return !( (x > x0 + this.sizeX - 1) || (x + sx - 1 < x0) || (y > y0 + this.sizeY - 1) || (y + sy - 1 < y0));
     }
 
     /**
