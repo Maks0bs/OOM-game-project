@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 
 public class World {
-    public static final int BLOCK_SIZE = 64;
+    public static final int BLOCK_SIZE = 32;
     private int blockCountX, blockCountY;
     /**
         This ArrayList contains game world's coordinates, where inner blocks are Y-coordinates
@@ -33,6 +33,11 @@ public class World {
     private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
     private ArrayList<Entity> entities = new ArrayList<Entity>();
 
+    /**
+     *
+     * @param blockCountY amount of blocks in the world on y-axis
+     * @param blockCountX amount of blocks in the world on x-axis
+     */
     public World(int blockCountY, int blockCountX){
         this.blockCountX = blockCountX;
         this.blockCountY = blockCountY;

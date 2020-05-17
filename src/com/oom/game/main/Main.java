@@ -4,7 +4,7 @@ package com.oom.game.main;
     No copyright :) (yet)
  */
 
-import com.oom.game.main.process.Game;
+import com.oom.game.main.process.Process;
 
 /**
     !!!IMPORTANT NOTES!!!
@@ -21,8 +21,8 @@ import com.oom.game.main.process.Game;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Dear player, welcome to OOM Game!");
-        Game.run();
+        System.out.println("Dear player, welcome to OOM Process!");
+        Process process = new Process();
 
     }
 }

@@ -8,16 +8,64 @@ import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.Campfire;
 import com.oom.game.main.environment.blocks.Grass;
+import gameCore.Game;
+import gameCore.IRenderable;
+import gameCore.IUpdatable;
+import gameCore.Renderer;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
+import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Game {
-
+public class Process {
     /*
-        FIXME add docs to Game class
+        FIXME add docs to Process class
         FIXME add this class to UML in a normal way (right now it's disgusting)
      */
+
+    /**
+     * Default constructor for Process
+     */
+    public Process(){
+        /*
+            FIXME Not clear how to use renderer and Graphics, a lot of work to do,
+            FIXME however i don't know what exactly should be done to make it look normal and work accordingly
+         */
+        BufferedImage imageGrass = null, imageBarrel = null;
+        try {
+            imageGrass = ImageIO.read(new File("res/Grass32px.png").getAbsoluteFile());
+            imageBarrel = ImageIO.read(new File("res/Barrel32px.jpg").getAbsoluteFile());
+        } catch(IOException e){
+            System.out.println(1);
+        }
+
+        Renderer basicRenderer = new Renderer(imageGrass.getGraphics());
+        NodeRenderable nodeRenderable = new NodeRenderable(imageGrass, 32, 32, 1, 1);
+        WorldRenderer mainRenderer = new WorldRenderer();
+        mainRenderer.setRenderer(basicRenderer);
+        mainRenderer.addRenderable(nodeRenderable);
+        WorldUpdater mainUpdater = new WorldUpdater(mainRenderer);
+
+        Game game = new Game(
+                "OOM GAME",
+                1080,
+                720,
+                30,
+                mainUpdater,
+                30,
+                mainRenderer
+        );
+        mainRenderer.addRenderable(new NodeRenderable(imageBarrel, 64, 64, 1, 1));
+
+        //game.paintComponent();
+    }
 
     /**
      * TODO improve random generation
@@ -36,7 +84,7 @@ public class Game {
     /**
      * method is responsible for executing world logic and adding stuff to it
      */
-    public static void run() {
+    public void run() {
         World world = new World(10, 10);
         for (int i = 0; i < 10; i++){
             for (int j = 0; j < 10; j++){
