@@ -1,14 +1,17 @@
 package com.oom.game.main.entities;
 
+import com.oom.game.main.entities.interaction.ProgressiveCreature;
 import com.oom.game.main.environment.Position;
 
-public class Player extends Creature implements ProgressiveCreature{
+public class Player extends Creature implements ProgressiveCreature {
     /*
         Players exp influence their level
      */
     /**
      * see constructor of {@link Creature}
      */
+
+
     public Player(String name, Position position, int sizeX, int sizeY,
                   int healthPoints, int attackPoints, int expPoints
     ){

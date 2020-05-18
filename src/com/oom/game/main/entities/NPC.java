@@ -1,5 +1,6 @@
 package com.oom.game.main.entities;
 
+import com.oom.game.main.entities.interaction.AggresiveBehaviour;
 import com.oom.game.main.environment.Position;
 
 public class NPC extends Creature {
@@ -7,7 +8,14 @@ public class NPC extends Creature {
         In this case this.expPoints is the reward
         that players receive after defeating the NPC
      */
+    /*
+        FIXME expand UML with strategies
+     */
+    //FIXME refactor creatures and entities with strategy pattern
+
     public static final int DEFAULT_EXP_KILL_REWARD = 5;
+
+    protected AggresiveBehaviour aggresiveBehaviour = null;
 
     /**
      * see constructor of {@link Creature}
@@ -36,5 +44,13 @@ public class NPC extends Creature {
     @Override
     public void onDeathAction(){
         System.out.println(this.name + " was defeated and drops " + this.expPoints + " XP points");
+    }
+
+    public AggresiveBehaviour getAggresiveBehaviour() {
+        return aggresiveBehaviour;
+    }
+
+    public void setAggresiveBehaviour(AggresiveBehaviour aggresiveBehaviour) {
+        this.aggresiveBehaviour = aggresiveBehaviour;
     }
 }

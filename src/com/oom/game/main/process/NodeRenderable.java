@@ -1,5 +1,6 @@
 package com.oom.game.main.process;
 
+import com.oom.game.main.environment.Position;
 import gameCore.IRenderable;
 import gameCore.Renderer;
 
@@ -9,23 +10,21 @@ public class NodeRenderable implements IRenderable {
     /*
         FIXME add this class to UML
      */
-    private BufferedImage image;
-    private int posX, posY;
+    private BufferedImage image; //FIXME bind image to the correspondent entity
+    private Position position;
     private float scaleX, scaleY;
     private Renderer renderer = null;//FIXME encapsulate renderer
 
     /**
      *
      * @param image image in this object that can be rendered
-     * @param posX position on x-axis
-     * @param posY position on y-axis
+     * @param position position on frame
      * @param scaleX coefficient that defines how picture should be enlarged on x-axis
      * @param scaleY coefficient that defines how picture should be enlarged on y-axis
      */
-    public NodeRenderable(BufferedImage image, int posX, int posY, float scaleX, float scaleY) {
+    public NodeRenderable(BufferedImage image, Position position, float scaleX, float scaleY) {
         this.image = image;
-        this.posX = posX;
-        this.posY = posY;
+        this.position = position;
         this.scaleX = scaleX;
         this.scaleY = scaleY;
     }
@@ -35,7 +34,12 @@ public class NodeRenderable implements IRenderable {
      */
     @Override
     public void render(Renderer renderer) {
-        renderer.drawImage(image, posX, posY, scaleX, scaleY);
+        renderer.drawImage(
+                image,
+                position.getX(),
+                position.getY(),
+                scaleX,
+                scaleY);
     }
 
     /**
@@ -61,35 +65,11 @@ public class NodeRenderable implements IRenderable {
         this.image = image;
     }
 
-    public int getPosX() {
-        return posX;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setPosX(int posX) {
-        this.posX = posX;
-    }
-
-    public int getPosY() {
-        return posY;
-    }
-
-    public void setPosY(int posY) {
-        this.posY = posY;
-    }
-
-    public float getScaleX() {
-        return scaleX;
-    }
-
-    public void setScaleX(float scaleX) {
-        this.scaleX = scaleX;
-    }
-
-    public float getScaleY() {
-        return scaleY;
-    }
-
-    public void setScaleY(float scaleY) {
-        this.scaleY = scaleY;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

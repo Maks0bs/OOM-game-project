@@ -9,63 +9,24 @@ import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.Campfire;
 import com.oom.game.main.environment.blocks.Grass;
 import gameCore.Game;
-import gameCore.IRenderable;
-import gameCore.IUpdatable;
 import gameCore.Renderer;
+import org.w3c.dom.Node;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.text.AttributedCharacterIterator;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.BitSet;
 
 public class Process {
     /*
         FIXME add docs to Process class
         FIXME add this class to UML in a normal way (right now it's disgusting)
      */
-
-    /**
-     * Default constructor for Process
-     */
-    public Process(){
-        /*
-            FIXME Not clear how to use renderer and Graphics, a lot of work to do,
-            FIXME however i don't know what exactly should be done to make it look normal and work accordingly
-         */
-        BufferedImage imageGrass = null, imageBarrel = null;
-        try {
-            imageGrass = ImageIO.read(new File("res/Grass32px.png").getAbsoluteFile());
-            imageBarrel = ImageIO.read(new File("res/Barrel32px.jpg").getAbsoluteFile());
-        } catch(IOException e){
-            System.out.println(1);
-        }
-
-        Renderer basicRenderer = new Renderer(imageGrass.getGraphics());
-        NodeRenderable nodeRenderable = new NodeRenderable(imageGrass, 32, 32, 1, 1);
-        WorldRenderer mainRenderer = new WorldRenderer();
-        mainRenderer.setRenderer(basicRenderer);
-        mainRenderer.addRenderable(nodeRenderable);
-        WorldUpdater mainUpdater = new WorldUpdater(mainRenderer);
-
-        Game game = new Game(
-                "OOM GAME",
-                1080,
-                720,
-                30,
-                mainUpdater,
-                30,
-                mainRenderer
-        );
-        mainRenderer.addRenderable(new NodeRenderable(imageBarrel, 64, 64, 1, 1));
-
-        //game.paintComponent();
-    }
+    private Renderer defaultRenderer = null; //this might not be necessary, as all data of this renderer is included in game
+    private WorldRenderable mainRenderable = null; //this might not be necessary, as all of it is included in game
+    private Game game = null;
 
     /**
      * TODO improve random generation
@@ -78,6 +39,39 @@ public class Process {
         } else { //here new possible creatures can be added
             return new Wolf(new Position(0, 0, true));
         }
+    }
+
+    /**
+     * FIXME maybe create constructor with custom values (graphics / renderer / game)
+     * Default constructor for Process
+     */
+    public Process(){
+        /*
+            FIXME Not clear how to use renderer and Graphics, a lot of work to do,
+            FIXME however i don't know what exactly should be done to make it look normal and work accordingly
+            FIXME upd 18.05.2020: Basic BufferedImage graphics. This approach is still quite disguisting,
+            FIXME but at least there is not NullPointerException
+         */
+        this.defaultRenderer = new Renderer(
+                (new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB))
+                .getGraphics()
+        );
+
+        this.mainRenderable = new WorldRenderable();
+        mainRenderable.setRenderer(defaultRenderer);
+
+        this.game = new Game(
+                "OOM GAME",
+                1080,
+                720,
+                30,
+                mainRenderable,
+                30,
+                mainRenderable
+        );
+
+
+
     }
 
 
@@ -104,6 +98,50 @@ public class Process {
         System.out.println(world.getEntities().size());
 
         renderWorld(world);
+
+        /*
+            Mocking normal render process here
+         */
+        BufferedImage imageGrass = null, imageBarrel = null;
+        try {
+            imageGrass = ImageIO.read(new File("res/Grass32px.png").getAbsoluteFile());
+            imageBarrel = ImageIO.read(new File("res/Barrel32px.jpg").getAbsoluteFile());
+        } catch(IOException e){
+            System.out.println(1);
+        }
+
+        mainRenderable.addRenderable(new NodeRenderable(
+                imageGrass,
+                new Position(32, 32, false),
+                1, 1
+        ));
+        NodeRenderable barrelNode = new NodeRenderable(
+                imageBarrel,
+                new Position (64, 64, false),
+                1, 1
+        );
+        mainRenderable.addRenderable(barrelNode);
+
+        for (int i = 0; i < 1000; i++){
+            if(i % 2 == 0) {
+                Position pos = barrelNode.getPosition();
+                pos.setX(pos.getX() + 4);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+
+                }
+            }
+            else {
+                Position pos = barrelNode.getPosition();
+                pos.setX(pos.getX() -2);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+
+                }
+            }
+        }
     }
 
     /**

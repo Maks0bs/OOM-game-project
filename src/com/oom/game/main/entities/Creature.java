@@ -6,7 +6,7 @@ import com.oom.game.main.environment.Position;
     Creature is an entity with stats and some props
  */
 public abstract class Creature extends Entity {
-    //FIXME refactor creatures and entities with strategy pattern (maybe)
+
     public static final String NAME_UNKNOWN = "CREATURE_NAME_UNKNOWN";
     /*
         Stats of a creature
