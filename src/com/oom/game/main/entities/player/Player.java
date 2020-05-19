@@ -1,5 +1,7 @@
-package com.oom.game.main.entities;
+package com.oom.game.main.entities.player;
 
+import com.oom.game.main.entities.Creature;
+import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.interaction.ProgressiveCreature;
 import com.oom.game.main.environment.Position;
 
@@ -32,7 +34,7 @@ public class Player extends Creature implements ProgressiveCreature {
         if (!victim.isAlive()){
             victim.onDeathAction();
             int prevLevel = this.getLevel();
-            this.addExpPoints(victim.expPoints);
+            this.addExpPoints(victim.getExpPoints());
             for (int i = prevLevel + 1; i <= this.getLevel(); i++){
                 this.onLevelUp(i);
             }

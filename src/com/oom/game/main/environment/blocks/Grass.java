@@ -9,7 +9,7 @@ import com.oom.game.main.environment.utils.Block;
     But you can put other blocks on it
  */
 public class Grass extends Block {
-    public static final int DEFAULT_TEXTURE = 5;
+    public static final String DEFAULT_TEXTURE = "res/blocks/32px/Grass.png";
     public Grass(){
         super(DEFAULT_TEXTURE);
         this.walkAction = new FloorWalkAction();

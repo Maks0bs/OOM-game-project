@@ -9,7 +9,7 @@ import com.oom.game.main.environment.utils.Block;
  */
 
 public class EmptyVoid extends Block {
-    public static final int DEFAULT_TEXTURE = 1;
+    public static final String DEFAULT_TEXTURE = "";
     public EmptyVoid(){
         super(DEFAULT_TEXTURE);
     }

@@ -3,9 +3,16 @@ package com.oom.game.main.environment.utils;
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.environment.blocks.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+
 
 public class Block {
-    protected int texture; // TODO to be replaced with regular graphical texture
+    protected String texturePath = "res/Default32px.png";
+    //FIXME add some member to describe current state (apart from implemented strategies) like type
     protected Block blockOnTop = null;
     protected PlayerInteraction playerInteraction = null;
     protected WalkAction walkAction = null;
@@ -16,8 +23,8 @@ public class Block {
      *
      * @param texture texture of the block (currently int)
      */
-    public Block(int texture){
-        this.texture = texture;
+    public Block(String texture){
+        this.texturePath = texture;
     }
 
     /**
@@ -28,12 +35,12 @@ public class Block {
         return (this.blockOnTop != null);
     }
 
-    public int getTexture() {
-        return texture;
+    public String getTexturePath() {
+        return texturePath;
     }
 
-    public void setTexture(int texture) {
-        this.texture = texture;
+    public void setTexturePath(String texturePath) {
+        this.texturePath = texturePath;
     }
 
     public Block getBlockOnTop() {
@@ -75,4 +82,6 @@ public class Block {
     public void setMoveAction(MoveAction moveAction) {
         this.moveAction = moveAction;
     }
+
+
 }

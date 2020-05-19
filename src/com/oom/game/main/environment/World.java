@@ -31,7 +31,7 @@ public class World {
        ...
     */
     private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
-    private ArrayList<Entity> entities = new ArrayList<Entity>();
+    private ArrayList<Entity> entities = new ArrayList<Entity>();//FIXME save entities in a Set / Map
 
     /**
      *
@@ -55,6 +55,9 @@ public class World {
      * @return requested block in this world
      */
     public Block getBlock(Position position) {
+        if (position.getBlockY() >= blockCountY || position.getBlockX() >= blockCountX){
+            return null;
+        }
         return blocks.get(position.getBlockY()).get(position.getBlockX());
     }
     public Block getBlock(int i, int j){
@@ -158,6 +161,30 @@ public class World {
 
         entities.add(entity);
         return true;
+    }
+
+
+    /**
+     *
+     * @param position top left position of area to be searched in
+     * @param sizeX x-size of search area rectangle
+     * @param sizeY y-size of search area rectangle
+     * @return {@linkplain ArrayList} of found entities
+     */
+    public ArrayList<Entity> getEntitiesInArea(Position position, int sizeX, int sizeY){
+        //FIXME implement this method
+        return null;
+    }
+
+    /**
+     * FIXME might need to remove this method and do area search manually in caller classes
+     * @param position top left position of area to be searched in
+     * @param sizeX x-size of search area rectangle
+     * @param sizeY y-size of search area rectangle
+     * @return list
+     */
+    public ArrayList<Entity> getBlockInArea(Position position, int sizeX, int sizeY){
+        return null;
     }
 
     /**

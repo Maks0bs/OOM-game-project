@@ -5,7 +5,7 @@ import com.oom.game.main.environment.utils.Block;
 import com.oom.game.main.environment.utils.PlayerInteraction;
 
 public class Campfire extends Block {
-    public static final int DEFAULT_TEXTURE = 3;
+    public static final String DEFAULT_TEXTURE = "";
     public Campfire(){
         super(DEFAULT_TEXTURE);
         super.playerInteraction = new ShowInventoryAction();

@@ -71,13 +71,13 @@ public abstract class Creature extends Entity {
     /**
      * Action, that should be performed when the creature dies
      */
-    abstract void onDeathAction();
+    public abstract void onDeathAction();
 
     /**
      * default counter attack action, when the creature is attacked
      * @param attacker the creature, that this one gets attacked by
      */
-    abstract void counterAttack(Creature attacker);
+    public abstract void counterAttack(Creature attacker);
 
     public int getHealthPoints() {
         return healthPoints;
@@ -91,6 +91,10 @@ public abstract class Creature extends Entity {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setHealthPoints(int healthPoints) {
         this.healthPoints = healthPoints;
     }
@@ -99,7 +103,11 @@ public abstract class Creature extends Entity {
         this.attackPoints = attackPoints;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getExpPoints() {
+        return expPoints;
+    }
+
+    public void setExpPoints(int expPoints) {
+        this.expPoints = expPoints;
     }
 }

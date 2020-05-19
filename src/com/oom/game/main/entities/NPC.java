@@ -15,6 +15,10 @@ public class NPC extends Creature {
 
     public static final int DEFAULT_EXP_KILL_REWARD = 5;
 
+    /*
+     *  FIXME when strategies in this class change, a special method should be called
+     *  FIXME to notify the creature (the same for block) to change its texture
+     */
     protected AggresiveBehaviour aggresiveBehaviour = null;
 
     /**
