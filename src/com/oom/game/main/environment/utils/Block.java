@@ -1,30 +1,32 @@
 package com.oom.game.main.environment.utils;
 
-import com.oom.game.main.entities.Entity;
-import com.oom.game.main.environment.blocks.*;
+//this class has to be observable
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-
+import com.oom.game.main.utils.GameObservable;
+import com.oom.game.main.utils.GameObserver;
 
 public class Block {
-    protected String texturePath = "res/Default32px.png";
-    //FIXME add some member to describe current state (apart from implemented strategies) like type
+    /*
+        FIXME might need to replace state string member to int variable that can only take up certain constants, defined in block classes
+     */
+    protected String state = "Default"; //State defines the texture that will be used to display this block
     protected Block blockOnTop = null;
     protected PlayerInteraction playerInteraction = null;
     protected WalkAction walkAction = null;
     protected DamageAction damageAction = null;
     protected MoveAction moveAction = null;
+    /*
+        It's possible to implement this through extending from observable class, but it's not possible
+        to extend in such a way in Player class. That's why this pattern is used.
+     */
+    protected GameObservable<Block> observable = new GameObservable<Block>();
 
     /**
      *
-     * @param texture texture of the block (currently int)
+     * @param state state of the block (currently int)
      */
-    public Block(String texture){
-        this.texturePath = texture;
+    public Block(String state){
+        this.state = state;
     }
 
     /**
@@ -35,20 +37,31 @@ public class Block {
         return (this.blockOnTop != null);
     }
 
-    public String getTexturePath() {
-        return texturePath;
+    public String getState() {
+        return state;
     }
 
-    public void setTexturePath(String texturePath) {
-        this.texturePath = texturePath;
+    /**
+     * FIXME add this method to UML, because it has to do with observable
+     * @param state new state
+     */
+    public void setState(String state) {
+        this.state = state;
+        this.observable.notifyObservers(this);
     }
 
     public Block getBlockOnTop() {
         return blockOnTop;
     }
 
+    /**
+     * FIXME add this method to UML, because it has to do with observable
+     * @param blockOnTop new blockOnTop
+     */
     public void setBlockOnTop(Block blockOnTop) {
+        //FIXME sometimes this function gets called 2 times (noticed on initialization)
         this.blockOnTop = blockOnTop;
+        this.observable.notifyObservers(this);
     }
 
     public PlayerInteraction getPlayerInteraction() {
@@ -83,5 +96,11 @@ public class Block {
         this.moveAction = moveAction;
     }
 
+    public GameObservable<Block> getObservable() {
+        return observable;
+    }
 
+    public void setObservable(GameObservable<Block> observable) {
+        this.observable = observable;
+    }
 }

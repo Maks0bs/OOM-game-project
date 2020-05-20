@@ -5,7 +5,11 @@ package com.oom.game.main;
  */
 
 
+import com.oom.game.main.environment.blocks.utils.BlockTextures;
 import com.oom.game.main.process.Process;
+
+import java.awt.*;
+import java.io.IOException;
 
 /*
     !!!IMPORTANT NOTES!!!
@@ -28,7 +32,21 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Dear player, welcome to OOM Process!");
+
+        /*
+            TODO add all necessary preparatory actions before creating the first process
+            TODO ensure that all static things work before starting the game process
+         */
+
+        try {
+            BlockTextures.generateList(); //TODO maybe this method should be called somewhere else
+        } catch (IOException e) {
+            System.out.println("could not generate static textures list");
+            e.printStackTrace();
+            return;
+        }
         Process process = new Process();
         process.run();
+
     }
 }

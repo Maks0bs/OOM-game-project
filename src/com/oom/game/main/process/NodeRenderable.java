@@ -10,10 +10,10 @@ public class NodeRenderable implements IRenderable {
     /*
         FIXME add this class to UML
      */
-    private BufferedImage image; //FIXME bind image to the correspondent entity
-    private Position position;
-    private float scaleX, scaleY;
-    private Renderer renderer = null;//FIXME encapsulate renderer
+    protected BufferedImage image; //FIXME bind image to the correspondent entity
+    protected Position position;
+    protected float scaleX = 1, scaleY = 1;
+    protected Renderer renderer = null;//FIXME encapsulate renderer
 
     /**
      *
@@ -30,6 +30,16 @@ public class NodeRenderable implements IRenderable {
     }
 
     /**
+     *
+     * @param image image in this object that can be rendered
+     * @param position position on frame
+     */
+    public NodeRenderable(BufferedImage image, Position position) {
+        this.image = image;
+        this.position = position;
+    }
+
+    /**
      * {@link IRenderable}
      */
     @Override
@@ -39,7 +49,8 @@ public class NodeRenderable implements IRenderable {
                 position.getX(),
                 position.getY(),
                 scaleX,
-                scaleY);
+                scaleY
+        );
     }
 
     /**

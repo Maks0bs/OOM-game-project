@@ -15,8 +15,8 @@ import java.util.HashMap;
     as static constant values
  */
 
-public class Textures {
-    private static HashMap<String, BufferedImage> list;
+public class BlockTextures {
+    private static HashMap<String, BufferedImage> list = new HashMap<>();
 
     /**
      * generates a HashMap of all known textures for blocks
@@ -25,8 +25,10 @@ public class Textures {
      * FIXME (should be only one call in the perfect situation)
      */
     public static void generateList() throws IOException {
-        list.put("Barrel", ImageIO.read(new File("res/blocks/32px/Barrel.png").getAbsoluteFile()));
-        list.put("Grass", ImageIO.read(new File("res/blocks/32px/Grass.png").getAbsoluteFile()));
+        list.put("Barrel", ImageIO.read((new File("res/blocks/32px/Barrel.png")).getAbsoluteFile()));
+        list.put("BarrelOpen", ImageIO.read((new File("res/blocks/32px/BarrelOpen.png")).getAbsoluteFile()));
+        list.put("Grass", ImageIO.read((new File("res/blocks/32px/Grass.png")).getAbsoluteFile()));
+        list.put("EmptyVoid", ImageIO.read((new File("res/blocks/32px/EmptyVoid.png")).getAbsoluteFile()));
     }
 
     /**
@@ -34,7 +36,7 @@ public class Textures {
      * @param key texture string key
      * @return correspondent texture as image
      */
-    public static BufferedImage getTexture(String key){
+    public static BufferedImage getTextureByState(String key){//FIXME add string parameter to specify dimensions (32x32 or 64x64 or other)
         return list.get(key);
     }
 }

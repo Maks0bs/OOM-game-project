@@ -2,10 +2,14 @@ package com.oom.game.main.environment;
 
 import com.oom.game.main.entities.Creature;
 import com.oom.game.main.entities.Entity;
+import com.oom.game.main.entities.player.Player;
+import com.oom.game.main.environment.blocks.Campfire;
 import com.oom.game.main.environment.blocks.EmptyVoid;
+import com.oom.game.main.environment.blocks.Grass;
 import com.oom.game.main.environment.exceptions.WorldResizeException;
 import com.oom.game.main.environment.utils.Block;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /*
@@ -32,6 +36,32 @@ public class World {
     */
     private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
     private ArrayList<Entity> entities = new ArrayList<Entity>();//FIXME save entities in a Set / Map
+
+    /**
+     * @return default world (100x100), filled with 10000 grass blocks
+     */
+    public static World generateDefaultWorld(){
+        World world = new World(100, 100);
+        for (int i = 0; i < 100; i++){
+            for (int j = 0; j < 100; j++){
+                world.addBlock(new Position(j, i, true), new Grass());
+            }
+        }
+
+        Player player = new Player("bruh", new Position(1, 1, true),
+                World.BLOCK_SIZE + 1, World.BLOCK_SIZE + 1, 2, 2, 2 );
+        Player p1 = new Player("1", new Position(2, 2, true),
+                World.BLOCK_SIZE, World.BLOCK_SIZE, 1,1,1);
+
+        world.addBlock(new Position(4, 4, true), new Campfire());
+        world.addEntity(player);
+        world.addEntity(p1);
+        world.removeEntity(player);
+        System.out.println(world.getEntities().size());
+
+
+        return world;
+    }
 
     /**
      *
