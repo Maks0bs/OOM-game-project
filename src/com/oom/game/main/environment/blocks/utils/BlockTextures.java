@@ -29,6 +29,7 @@ public class BlockTextures {
         list.put("BarrelOpen", ImageIO.read((new File("res/blocks/32px/BarrelOpen.png")).getAbsoluteFile()));
         list.put("Grass", ImageIO.read((new File("res/blocks/32px/Grass.png")).getAbsoluteFile()));
         list.put("EmptyVoid", ImageIO.read((new File("res/blocks/32px/EmptyVoid.png")).getAbsoluteFile()));
+        list.put("StoneTileFloor", ImageIO.read((new File("res/blocks/32px/StoneTileFloor.png")).getAbsoluteFile()));
     }
 
     /**

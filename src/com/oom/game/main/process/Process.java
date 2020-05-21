@@ -9,10 +9,12 @@ import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.Barrel;
 import com.oom.game.main.environment.blocks.Campfire;
 import com.oom.game.main.environment.blocks.Grass;
+import com.oom.game.main.environment.blocks.StoneTileFloor;
 import com.oom.game.main.environment.blocks.utils.BlockTextures;
 import com.oom.game.main.environment.utils.Block;
 import gameCore.Game;
 import gameCore.Renderer;
+import gameCore.eventSystem.IEventManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -54,7 +56,14 @@ public class Process {
         this.world = world;
 
 
-
+        for (int i = 0; i < world.getBlockCountY(); i++){
+            for (int j = 0; j < world.getBlockCountX(); j++){
+                if ((i + j) % 2 == 1){
+                    world.removeBlock(i, j);
+                    world.addBlock(i, j, new StoneTileFloor());
+                }
+            }
+        }
 
 
         this.mainRenderable = new WorldRenderable(
@@ -72,7 +81,8 @@ public class Process {
                 30,
                 mainRenderable, //renderable
                 30,
-                mainRenderable //updatable
+                mainRenderable, //updatable
+                null
         );
 
         world.addBlock(new Position(1, 1, true), new Barrel());
@@ -92,12 +102,16 @@ public class Process {
         for (int i = 0; i < 100; i++){
             if (i % 2 == 0){
                 grass.setBlockOnTop(null);
+
             }
             else{
                 grass.setBlockOnTop(new Barrel());
+
             }
             try{
-                Thread.sleep(400);
+                Thread.sleep(50);
+                mainRenderable.updatePosition(mainRenderable.getPosition().sum(new Position(1, 0, false)));
+
             } catch (InterruptedException e){
 
             }

@@ -52,6 +52,11 @@ public class BlockRenderable extends NodeRenderable implements GameObserver<Bloc
     }
 
     @Override
+    protected String getNodeType() {
+        return "Block";
+    }
+
+    @Override
     public void render(Renderer renderer) {
         super.render(renderer);
     }

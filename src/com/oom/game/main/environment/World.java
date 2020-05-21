@@ -53,7 +53,7 @@ public class World {
         Player p1 = new Player("1", new Position(2, 2, true),
                 World.BLOCK_SIZE, World.BLOCK_SIZE, 1,1,1);
 
-        world.addBlock(new Position(4, 4, true), new Campfire());
+        //world.addBlock(new Position(4, 4, true), new Campfire());
         world.addEntity(player);
         world.addEntity(p1);
         world.removeEntity(player);
@@ -120,7 +120,6 @@ public class World {
     }
 
     /**
-     * TODO maybe replace boolean return type with exceptions
      * @param position position of the block to be added
      * @param block new block to be added ON TOP of the current structure (if any).
      *              If the current structure is EmptyVoid {@link Void} then replace this block with this parameter completely
@@ -131,6 +130,29 @@ public class World {
         if (curBlock instanceof EmptyVoid){ //if there is no block (Empty void), then replace
             //FIXME it is a bad idea to use instance of, change to smth else
             blocks.get(position.getBlockY()).set(position.getBlockX(), block);
+            return true;
+        }
+        else{ //otherwise there is a floor block, add one on top, but check if block on top already exists
+            if (curBlock.hasBlockOnTop()){
+                return false;
+            }
+            curBlock.setBlockOnTop(block);
+            return true;
+        }
+    }
+
+    /**
+     * @param i position of the block to be added on y-axis
+     * @param j position of the block to be added on x-axis
+     * @param block new block to be added ON TOP of the current structure (if any).
+     *              If the current structure is EmptyVoid {@link Void} then replace this block with this parameter completely
+     * @return true is block was added, false if something went wrong
+     */
+    public boolean addBlock(int i, int j, Block block){
+        Block curBlock = this.getBlock(i, j);
+        if (curBlock instanceof EmptyVoid){ //if there is no block (Empty void), then replace
+            //FIXME it is a bad idea to use instance of, change to smth else
+            blocks.get(i).set(j, block);
             return true;
         }
         else{ //otherwise there is a floor block, add one on top, but check if block on top already exists
@@ -157,6 +179,26 @@ public class World {
             return true;
         } else {
             blocks.get(position.getBlockY()).set(position.getBlockX(), new EmptyVoid());
+            return true;
+        }
+    }
+
+    /**
+     * NOTE: deletion shouldn't leave any null pointers. Please use the EmptyVoid {@link Void} block as a placeholder.
+     * @param i position of the block to be removed on y-axis
+     * @param j position of the block to be removed on x-axis
+     * @return true if block was removed successfully, false on error
+     */
+    public boolean removeBlock(int i, int j){
+        Block curBlock = this.getBlock(i, j);
+        if (curBlock instanceof EmptyVoid){ //if there is no block (Empty void), then replace
+            return false;
+        } else if (curBlock.hasBlockOnTop()){
+
+            curBlock.setBlockOnTop(null);
+            return true;
+        } else {
+            blocks.get(i).set(j, new EmptyVoid());
             return true;
         }
     }

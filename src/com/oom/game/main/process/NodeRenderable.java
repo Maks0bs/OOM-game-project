@@ -6,7 +6,7 @@ import gameCore.Renderer;
 
 import java.awt.image.BufferedImage;
 
-public class NodeRenderable implements IRenderable {
+public abstract class NodeRenderable implements IRenderable {
     /*
         FIXME add this class to UML
      */
@@ -52,6 +52,26 @@ public class NodeRenderable implements IRenderable {
                 scaleY
         );
     }
+
+    /**
+     * {@link IRenderable}
+     * @param position relative position of rendering
+     */
+    public void render(Renderer renderer, Position position) {
+        renderer.drawImage(
+                image,
+                position.getX(),
+                position.getY(),
+                scaleX,
+                scaleY
+        );
+    }
+
+    /**
+     * this method mainly exists to make NodeRenderable abstract and restrict its instantiation
+     * @return type of current NodeRenderable (e. g. Block or Entity)
+     */
+    protected abstract String getNodeType();
 
     /**
      * {@link IRenderable} render this.renderer
