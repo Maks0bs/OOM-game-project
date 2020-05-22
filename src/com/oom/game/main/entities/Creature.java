@@ -6,6 +6,7 @@ import com.oom.game.main.environment.Position;
     Creature is an entity with stats and some props
  */
 public abstract class Creature extends Entity {
+
     public static final String NAME_UNKNOWN = "CREATURE_NAME_UNKNOWN";
     /*
         Stats of a creature
@@ -23,41 +24,21 @@ public abstract class Creature extends Entity {
 
     /**
      * @param name name of the creature
-     * @param position position of the creature on the world
+     * @param position {@link Entity}
+     * @param sizeX {@link Entity}
+     * @param sizeY {@link Entity}
      * @param healthPoints health points of new creature
      * @param attackPoints attack points of new creature
      * @param expPoints experience points of new creature
      */
-    public Creature(String name, Position position, int healthPoints, int attackPoints, int expPoints){
-        super(position);
+    public Creature(String name, Position position, int sizeX, int sizeY,
+                    int healthPoints, int attackPoints, int expPoints
+    ){
+        super(position, sizeX, sizeY);
         this.name = name;
         this.healthPoints = healthPoints;
         this.attackPoints = attackPoints;
         this.expPoints = expPoints;
-    }
-
-    public int getHealthPoints() {
-        return healthPoints;
-    }
-
-    public int getAttackPoints() {
-        return attackPoints;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setHealthPoints(int healthPoints) {
-        this.healthPoints = healthPoints;
-    }
-
-    public void setAttackPoints(int attackPoints) {
-        this.attackPoints = attackPoints;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -79,7 +60,6 @@ public abstract class Creature extends Entity {
     }
 
     /**
-     * FIXME (maybe) add this method to UML diagram, even though it is already in the superclass
      * {@link Entity}
      * @return info of creature
      */
@@ -91,12 +71,43 @@ public abstract class Creature extends Entity {
     /**
      * Action, that should be performed when the creature dies
      */
-    abstract void onDeathAction();
+    public abstract void onDeathAction();
 
     /**
      * default counter attack action, when the creature is attacked
-     * FIXME add arrow pointing to itself (Creature -> Creature) to UML
      * @param attacker the creature, that this one gets attacked by
      */
-    abstract void counterAttack(Creature attacker);
+    public abstract void counterAttack(Creature attacker);
+
+    public int getHealthPoints() {
+        return healthPoints;
+    }
+
+    public int getAttackPoints() {
+        return attackPoints;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setHealthPoints(int healthPoints) {
+        this.healthPoints = healthPoints;
+    }
+
+    public void setAttackPoints(int attackPoints) {
+        this.attackPoints = attackPoints;
+    }
+
+    public int getExpPoints() {
+        return expPoints;
+    }
+
+    public void setExpPoints(int expPoints) {
+        this.expPoints = expPoints;
+    }
 }

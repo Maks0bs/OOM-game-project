@@ -1,36 +1,15 @@
 package com.oom.game.main.environment.blocks;
 
+import com.oom.game.main.environment.blocks.strategies.ShowInventoryAction;
 import com.oom.game.main.environment.utils.Block;
-import com.oom.game.main.environment.utils.ClickInteractable;
-import com.oom.game.main.environment.utils.OpenBottom;
+import com.oom.game.main.environment.utils.PlayerInteraction;
 
-public class Campfire extends Block implements OpenBottom, ClickInteractable {
-    private Block blockBelow = null;
-
-    /**
-     *
-     * @param texture {@link Block}
-     * @param blockBelow {@link OpenBottom}
-     */
-    Campfire(int texture, Block blockBelow){
-        super(texture);
-        this.blockBelow = blockBelow;
+public class Campfire extends Block {
+    public static final String DEFAULT_TEXTURE = "";
+    public Campfire(){
+        super(DEFAULT_TEXTURE);
+        super.playerInteraction = new ShowInventoryAction();
     }
 
-    /**
-     *
-     * @return {@link OpenBottom}
-     */
-    @Override
-    public Block getBlockBelow() {
-        return blockBelow;
-    }
-
-    /**
-     * {@link ClickInteractable}
-     */
-    @Override
-    public void onClick() {
-
-    }
+    // add cooking functionality
 }

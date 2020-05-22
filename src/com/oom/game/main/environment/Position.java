@@ -7,8 +7,9 @@ package com.oom.game.main.environment;
 
  */
 
+
 public class Position {
-    public static final int BLOCK_SIZE = 64, DEFAULT_POSITION = 0;
+    public static final int DEFAULT_POSITION = 0;
     private int x = DEFAULT_POSITION, y = DEFAULT_POSITION;
 
 
@@ -21,11 +22,37 @@ public class Position {
      */
     public Position(int x, int y, boolean isBlockPosition){
         if (isBlockPosition){
-            x *= BLOCK_SIZE;
-            y *= BLOCK_SIZE;
+            x *= World.BLOCK_SIZE;
+            y *= World.BLOCK_SIZE;
         }
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     *
+     * @param x x-coordinate of current object
+     * @param y y-coordinate of object
+     */
+    public Position(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     *
+     * @return x-coordinate of block by the given exact x-coordinate
+     */
+    public int getBlockX(){
+        return x / World.BLOCK_SIZE;
+    }
+
+    /**
+     *
+     * @return y-coordinate of block by the given exact y-coordinate
+     */
+    public int getBlockY(){
+        return y / World.BLOCK_SIZE;
     }
 
     public int getX() {
@@ -42,21 +69,5 @@ public class Position {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    /**
-     *
-     * @return x-coordinate of block by the given exact x-coordinate
-     */
-    public int getBlockX(){
-        return x / BLOCK_SIZE;
-    }
-
-    /**
-     *
-     * @return y-coordinate of block by the given exact y-coordinate
-     */
-    public int getBlockY(){
-        return x / BLOCK_SIZE;
     }
 }

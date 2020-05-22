@@ -1,4 +1,4 @@
-package com.oom.game.main.entities;
+package com.oom.game.main.entities.interaction;
 
 public interface ProgressiveCreature {
     /**

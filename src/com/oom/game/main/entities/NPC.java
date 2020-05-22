@@ -1,5 +1,6 @@
 package com.oom.game.main.entities;
 
+import com.oom.game.main.entities.interaction.AggresiveBehaviour;
 import com.oom.game.main.environment.Position;
 
 public class NPC extends Creature {
@@ -7,19 +8,26 @@ public class NPC extends Creature {
         In this case this.expPoints is the reward
         that players receive after defeating the NPC
      */
+    /*
+        FIXME expand UML with strategies
+     */
+    //FIXME refactor creatures and entities with strategy pattern
+
     public static final int DEFAULT_EXP_KILL_REWARD = 5;
 
-    /**
-     *
-     * @param name name of the creature
-     * @param position position of the creature on the world
-     *
-     * @param healthPoints health points of new creature
-     * @param attackPoints attack points of new creature
-     * @param expPoints experience points of new creature (mainly kill reward for players)
+    /*
+     *  FIXME when strategies in this class change, a special method should be called
+     *  FIXME to notify the creature (the same for block) to change its texture
      */
-    public NPC(String name, Position position, int healthPoints, int attackPoints, int expPoints) {
-        super(name, position, healthPoints, attackPoints, expPoints);
+    protected AggresiveBehaviour aggresiveBehaviour = null;
+
+    /**
+     * see constructor of {@link Creature}
+     */
+    public NPC(String name, Position position, int sizeX, int sizeY,
+               int healthPoints, int attackPoints, int expPoints
+    ){
+        super(name, position, sizeX, sizeY, healthPoints, attackPoints, expPoints);
     }
 
 
@@ -40,5 +48,13 @@ public class NPC extends Creature {
     @Override
     public void onDeathAction(){
         System.out.println(this.name + " was defeated and drops " + this.expPoints + " XP points");
+    }
+
+    public AggresiveBehaviour getAggresiveBehaviour() {
+        return aggresiveBehaviour;
+    }
+
+    public void setAggresiveBehaviour(AggresiveBehaviour aggresiveBehaviour) {
+        this.aggresiveBehaviour = aggresiveBehaviour;
     }
 }
