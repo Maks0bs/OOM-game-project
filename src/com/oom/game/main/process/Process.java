@@ -68,8 +68,8 @@ public class Process {
 
         this.mainRenderable = new WorldRenderable(
                 world,
-                (int) screenSize.getWidth(),
-                (int) screenSize.getHeight()
+                (int) screenSize.getWidth() / 2,
+                (int) screenSize.getHeight() / 2
         ); //FIXME replace with MainRenderable (instead of WorldRenderable)
         mainRenderable.setRenderer(defaultRenderer);
 
@@ -99,7 +99,7 @@ public class Process {
          */
 
         Block grass = this.world.getBlock(1, 1);
-        for (int i = 0; i < 100; i++){
+        for (int i = 0; i < 10000; i++){
             if (i % 2 == 0){
                 grass.setBlockOnTop(null);
 
@@ -109,8 +109,8 @@ public class Process {
 
             }
             try{
-                Thread.sleep(50);
-                mainRenderable.updatePosition(mainRenderable.getPosition().sum(new Position(1, 0, false)));
+                Thread.sleep(2);
+                mainRenderable.updatePosition(mainRenderable.getPosition().sum(new Position(1, 1, false)));
 
             } catch (InterruptedException e){
 

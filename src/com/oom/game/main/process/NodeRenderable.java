@@ -55,13 +55,13 @@ public abstract class NodeRenderable implements IRenderable {
 
     /**
      * {@link IRenderable}
-     * @param position relative position of rendering
+     * @param pos relative position of rendering
      */
-    public void render(Renderer renderer, Position position) {
+    public void render(Renderer renderer, Position pos) {
         renderer.drawImage(
                 image,
-                position.getX(),
-                position.getY(),
+                pos.getX(),
+                pos.getY(),
                 scaleX,
                 scaleY
         );

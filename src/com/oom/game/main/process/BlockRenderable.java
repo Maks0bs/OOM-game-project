@@ -56,11 +56,6 @@ public class BlockRenderable extends NodeRenderable implements GameObserver<Bloc
         return "Block";
     }
 
-    @Override
-    public void render(Renderer renderer) {
-        super.render(renderer);
-    }
-
     /**
      * FIXME we might not need to use this method at all
      * Right now it is used to avoid memory leaks in Observable,

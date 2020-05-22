@@ -8,6 +8,9 @@ public class GameObservable<T> {
     /*
         FIXME add this class to UML
      */
+    /*
+        FIXME change ArrayList to HashSet!!!
+     */
     private ArrayList<GameObserver<T> > observers = new ArrayList<>();
 
     /**

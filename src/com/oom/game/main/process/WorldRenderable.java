@@ -59,6 +59,7 @@ public class WorldRenderable implements IRenderable, IUpdatable {
         this.world = world;
         this.width = width;
         this.height = height;
+
         this.position = new Position(0, 0, false);
         //FIXME fill up starting renderables array with initial blocks
         //FIXME later add entities
@@ -67,7 +68,7 @@ public class WorldRenderable implements IRenderable, IUpdatable {
             for (int j = 0; j <= width / World.BLOCK_SIZE; j++){
                 BlockRenderable cur = new BlockRenderable(
                         world.getBlock(i, j),
-                        new Position(i, j, true)
+                        new Position(j, i, true)
                 );
 
                 temp.add(cur);
@@ -85,7 +86,6 @@ public class WorldRenderable implements IRenderable, IUpdatable {
      * @return true if position was updated successfully, false on problems (mainly boundaries are set wrong)
      */
     public boolean updatePosition(Position newPosition){
-        //FIXME implement this method
         int curStartY = this.position.getBlockY(), newStartY = newPosition.getBlockY();
         int curStartX = this.position.getBlockX(), newStartX = newPosition.getBlockX();
 
@@ -106,7 +106,7 @@ public class WorldRenderable implements IRenderable, IUpdatable {
                 for (int j = curStartX; j <= curEndX; j++){
                     BlockRenderable cur = new BlockRenderable(
                             world.getBlock(i, j),
-                            new Position(i, j, true)
+                            new Position(j, i, true)
                     );
 
                     temp.add(cur);
@@ -133,7 +133,7 @@ public class WorldRenderable implements IRenderable, IUpdatable {
                 for (int j = curStartX; j <= curEndX; j++){
                     BlockRenderable cur = new BlockRenderable(
                             world.getBlock(i, j),
-                            new Position(i, j, true)
+                            new Position(j, i, true)
                     );
 
                     temp.add(cur);
@@ -151,12 +151,13 @@ public class WorldRenderable implements IRenderable, IUpdatable {
                 for (int j = curStartY; j <= curEndY; j++){
                     BlockRenderable cur = new BlockRenderable(
                             world.getBlock(j, i),
-                            new Position(j, i, true)
+                            new Position(i, j, true)
                     );
                     blockRenderables.get(j - curStartY).add(0, cur);
                 }
             }
         } else if (diffStartX < 0) {
+            System.out.println("get over here");
             for (int i = curStartX + 1; i <= newStartX; i++){
                 for (int j = curStartY; j <= curEndY; j++){
                     blockRenderables.get(j - curStartY).remove(0);
@@ -173,11 +174,13 @@ public class WorldRenderable implements IRenderable, IUpdatable {
                 }
             }
         } else if (diffEndX < 0) {
+
+            System.out.println("well i am here");
             for (int i = curEndX + 1; i <= newEndX; i++){
                 for (int j = curStartY; j <= curEndY; j++){
                     BlockRenderable cur = new BlockRenderable(
                             world.getBlock(j, i),
-                            new Position(j, i, true)
+                            new Position(i, j, true)
                     );
                     blockRenderables.get(j - curStartY).add(cur);
                 }
@@ -200,11 +203,14 @@ public class WorldRenderable implements IRenderable, IUpdatable {
      */
     @Override
     public void render(Renderer renderer) {
+        //System.out.println(blockRenderables.size() + " " + blockRenderables.get(0).size());
         for (int i = 0; i < blockRenderables.size(); i++){
             for (int j = 0; j < blockRenderables.get(i).size(); j++){
                 BlockRenderable cur = blockRenderables.get(i).get(j);
                 cur.render(renderer, cur.getPosition().difference(this.position));
+                //System.out.print(cur.getPosition().difference(this.position).getY() + " ");
             }
+            //System.out.println("");
         }
 
         for (int i = 0; i < entityRenderables.size(); i++){
