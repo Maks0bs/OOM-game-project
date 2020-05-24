@@ -64,7 +64,9 @@ public class BlockRenderable extends NodeRenderable implements GameObserver<Bloc
      * @throws Throwable see {@link Object}
      */
     @Override
+    @Deprecated
     protected void finalize() throws Throwable {
+        System.out.println("bruh");
         block.getObservable().unregisterObserver(this);
         super.finalize();
     }

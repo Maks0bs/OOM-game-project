@@ -1,8 +1,12 @@
 package com.oom.game.main.process;
 
+import com.oom.game.main.entities.Entity;
+import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.EmptyVoid;
+import com.oom.game.main.utils.GameObservable;
+import com.oom.game.main.utils.GameObserver;
 import gameCore.IRenderable;
 import gameCore.IUpdatable;
 import gameCore.Renderer;
@@ -18,7 +22,7 @@ import gameCore.Renderer;
 
 import java.util.ArrayList;
 
-public class WorldRenderable implements IRenderable, IUpdatable {
+public class WorldRenderable implements IRenderable, IUpdatable, GameObserver<Player> {
     /*
         FIXME add this class to UML
 
@@ -50,7 +54,7 @@ public class WorldRenderable implements IRenderable, IUpdatable {
         There are placeholder EmptyVoids in case the some updates occur and we have to move the rendered component
      */
     private ArrayList<ArrayList<BlockRenderable> > blockRenderables = new ArrayList<>();
-    private ArrayList<NodeRenderable> entityRenderables = new ArrayList<>();
+    private ArrayList<EntityRenderable> entityRenderables = new ArrayList<>();
 
     /**
      * Default constructor
@@ -75,6 +79,16 @@ public class WorldRenderable implements IRenderable, IUpdatable {
             }
 
             blockRenderables.add(temp);
+        }
+
+
+        for (int i = 0; i < world.getEntities().size(); i++){
+            entityRenderables.add(new EntityRenderable(world.getEntities().get(i)));
+        }
+
+
+        if (world.hasPlayer()){
+            entityRenderables.add(new EntityRenderable(world.getPlayer()));
         }
 
         //Maybe add placeholder blocks if something goes wrong with visual rendering
@@ -123,7 +137,6 @@ public class WorldRenderable implements IRenderable, IUpdatable {
         //Bottom side
         if (diffEndY > 0){
 
-            System.out.println("delete");
             for (int i = curEndY - 1; i >= newEndY; i--){
                 blockRenderables.remove(blockRenderables.size() - 1);
             }
@@ -157,7 +170,6 @@ public class WorldRenderable implements IRenderable, IUpdatable {
                 }
             }
         } else if (diffStartX < 0) {
-            System.out.println("get over here");
             for (int i = curStartX + 1; i <= newStartX; i++){
                 for (int j = curStartY; j <= curEndY; j++){
                     blockRenderables.get(j - curStartY).remove(0);
@@ -175,7 +187,6 @@ public class WorldRenderable implements IRenderable, IUpdatable {
             }
         } else if (diffEndX < 0) {
 
-            System.out.println("well i am here");
             for (int i = curEndX + 1; i <= newEndX; i++){
                 for (int j = curStartY; j <= curEndY; j++){
                     BlockRenderable cur = new BlockRenderable(
@@ -192,10 +203,18 @@ public class WorldRenderable implements IRenderable, IUpdatable {
 
 
         this.position = newPosition;
-
-        //FIXME check expansion in 4 directions
-        //FIXME e. g. : expansion to right: (prev position + size).getblockX >= newPosition.getBlockX...
         return true;
+    }
+
+    /**
+     * FIXME add this method to UMK
+     * @param dx change of position by x-axis
+     * @param dy change of position by y-axis
+     * @return true if moving position was successful and false otherwise
+     */
+    public boolean movePosition(int dx, int dy){
+        Position newPosition = new Position(this.position.getX() + dx, this.position.getY() + dy);
+        return this.updatePosition(newPosition);
     }
 
     /**
@@ -203,22 +222,26 @@ public class WorldRenderable implements IRenderable, IUpdatable {
      */
     @Override
     public void render(Renderer renderer) {
-        //System.out.println(blockRenderables.size() + " " + blockRenderables.get(0).size());
         for (int i = 0; i < blockRenderables.size(); i++){
             for (int j = 0; j < blockRenderables.get(i).size(); j++){
                 BlockRenderable cur = blockRenderables.get(i).get(j);
                 cur.render(renderer, cur.getPosition().difference(this.position));
-                //System.out.print(cur.getPosition().difference(this.position).getY() + " ");
             }
-            //System.out.println("");
         }
 
+
         for (int i = 0; i < entityRenderables.size(); i++){
-            entityRenderables.get(i).render(renderer);
+            EntityRenderable cur = entityRenderables.get(i);
+            cur.render(renderer, cur.getPosition().difference(this.position));
         }
 
     }
 
+    @Override
+    public void update(GameObservable<Player> observable, Player newData) {
+        //FIXME adjust world in such a way, that the player is in the center of the screen
+        //FIXME only if player is close to boundaries, don't move screen
+    }
 
     /**
      * {@link IRenderable}

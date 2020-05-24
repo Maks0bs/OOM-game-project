@@ -35,6 +35,10 @@ public class GameObservable<T> {
         this.observers.remove(observer);
     }
 
+    /**
+     * Notify all registered observers about the update of data
+     * @param data new data to notify observers about
+     */
     public void notifyObservers(T data){//add old data as argument for comparison
         for (GameObserver<T> o : this.observers){
             o.update(this, data);

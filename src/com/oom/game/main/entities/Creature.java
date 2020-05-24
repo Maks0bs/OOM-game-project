@@ -46,10 +46,10 @@ public abstract class Creature extends Entity {
      * @param attackPoints attack points of new creature
      * @param expPoints experience points of new creature
      */
-    public Creature(String name, Position position, int sizeX, int sizeY,
+    public Creature(String name, Position position, int sizeX, int sizeY, String state,
                     int healthPoints, int attackPoints, int expPoints
     ){
-        super(position, sizeX, sizeY);
+        super(position, sizeX, sizeY, state);
         this.name = name;
         this.healthPoints = healthPoints;
         this.attackPoints = attackPoints;

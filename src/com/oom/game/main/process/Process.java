@@ -1,26 +1,22 @@
 package com.oom.game.main.process;
 
-import com.oom.game.main.entities.Creature;
+import com.oom.game.main.Main;
 import com.oom.game.main.entities.player.Player;
-import com.oom.game.main.entities.mobs.Rabbit;
-import com.oom.game.main.entities.mobs.Wolf;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.Barrel;
-import com.oom.game.main.environment.blocks.Campfire;
-import com.oom.game.main.environment.blocks.Grass;
 import com.oom.game.main.environment.blocks.StoneTileFloor;
-import com.oom.game.main.environment.blocks.utils.BlockTextures;
 import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.utils.GameKeyEventManager;
+import com.oom.game.main.utils.GameObservable;
+import com.oom.game.main.utils.GameObserver;
 import gameCore.Game;
+import gameCore.IRenderable;
 import gameCore.Renderer;
-import gameCore.eventSystem.IEventManager;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class Process {
     /*
@@ -28,9 +24,16 @@ public class Process {
         FIXME add this class to UML in a normal way (right now it's disgusting)
      */
     private Renderer defaultRenderer = null; //this might not be necessary, as all data of this renderer is included in game
-    private WorldRenderable mainRenderable = null; //this might not be necessary, as all of it is included in game
+    private MainRenderable mainRenderable = null; //this might not be necessary, as all of it is included in game
     private Game game = null;
     private World world;
+    private GameKeyEventManager keyEventManager = null;
+    /*
+        This player is the main game entity;
+        FIXME may add several players simultaneously
+     */
+    private Player player;
+    private ArrayList<GameObserver<IRenderable> > observers = new ArrayList<GameObserver<IRenderable>>();
 
 
     /**
@@ -49,12 +52,11 @@ public class Process {
                 .getGraphics()
         );
 
-
-
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        World world = World.generateDefaultWorld();
-        this.world = world;
 
+        this.world = World.generateDefaultWorld();
+        this.player = Player.generateDefaultPlayer();
+        world.addPlayer(player);
 
         for (int i = 0; i < world.getBlockCountY(); i++){
             for (int j = 0; j < world.getBlockCountX(); j++){
@@ -65,13 +67,19 @@ public class Process {
             }
         }
 
-
-        this.mainRenderable = new WorldRenderable(
+        GUIRenderable guiRenderable = new GUIRenderable();
+        WorldRenderable worldRenderable = new WorldRenderable(
                 world,
                 (int) screenSize.getWidth() / 2,
                 (int) screenSize.getHeight() / 2
         ); //FIXME replace with MainRenderable (instead of WorldRenderable)
+        this.mainRenderable = new MainRenderable(worldRenderable, guiRenderable);
         mainRenderable.setRenderer(defaultRenderer);
+
+
+
+        this.keyEventManager = new GameKeyEventManager();
+        keyEventManager.register(mainRenderable);
 
 
         this.game = new Game(
@@ -82,7 +90,7 @@ public class Process {
                 mainRenderable, //renderable
                 30,
                 mainRenderable, //updatable
-                null
+                keyEventManager
         );
 
         world.addBlock(new Position(1, 1, true), new Barrel());
@@ -91,30 +99,64 @@ public class Process {
 
 
     /**
-     * method is responsible for executing world logic and adding stuff to it
+     * method is responsible for executing world / game logic and adding stuff to it
      */
     public void run() {
         /*
-            Mocking normal render process here
+            Mocking normal game process here
          */
 
-        Block grass = this.world.getBlock(1, 1);
-        for (int i = 0; i < 10000; i++){
-            if (i % 2 == 0){
-                grass.setBlockOnTop(null);
+        PlayerControl playerControl = new PlayerControl();
+        playerControl.enable();
 
+    }
+
+    /**
+     * Class made for automating results of pressing keys and other actions to control player
+     */
+    private class PlayerControl implements GameObserver<MainRenderable> {
+        private boolean enabled = false;
+        private int lastSteps = 0, curJump = 0;
+        private static final int NO_STEPS = Integer.MIN_VALUE;
+
+        PlayerControl(){
+            mainRenderable.getObservable().registerObserver(this);
+        }
+
+        public void enable(){
+            enabled = true;
+        }
+
+        public void disable(){
+            enabled = false;
+            lastSteps = NO_STEPS;
+            curJump = 0;
+        }
+
+
+        @Override
+        public void update(GameObservable<MainRenderable> observable, MainRenderable newData) {
+            if(!enabled){
+                return;
             }
-            else{
-                grass.setBlockOnTop(new Barrel());
 
+            if (newData.getFramesWhilePressed() > 0){
+                if (lastSteps != NO_STEPS){
+                    curJump = newData.getFramesWhilePressed() - lastSteps;
+                }
+                lastSteps = newData.getFramesWhilePressed();
             }
-            try{
-                Thread.sleep(2);
-                mainRenderable.updatePosition(mainRenderable.getPosition().sum(new Position(1, 1, false)));
 
-            } catch (InterruptedException e){
+            //FIXME find what block is currently under the player
+            //FIXME find the center of the player rectangle and the pixel in the center defines the block under the player
+            Block posBlock = world.getBlock(0, 0);
+            if (posBlock.getWalkAction() != null && posBlock.getWalkAction().getBaseWalkingSpeed() < curJump){
+                //FIXME move player one pixel in the direction which is defined by current pressed keys
 
+                //FIXME then update the world according to the current player position!!!
             }
+
+            mainRenderable.getWorldRenderable().movePosition(1, 1);
         }
     }
 

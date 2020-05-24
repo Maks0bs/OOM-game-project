@@ -4,20 +4,30 @@ import com.oom.game.main.entities.Creature;
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.interaction.ProgressiveCreature;
 import com.oom.game.main.environment.Position;
+import com.oom.game.main.environment.World;
+import com.oom.game.main.utils.GameObserver;
+import gameCore.IRenderable;
 
 public class Player extends Creature implements ProgressiveCreature {
-    /*
-        Players exp influence their level
-     */
+    public static String DEFAULT_STATE = "PlayerDefault";
+    public static int DEFAULT_HEALTH_POINTS = 100, DEFAULT_ATTACK_POINTS = 5;
+    //MAYBE IT WOULD BE NECESSARY TO ADD WORLD REFERENCE FOR PLAYER TO KNOW POSITION AND BLOCK UNDER HIM, ETC.
+
+    public static Player generateDefaultPlayer(){
+        return new Player("Player", new Position(0, 0, true),
+                World.BLOCK_SIZE, World.BLOCK_SIZE,
+                DEFAULT_STATE, DEFAULT_HEALTH_POINTS, DEFAULT_ATTACK_POINTS, 0
+        );
+    }
+
     /**
-     * see constructor of {@link Creature}
+     *
+     * {@link Creature}
      */
-
-
-    public Player(String name, Position position, int sizeX, int sizeY,
+    public Player(String name, Position position, int sizeX, int sizeY, String state,
                   int healthPoints, int attackPoints, int expPoints
     ){
-        super(name, position, sizeX, sizeY, healthPoints, attackPoints, expPoints);
+        super(name, position, sizeX, sizeY, state, healthPoints, attackPoints, expPoints);
     }
 
     /*

@@ -5,8 +5,11 @@ package com.oom.game.main;
  */
 
 
+import com.oom.game.main.entities.Entity;
+import com.oom.game.main.entities.utils.EntityTextures;
 import com.oom.game.main.environment.blocks.utils.BlockTextures;
 import com.oom.game.main.process.Process;
+import com.oom.game.main.ui.utils.GUITextures;
 
 import java.awt.*;
 import java.io.IOException;
@@ -40,6 +43,8 @@ public class Main {
 
         try {
             BlockTextures.generateList(); //TODO maybe this method should be called somewhere else
+            EntityTextures.generateList();
+            GUITextures.generateList();
         } catch (IOException e) {
             System.out.println("could not generate static textures list");
             e.printStackTrace();

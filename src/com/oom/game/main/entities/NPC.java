@@ -24,10 +24,10 @@ public class NPC extends Creature {
     /**
      * see constructor of {@link Creature}
      */
-    public NPC(String name, Position position, int sizeX, int sizeY,
+    public NPC(String name, Position position, int sizeX, int sizeY, String state,
                int healthPoints, int attackPoints, int expPoints
     ){
-        super(name, position, sizeX, sizeY, healthPoints, attackPoints, expPoints);
+        super(name, position, sizeX, sizeY, state, healthPoints, attackPoints, expPoints);
     }
 
 

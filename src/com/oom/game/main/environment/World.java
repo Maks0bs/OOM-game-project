@@ -3,13 +3,11 @@ package com.oom.game.main.environment;
 import com.oom.game.main.entities.Creature;
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.player.Player;
-import com.oom.game.main.environment.blocks.Campfire;
 import com.oom.game.main.environment.blocks.EmptyVoid;
 import com.oom.game.main.environment.blocks.Grass;
-import com.oom.game.main.environment.exceptions.WorldResizeException;
+import com.oom.game.main.environment.utils.exceptions.WorldResizeException;
 import com.oom.game.main.environment.utils.Block;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /*
@@ -36,6 +34,10 @@ public class World {
     */
     private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
     private ArrayList<Entity> entities = new ArrayList<Entity>();//FIXME save entities in a Set / Map
+    /*
+        At the moment there can only be one player
+     */
+    private Player player = null;
 
     /**
      * @return default world (100x100), filled with 10000 grass blocks
@@ -47,18 +49,6 @@ public class World {
                 world.addBlock(new Position(j, i, true), new Grass());
             }
         }
-
-        Player player = new Player("bruh", new Position(1, 1, true),
-                World.BLOCK_SIZE + 1, World.BLOCK_SIZE + 1, 2, 2, 2 );
-        Player p1 = new Player("1", new Position(2, 2, true),
-                World.BLOCK_SIZE, World.BLOCK_SIZE, 1,1,1);
-
-        //world.addBlock(new Position(4, 4, true), new Campfire());
-        world.addEntity(player);
-        world.addEntity(p1);
-        world.removeEntity(player);
-        System.out.println(world.getEntities().size());
-
 
         return world;
     }
@@ -208,7 +198,7 @@ public class World {
         TODO an ID field should be added to all game objects
      */
     /**
-     *
+     * !!!Note!!! please do not use this method to add players. See addPlayer method;
      * @param entity the entity you want to add. Should only be added on walkable blocks!!!
      * @return true if it is legal to insert entity in current position, false otherwise
      */
@@ -231,8 +221,37 @@ public class World {
             }
         }
 
+
         entities.add(entity);
         return true;
+    }
+
+    /**
+     * Please use only this method to add players. Do not use addEntity for that
+     * @param player player to be bound to this world
+     * @return true if player was bound successfully, false otherwise
+     */
+    public boolean addPlayer(Player player){
+        if (this.player == null){
+            this.player = player;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @return true if player is bound to this world, false otherwise
+     */
+    public boolean hasPlayer(){
+        return this.player != null;
+    }
+
+    /**
+     * Unbinds player from current world
+     */
+    public void removePlayer(){
+        this.player = null;
     }
 
 
@@ -304,5 +323,9 @@ public class World {
 
     public void setEntities(ArrayList<Entity> entities) {
         this.entities = entities;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

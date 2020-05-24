@@ -1,4 +1,4 @@
-package com.oom.game.main.environment.blocks.utils;
+package com.oom.game.main.ui.utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,22 +15,18 @@ import java.util.HashMap;
     as static constant values
  */
 
-public class BlockTextures {
+public class GUITextures {
     private static HashMap<String, BufferedImage> list = new HashMap<>();
 
     /**
-     * generates a HashMap of all known textures for blocks
+     * generates a HashMap of all known textures for GUI
      * @throws IOException when files could not be read properly
      * FIXME this method should be called as few times as possible and before any actions with textures
      * FIXME (should be only one call in the perfect situation)
      */
     public static void generateList() throws IOException {
         //FIXME replace with File.list() method
-        list.put("Barrel", ImageIO.read((new File("res/blocks/32px/Barrel.png")).getAbsoluteFile()));
-        list.put("BarrelOpen", ImageIO.read((new File("res/blocks/32px/BarrelOpen.png")).getAbsoluteFile()));
-        list.put("Grass", ImageIO.read((new File("res/blocks/32px/Grass.png")).getAbsoluteFile()));
-        list.put("EmptyVoid", ImageIO.read((new File("res/blocks/32px/EmptyVoid.png")).getAbsoluteFile()));
-        list.put("StoneTileFloor", ImageIO.read((new File("res/blocks/32px/StoneTileFloor.png")).getAbsoluteFile()));
+        list.put("GuiTest", ImageIO.read((new File("res/gui/GuiTest.png")).getAbsoluteFile()));
     }
 
     /**
