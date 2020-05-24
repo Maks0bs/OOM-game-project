@@ -1,5 +1,7 @@
 package com.oom.game.main.entities;
 
+import com.oom.game.main.entities.mobs.Rabbit;
+import com.oom.game.main.entities.mobs.Wolf;
 import com.oom.game.main.environment.Position;
 
 /*
@@ -17,6 +19,19 @@ public abstract class Creature extends Entity {
     protected int healthPoints = 0, attackPoints = 0, expPoints = 0;
     protected String name = NAME_UNKNOWN;
 
+    /**
+     * TODO improve random generation
+     * @return random creature (currently 2/3 chance = rabbit, 1/3 chance = wolf)
+     */
+    public static Creature generateRandomCreature(){
+        int key = (int) (Math.random() * 100);
+        if (key <= 66){
+            return new Rabbit(new Position(0, 0, true));
+        } else { //here new possible creatures can be added
+            return new Wolf(new Position(0, 0, true));
+        }
+    }
+
     /*
         TODO reduce constructors for Creature
         TODO add some interfaces for default actions
@@ -31,10 +46,10 @@ public abstract class Creature extends Entity {
      * @param attackPoints attack points of new creature
      * @param expPoints experience points of new creature
      */
-    public Creature(String name, Position position, int sizeX, int sizeY,
+    public Creature(String name, Position position, int sizeX, int sizeY, String state,
                     int healthPoints, int attackPoints, int expPoints
     ){
-        super(position, sizeX, sizeY);
+        super(position, sizeX, sizeY, state);
         this.name = name;
         this.healthPoints = healthPoints;
         this.attackPoints = attackPoints;

@@ -1,4 +1,6 @@
-package com.oom.game.main.environment.exceptions;
+package com.oom.game.main.environment.utils.exceptions;
+
+import com.oom.game.main.environment.World;
 
 public class WorldResizeException extends Exception {
     /**
@@ -9,5 +11,9 @@ public class WorldResizeException extends Exception {
      */
     public WorldResizeException(String message){
         super(message);
+    }
+
+    public WorldResizeException() {
+        super("Cannot resize world");
     }
 }
