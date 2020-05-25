@@ -15,6 +15,8 @@ public class Block {
     protected WalkAction walkAction = null;
     protected DamageAction damageAction = null;
     protected MoveAction moveAction = null;
+    //FIXME URGENT implement strategies that imply no action to use instead of null!!!!!!!!!!!!!
+    //FIXME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /*
         It's possible to implement this through extending from observable class, but it's not possible
         to extend in such a way in Player class. That's why this pattern is used.

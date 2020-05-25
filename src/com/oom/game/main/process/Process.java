@@ -1,6 +1,5 @@
 package com.oom.game.main.process;
 
-import com.oom.game.main.Main;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
@@ -17,6 +16,8 @@ import gameCore.Renderer;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 public class Process {
     /*
@@ -116,8 +117,7 @@ public class Process {
      */
     private class PlayerControl implements GameObserver<MainRenderable> {
         private boolean enabled = false;
-        private int lastSteps = 0, curJump = 0;
-        private static final int NO_STEPS = Integer.MIN_VALUE;
+        private HashMap<Character, Integer> prevPressed = new HashMap<>();
 
         PlayerControl(){
             mainRenderable.getObservable().registerObserver(this);
@@ -129,8 +129,6 @@ public class Process {
 
         public void disable(){
             enabled = false;
-            lastSteps = NO_STEPS;
-            curJump = 0;
         }
 
 
@@ -140,23 +138,74 @@ public class Process {
                 return;
             }
 
-            if (newData.getFramesWhilePressed() > 0){
-                if (lastSteps != NO_STEPS){
-                    curJump = newData.getFramesWhilePressed() - lastSteps;
+            Position blockPos = new Position(
+                    player.getPosition().getX() + (player.getSizeX() / 2),
+                    player.getPosition().getY() + (player.getSizeY() / 2)
+            );
+            Block blockUnder = world.getBlock(blockPos);
+
+            if (blockUnder.getWalkAction() != null && blockUnder.getWalkAction().canWalk()){
+                double base = blockUnder.getWalkAction().getBaseWalkingSpeed();
+
+                if (newData.keyIsPressed('w')){
+                    if (!prevPressed.containsKey('w')){
+                        prevPressed.put('w', newData.getKeyPressedTime('w'));
+                    }
+                    double diffW = newData.getKeyPressedTime('w') - prevPressed.get('w');
+                    if (diffW * base >= 1){
+                        prevPressed.put('w', prevPressed.get('w') + (int)diffW);
+                        player.move(0, -(int)(diffW * base) );
+                    }
                 }
-                lastSteps = newData.getFramesWhilePressed();
+                else{
+                    prevPressed.remove('w');
+                }
+
+                if (newData.keyIsPressed('a')){
+                    if (!prevPressed.containsKey('a')){
+                        prevPressed.put('a', newData.getKeyPressedTime('a'));
+                    }
+                    double diffW = newData.getKeyPressedTime('a') - prevPressed.get('a');
+                    if (diffW * base >= 1){
+                        prevPressed.put('a', prevPressed.get('a') + (int)diffW);
+                        player.move(-(int)(diffW * base), 0 );
+                    }
+                }
+                else{
+                    prevPressed.remove('a');
+                }
+
+                if (newData.keyIsPressed('s')){
+                    if (!prevPressed.containsKey('s')){
+                        prevPressed.put('s', newData.getKeyPressedTime('s'));
+                        //System.out.println("added s");
+                    }
+                    //System.out.println("pressed " + newData.getKeyPressedTime('s') + " " + prevPressed.get('s'));
+                    double diffW = newData.getKeyPressedTime('s') - prevPressed.get('s');
+                    if (diffW * base >= 1){
+                        prevPressed.put('s', prevPressed.get('s') + (int)diffW);
+                        player.move(0, (int)(diffW * base) );
+                    }
+                }
+                else{
+                    prevPressed.remove('s');
+                }
+
+                if (newData.keyIsPressed('d')){
+                    if (!prevPressed.containsKey('d')){
+                        prevPressed.put('d', newData.getKeyPressedTime('d'));
+                        //System.out.println("added d");
+                    }
+                    double diffW = newData.getKeyPressedTime('d') - prevPressed.get('d');
+                    if (diffW * base >= 1){
+                        prevPressed.put('d', prevPressed.get('d') + (int)diffW);
+                        player.move((int)(diffW * base), 0 );
+                    }
+                }
+                else{
+                    prevPressed.remove('d');
+                }
             }
-
-            //FIXME find what block is currently under the player
-            //FIXME find the center of the player rectangle and the pixel in the center defines the block under the player
-            Block posBlock = world.getBlock(0, 0);
-            if (posBlock.getWalkAction() != null && posBlock.getWalkAction().getBaseWalkingSpeed() < curJump){
-                //FIXME move player one pixel in the direction which is defined by current pressed keys
-
-                //FIXME then update the world according to the current player position!!!
-            }
-
-            mainRenderable.getWorldRenderable().movePosition(1, 1);
         }
     }
 

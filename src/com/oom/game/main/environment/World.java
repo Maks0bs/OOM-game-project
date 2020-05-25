@@ -274,7 +274,8 @@ public class World {
      * @param sizeY y-size of search area rectangle
      * @return list
      */
-    public ArrayList<Entity> getBlockInArea(Position position, int sizeX, int sizeY){
+    public ArrayList<Entity> getBlocksInArea(Position position, int sizeX, int sizeY){
+        //FIXME implement this method
         return null;
     }
 
