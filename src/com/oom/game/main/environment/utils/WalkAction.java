@@ -17,4 +17,9 @@ public interface WalkAction {
      * @return true if creatures can walk on this block, false otherwise
      */
     boolean canWalk();
+
+    /**
+     * Action that should be performed when an entity walk on top of this block
+     */
+    void onWalk();
 }

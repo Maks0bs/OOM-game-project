@@ -6,6 +6,7 @@ import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.Barrel;
 import com.oom.game.main.environment.blocks.StoneTileFloor;
 import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.process.utils.PlayerControl;
 import com.oom.game.main.utils.GameKeyEventManager;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
@@ -107,106 +108,11 @@ public class Process {
             Mocking normal game process here
          */
 
-        PlayerControl playerControl = new PlayerControl();
+        PlayerControl playerControl = new PlayerControl(mainRenderable, player, world);
         playerControl.enable();
 
     }
 
-    /**
-     * Class made for automating results of pressing keys and other actions to control player
-     */
-    private class PlayerControl implements GameObserver<MainRenderable> {
-        private boolean enabled = false;
-        private HashMap<Character, Integer> prevPressed = new HashMap<>();
 
-        PlayerControl(){
-            mainRenderable.getObservable().registerObserver(this);
-        }
-
-        public void enable(){
-            enabled = true;
-        }
-
-        public void disable(){
-            enabled = false;
-        }
-
-
-        @Override
-        public void update(GameObservable<MainRenderable> observable, MainRenderable newData) {
-            if(!enabled){
-                return;
-            }
-
-            Position blockPos = new Position(
-                    player.getPosition().getX() + (player.getSizeX() / 2),
-                    player.getPosition().getY() + (player.getSizeY() / 2)
-            );
-            Block blockUnder = world.getBlock(blockPos);
-
-            if (blockUnder.getWalkAction() != null && blockUnder.getWalkAction().canWalk()){
-                double base = blockUnder.getWalkAction().getBaseWalkingSpeed();
-
-                if (newData.keyIsPressed('w')){
-                    if (!prevPressed.containsKey('w')){
-                        prevPressed.put('w', newData.getKeyPressedTime('w'));
-                    }
-                    double diffW = newData.getKeyPressedTime('w') - prevPressed.get('w');
-                    if (diffW * base >= 1){
-                        prevPressed.put('w', prevPressed.get('w') + (int)diffW);
-                        player.move(0, -(int)(diffW * base) );
-                    }
-                }
-                else{
-                    prevPressed.remove('w');
-                }
-
-                if (newData.keyIsPressed('a')){
-                    if (!prevPressed.containsKey('a')){
-                        prevPressed.put('a', newData.getKeyPressedTime('a'));
-                    }
-                    double diffW = newData.getKeyPressedTime('a') - prevPressed.get('a');
-                    if (diffW * base >= 1){
-                        prevPressed.put('a', prevPressed.get('a') + (int)diffW);
-                        player.move(-(int)(diffW * base), 0 );
-                    }
-                }
-                else{
-                    prevPressed.remove('a');
-                }
-
-                if (newData.keyIsPressed('s')){
-                    if (!prevPressed.containsKey('s')){
-                        prevPressed.put('s', newData.getKeyPressedTime('s'));
-                        //System.out.println("added s");
-                    }
-                    //System.out.println("pressed " + newData.getKeyPressedTime('s') + " " + prevPressed.get('s'));
-                    double diffW = newData.getKeyPressedTime('s') - prevPressed.get('s');
-                    if (diffW * base >= 1){
-                        prevPressed.put('s', prevPressed.get('s') + (int)diffW);
-                        player.move(0, (int)(diffW * base) );
-                    }
-                }
-                else{
-                    prevPressed.remove('s');
-                }
-
-                if (newData.keyIsPressed('d')){
-                    if (!prevPressed.containsKey('d')){
-                        prevPressed.put('d', newData.getKeyPressedTime('d'));
-                        //System.out.println("added d");
-                    }
-                    double diffW = newData.getKeyPressedTime('d') - prevPressed.get('d');
-                    if (diffW * base >= 1){
-                        prevPressed.put('d', prevPressed.get('d') + (int)diffW);
-                        player.move((int)(diffW * base), 0 );
-                    }
-                }
-                else{
-                    prevPressed.remove('d');
-                }
-            }
-        }
-    }
 
 }

@@ -34,4 +34,9 @@ public class FloorWalkAction implements WalkAction {
     public boolean canWalk() {
         return true;
     }
+
+    @Override
+    public void onWalk() {
+
+    }
 }
