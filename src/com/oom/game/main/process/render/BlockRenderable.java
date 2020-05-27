@@ -10,7 +10,7 @@ import com.oom.game.main.utils.GameObserver;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class BlockRenderable extends NodeRenderable implements GameObserver<Block> {
+public class BlockRenderable extends NodeRenderable {
     /*
         FIXME add this class to UML
      */
@@ -24,18 +24,17 @@ public class BlockRenderable extends NodeRenderable implements GameObserver<Bloc
     public BlockRenderable(Block block, Position position) {
         super(null, position);
         this.image = BlockTextures.getTextureByState(block.getState());
-        block.getObservable().registerObserver(this);
         this.block = block;
     }
 
-    @Override
-    public void update(GameObservable<Block> observable, Block newData) {
 
-
-        //if (!newData.getState().equals(this.block.getState())){ this could work, if data was set in setter AFTER sending it over here
-        if (newData.hasBlockOnTop()){
-            BufferedImage bottom = BlockTextures.getTextureByState(newData.getState());
-            BufferedImage top = BlockTextures.getTextureByState(newData.getBlockOnTop().getState());
+    /**
+     * function to toggle display the block on top of the one that is saved in BlockRenderable as a member
+     */
+    public void displayTopBlock(){
+        if (block.hasBlockOnTop()){
+            BufferedImage bottom = BlockTextures.getTextureByState(block.getState());
+            BufferedImage top = BlockTextures.getTextureByState(block.getBlockOnTop().getState());
             BufferedImage combined = new BufferedImage(bottom.getWidth(), bottom.getHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics g = combined.getGraphics();
             g.drawImage(bottom, 0, 0, null);
@@ -43,30 +42,10 @@ public class BlockRenderable extends NodeRenderable implements GameObserver<Bloc
             g.dispose();
             this.image = combined;
         }
-        else{
-            this.image = BlockTextures.getTextureByState(newData.getState());
-        }
-
-        this.block = newData;
     }
 
     @Override
     protected String getNodeType() {
         return "Block";
-    }
-
-    /**
-     * FIXME we might not need to use this method at all
-     * Right now it is used to avoid memory leaks in Observable,
-     * because when this BlockRenderable is deleted in WorldRenderable,
-     * this object is null, but it still exists in list of objects in observer
-     * @throws Throwable see {@link Object}
-     */
-    @Override
-    @Deprecated
-    protected void finalize() throws Throwable {
-        System.out.println("bruh");
-        block.getObservable().unregisterObserver(this);
-        super.finalize();
     }
 }

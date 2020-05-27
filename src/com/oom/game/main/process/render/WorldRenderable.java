@@ -4,6 +4,7 @@ import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
+import com.oom.game.main.environment.blocks.utils.BlockTextures;
 import com.oom.game.main.environment.utils.Block;
 import com.oom.game.main.process.render.BlockRenderable;
 import com.oom.game.main.process.render.EntityRenderable;
@@ -22,6 +23,8 @@ import gameCore.Renderer;
     FIXME might need to fix some issues in above notes
  */
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class WorldRenderable implements IRenderable, IUpdatable {
@@ -79,6 +82,7 @@ public class WorldRenderable implements IRenderable, IUpdatable {
                         world.getBlock(i, j),
                         new Position(j, i, true)
                 );
+                cur.displayTopBlock();
 
                 temp.add(cur);
             }
@@ -100,14 +104,12 @@ public class WorldRenderable implements IRenderable, IUpdatable {
             @Override
             public void update(GameObservable<World> observable, World newData, Object specs) {
                 //FIXME improve type check (do it without dynamic upcast)
-                System.out.println("test");
                 if (specs instanceof Position){
                     Position pos = (Position) specs;
-                    setRenderableByPosition(pos, new BlockRenderable(newData.getBlock(pos), pos));
+                    Block b = newData.getBlock(pos);
+                    setRenderableByPosition(pos, new BlockRenderable(b, pos));
                     BlockRenderable br = getRenderableByPosition(pos);
-                    //FIXME this is absolutely disgusting!!!!!!!!!!!
-                    //FIXME change this immediately (update block on top changes here, not in block renderable
-                    br.update(null, newData.getBlock(pos));
+                    br.displayTopBlock();
                 }
             }
         };
@@ -159,6 +161,7 @@ public class WorldRenderable implements IRenderable, IUpdatable {
                             world.getBlock(i, j),
                             new Position(j, i, true)
                     );
+                    cur.displayTopBlock();
 
                     temp.add(cur);
                 }
@@ -185,6 +188,7 @@ public class WorldRenderable implements IRenderable, IUpdatable {
                             world.getBlock(i, j),
                             new Position(j, i, true)
                     );
+                    cur.displayTopBlock();
 
                     temp.add(cur);
                 }
@@ -203,6 +207,8 @@ public class WorldRenderable implements IRenderable, IUpdatable {
                             world.getBlock(j, i),
                             new Position(i, j, true)
                     );
+
+                    cur.displayTopBlock();
                     blockRenderables.get(j - curStartY).add(0, cur);
                 }
             }
@@ -229,6 +235,8 @@ public class WorldRenderable implements IRenderable, IUpdatable {
                             world.getBlock(j, i),
                             new Position(i, j, true)
                     );
+
+                    cur.displayTopBlock();
                     blockRenderables.get(j - curStartY).add(cur);
                 }
             }

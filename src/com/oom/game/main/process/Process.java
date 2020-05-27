@@ -101,47 +101,10 @@ public class Process {
         world.addBlock(2, 1, new Barrel());
         world.addBlock(5, 5, new Barrel());
 
-        //FIXME this remove cannot be seen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         world.removeBlock(4, 4);
 
     }
 
-    /*
-        URGENT: work on deleting blocks and showing these changes in WorldRenderable
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-        !
-     */
 
 
     /**

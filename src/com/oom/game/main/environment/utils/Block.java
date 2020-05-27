@@ -22,7 +22,6 @@ public class Block {
         It's possible to implement this through extending from observable class, but it's not possible
         to extend in such a way in Player class. That's why this pattern is used.
      */
-    protected GameObservable<Block> observable = new GameObservable<Block>();
 
     /**
      *
@@ -50,7 +49,6 @@ public class Block {
      */
     public void setState(String state) {
         this.state = state;
-        this.observable.notifyObservers(this);
     }
 
     public Block getBlockOnTop() {
@@ -64,7 +62,6 @@ public class Block {
     public void setBlockOnTop(Block blockOnTop) {
         //FIXME sometimes this function gets called 2 times (noticed on initialization)
         this.blockOnTop = blockOnTop;
-        this.observable.notifyObservers(this);
     }
 
     public PlayerInteraction getPlayerInteraction() {
@@ -99,11 +96,4 @@ public class Block {
         this.moveAction = moveAction;
     }
 
-    public GameObservable<Block> getObservable() {
-        return observable;
-    }
-
-    public void setObservable(GameObservable<Block> observable) {
-        this.observable = observable;
-    }
 }
