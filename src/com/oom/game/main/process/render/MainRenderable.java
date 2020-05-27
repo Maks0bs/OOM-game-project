@@ -1,4 +1,4 @@
-package com.oom.game.main.process;
+package com.oom.game.main.process.render;
 
 import com.oom.game.main.utils.GameObservable;
 import gameCore.IRenderable;
@@ -10,7 +10,6 @@ import gameCore.input.keyboard.KeyPressedEvent;
 import gameCore.input.keyboard.KeyReleasedEvent;
 
 import java.util.HashMap;
-import java.util.Set;
 
 /*
     This class has to deal with all system events like key strokes, clicks, etc.

@@ -1,12 +1,11 @@
-package com.oom.game.main.process;
+package com.oom.game.main.process.render;
 
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.blocks.utils.BlockTextures;
 import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.process.render.NodeRenderable;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
-import gameCore.IRenderable;
-import gameCore.Renderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

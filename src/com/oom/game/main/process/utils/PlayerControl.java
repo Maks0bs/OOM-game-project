@@ -4,7 +4,7 @@ import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.utils.Block;
-import com.oom.game.main.process.MainRenderable;
+import com.oom.game.main.process.render.MainRenderable;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 
@@ -20,9 +20,9 @@ public class PlayerControl implements GameObserver<MainRenderable> {
     private World world = null;
     private Player player = null;
 
-    public PlayerControl(MainRenderable mainRenderable, Player player, World world){
+    public PlayerControl(MainRenderable mainRenderable, World world){
 
-        this.player = player;
+        this.player = world.getPlayer();
         this.world = world;
         mainRenderable.getObservable().registerObserver(this);
         for (int i = 0; i < CONTROL_KEYS.length; i++){
@@ -59,6 +59,7 @@ public class PlayerControl implements GameObserver<MainRenderable> {
                 double newValue = pressedDistance.get(c) + base;
                 int diff = (int)(newValue);
                 pressedDistance.replace(c, newValue - diff);
+                //FIXME don't move one time, make it in a loop and move one pixel at a time to make it look more smooth
                 switch (c){
                     case 'w':
                         player.move(0, -diff);

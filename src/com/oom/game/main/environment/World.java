@@ -7,6 +7,8 @@ import com.oom.game.main.environment.blocks.EmptyVoid;
 import com.oom.game.main.environment.blocks.Grass;
 import com.oom.game.main.environment.utils.exceptions.WorldResizeException;
 import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.utils.GameObservable;
+import com.oom.game.main.utils.GameObserver;
 
 import java.util.ArrayList;
 
@@ -38,6 +40,7 @@ public class World {
         At the moment there can only be one player
      */
     private Player player = null;
+    private GameObservable<World> observable = new GameObservable<>();
 
     /**
      * @return default world (100x100), filled with 10000 grass blocks
@@ -120,6 +123,8 @@ public class World {
         if (curBlock instanceof EmptyVoid){ //if there is no block (Empty void), then replace
             //FIXME it is a bad idea to use instance of, change to smth else
             blocks.get(position.getBlockY()).set(position.getBlockX(), block);
+            //TODO might need to make a deep copy HERE and in a lot of other places (where block updates occur)
+            this.observable.notifyObservers(this, position);
             return true;
         }
         else{ //otherwise there is a floor block, add one on top, but check if block on top already exists
@@ -127,6 +132,7 @@ public class World {
                 return false;
             }
             curBlock.setBlockOnTop(block);
+            this.observable.notifyObservers(this, position);
             return true;
         }
     }
@@ -138,11 +144,12 @@ public class World {
      *              If the current structure is EmptyVoid {@link Void} then replace this block with this parameter completely
      * @return true is block was added, false if something went wrong
      */
-    public boolean addBlock(int i, int j, Block block){
+    public boolean addBlock(int i, int j, Block block){//FIXME improve the complexity this
         Block curBlock = this.getBlock(i, j);
         if (curBlock instanceof EmptyVoid){ //if there is no block (Empty void), then replace
             //FIXME it is a bad idea to use instance of, change to smth else
             blocks.get(i).set(j, block);
+            this.observable.notifyObservers(this, new Position(j, i, true));
             return true;
         }
         else{ //otherwise there is a floor block, add one on top, but check if block on top already exists
@@ -150,6 +157,7 @@ public class World {
                 return false;
             }
             curBlock.setBlockOnTop(block);
+            this.observable.notifyObservers(this, new Position(j, i, true));
             return true;
         }
     }
@@ -159,16 +167,18 @@ public class World {
      * @param position position of the block to be removed
      * @return true if block was removed successfully, false on error
      */
-    public boolean removeBlock(Position position){
+    public boolean removeBlock(Position position){//FIXME improve the complexity this
         Block curBlock = this.getBlock(position);
         if (curBlock instanceof EmptyVoid){ //if there is no block (Empty void), then replace
             return false;
         } else if (curBlock.hasBlockOnTop()){
 
             curBlock.setBlockOnTop(null);
+            this.observable.notifyObservers(this, position);
             return true;
         } else {
             blocks.get(position.getBlockY()).set(position.getBlockX(), new EmptyVoid());
+            this.observable.notifyObservers(this, position);
             return true;
         }
     }
@@ -179,16 +189,18 @@ public class World {
      * @param j position of the block to be removed on x-axis
      * @return true if block was removed successfully, false on error
      */
-    public boolean removeBlock(int i, int j){
+    public boolean removeBlock(int i, int j){//FIXME
         Block curBlock = this.getBlock(i, j);
         if (curBlock instanceof EmptyVoid){ //if there is no block (Empty void), then replace
             return false;
         } else if (curBlock.hasBlockOnTop()){
 
             curBlock.setBlockOnTop(null);
+            this.observable.notifyObservers(this, new Position(j, i, true));
             return true;
         } else {
             blocks.get(i).set(j, new EmptyVoid());
+            this.observable.notifyObservers(this, new Position(j, i, true));
             return true;
         }
     }
@@ -223,6 +235,7 @@ public class World {
 
 
         entities.add(entity);
+        this.observable.notifyObservers(this);
         return true;
     }
 
@@ -234,6 +247,7 @@ public class World {
     public boolean addPlayer(Player player){
         if (this.player == null){
             this.player = player;
+            this.observable.notifyObservers(this);
             return true;
         }
         return false;
@@ -251,7 +265,29 @@ public class World {
      * Unbinds player from current world
      */
     public void removePlayer(){
+        this.observable.notifyObservers(this);
         this.player = null;
+    }
+
+    /**
+     *
+     * @param position position to be tested if it is included to this world
+     * @return true if position is legal, false otherwise
+     */
+    public boolean isValidPosition(Position position){
+        return !(position.getX() < 0 || position.getX() >= blockCountX * BLOCK_SIZE ||
+            position.getY() < 0 || position.getY() >= blockCountY * BLOCK_SIZE
+        );
+    }
+
+    /**
+     *
+     * @param i y-axis block position
+     * @param j x-axis block position
+     * @return true if index is legal, false otherwise
+     */
+    public boolean isValidBlockIndex(int i, int j){
+        return !(i < 0 || i >= blockCountX || j < 0 || j>= blockCountY);
     }
 
 
@@ -288,6 +324,7 @@ public class World {
         for (int i = 0; i < entities.size(); i++){
             if (entities.get(i) == entity){//here addresses are compared, and that's what wee need, don't use .equals()
                 entities.remove(i);
+                this.observable.notifyObservers(this);
                 return true;
             }
         }
@@ -310,23 +347,18 @@ public class World {
         this.blockCountY = blockCountY;
     }
 
-    public ArrayList<ArrayList<Block>> getBlocks() {
-        return blocks;
-    }
-
-    public void setBlocks(ArrayList<ArrayList<Block>> blocks) {
-        this.blocks = blocks;
-    }
 
     public ArrayList<Entity> getEntities() {
         return entities;
     }
 
-    public void setEntities(ArrayList<Entity> entities) {
-        this.entities = entities;
-    }
-
     public Player getPlayer() {
         return player;
+    }
+
+    public GameObservable<World> getObservable() {
+
+        System.out.println(observable);
+        return observable;
     }
 }

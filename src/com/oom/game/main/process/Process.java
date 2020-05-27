@@ -5,7 +5,9 @@ import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.Barrel;
 import com.oom.game.main.environment.blocks.StoneTileFloor;
-import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.process.render.GUIRenderable;
+import com.oom.game.main.process.render.MainRenderable;
+import com.oom.game.main.process.render.WorldRenderable;
 import com.oom.game.main.process.utils.PlayerControl;
 import com.oom.game.main.utils.GameKeyEventManager;
 import com.oom.game.main.utils.GameObservable;
@@ -17,8 +19,6 @@ import gameCore.Renderer;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 
 public class Process {
     /*
@@ -35,6 +35,7 @@ public class Process {
         FIXME may add several players simultaneously
      */
     private Player player;
+    private PlayerControl playerControl;
     private ArrayList<GameObserver<IRenderable> > observers = new ArrayList<GameObserver<IRenderable>>();
 
 
@@ -78,6 +79,8 @@ public class Process {
         this.mainRenderable = new MainRenderable(worldRenderable, guiRenderable);
         mainRenderable.setRenderer(defaultRenderer);
 
+        //player.getObservable().registerObserver(worldRenderable.getPlayerObserver());
+
 
 
         this.keyEventManager = new GameKeyEventManager();
@@ -95,9 +98,50 @@ public class Process {
                 keyEventManager
         );
 
-        world.addBlock(new Position(1, 1, true), new Barrel());
+        world.addBlock(2, 1, new Barrel());
+        world.addBlock(5, 5, new Barrel());
+
+        //FIXME this remove cannot be seen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        world.removeBlock(4, 4);
 
     }
+
+    /*
+        URGENT: work on deleting blocks and showing these changes in WorldRenderable
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+        !
+     */
 
 
     /**
@@ -108,8 +152,11 @@ public class Process {
             Mocking normal game process here
          */
 
-        PlayerControl playerControl = new PlayerControl(mainRenderable, player, world);
-        playerControl.enable();
+        this.playerControl = new PlayerControl(mainRenderable, world);
+        this.playerControl.enable();
+
+        //FIXME this doesnt work !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //mainRenderable.getWorldRenderable().updatePosition(new Position(50, 50, true));
 
     }
 

@@ -5,6 +5,7 @@ import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.interaction.ProgressiveCreature;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
+import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 import gameCore.IRenderable;
 

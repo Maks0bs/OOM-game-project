@@ -1,6 +1,7 @@
 package com.oom.game.main.utils;
 
 import gameCore.Game;
+import jdk.jfr.Description;
 
 import java.util.ArrayList;
 
@@ -43,5 +44,26 @@ public class GameObservable<T> {
         for (GameObserver<T> o : this.observers){
             o.update(this, data);
         }
+    }
+
+    /**
+     * Notify all registered observers about the update of data
+     * @param data new data to notify observers about
+     * @param specs object to specify what exactly has changed
+     */
+    public void notifyObservers(T data, Object specs){
+        for (GameObserver<T> o : this.observers){
+            o.update(this, data, specs);
+        }
+    }
+
+    @Override
+    public String toString() {
+        String ans = "GameObservable" + " with " + observers.size() + " observers: ";
+        for (int i = 0; i < observers.size(); i++){
+            ans += observers.get(i).getClass().toString() + " ";
+        }
+
+        return ans;
     }
 }

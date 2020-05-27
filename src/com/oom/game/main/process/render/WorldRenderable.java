@@ -1,10 +1,12 @@
-package com.oom.game.main.process;
+package com.oom.game.main.process.render;
 
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
-import com.oom.game.main.environment.blocks.EmptyVoid;
+import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.process.render.BlockRenderable;
+import com.oom.game.main.process.render.EntityRenderable;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 import gameCore.IRenderable;
@@ -22,7 +24,7 @@ import gameCore.Renderer;
 
 import java.util.ArrayList;
 
-public class WorldRenderable implements IRenderable, IUpdatable, GameObserver<Player> {
+public class WorldRenderable implements IRenderable, IUpdatable {
     /*
         FIXME add this class to UML
 
@@ -56,6 +58,9 @@ public class WorldRenderable implements IRenderable, IUpdatable, GameObserver<Pl
     private ArrayList<ArrayList<BlockRenderable> > blockRenderables = new ArrayList<>();
     private ArrayList<EntityRenderable> entityRenderables = new ArrayList<>();
 
+    private GameObserver<Entity> playerObserver = null;
+    private GameObserver<World> worldObserver = null;
+
     /**
      * Default constructor
      */
@@ -86,9 +91,41 @@ public class WorldRenderable implements IRenderable, IUpdatable, GameObserver<Pl
             entityRenderables.add(new EntityRenderable(world.getEntities().get(i)));
         }
 
+        worldObserver = new GameObserver<World>() {
+            @Override
+            public void update(GameObservable<World> observable, World newData) {
+                //FIXME implement entity changes and general block changes
+            }
+
+            @Override
+            public void update(GameObservable<World> observable, World newData, Object specs) {
+                //FIXME improve type check (do it without dynamic upcast)
+                System.out.println("test");
+                if (specs instanceof Position){
+                    Position pos = (Position) specs;
+                    setRenderableByPosition(pos, new BlockRenderable(newData.getBlock(pos), pos));
+                    BlockRenderable br = getRenderableByPosition(pos);
+                    //FIXME this is absolutely disgusting!!!!!!!!!!!
+                    //FIXME change this immediately (update block on top changes here, not in block renderable
+                    br.update(null, newData.getBlock(pos));
+                }
+            }
+        };
+        world.getObservable().registerObserver(worldObserver);
 
         if (world.hasPlayer()){
             entityRenderables.add(new EntityRenderable(world.getPlayer()));
+            playerObserver = new GameObserver<>() {
+                @Override
+                public void update(GameObservable<Entity> observable, Entity newData) {
+                    //FIXME adjust world in such a way, that the player is in the center of the screen
+                    //FIXME only if player is close to boundaries, don't move screen
+                    Position newPosition = new Position(newData.getPosition());
+                    updatePosition(newPosition);
+                }
+            };
+
+            world.getPlayer().getObservable().registerObserver(playerObserver);
         }
 
         //Maybe add placeholder blocks if something goes wrong with visual rendering
@@ -186,7 +223,6 @@ public class WorldRenderable implements IRenderable, IUpdatable, GameObserver<Pl
                 }
             }
         } else if (diffEndX < 0) {
-
             for (int i = curEndX + 1; i <= newEndX; i++){
                 for (int j = curStartY; j <= curEndY; j++){
                     BlockRenderable cur = new BlockRenderable(
@@ -207,7 +243,7 @@ public class WorldRenderable implements IRenderable, IUpdatable, GameObserver<Pl
     }
 
     /**
-     * FIXME add this method to UMK
+     * FIXME add this method to UML
      * @param dx change of position by x-axis
      * @param dy change of position by y-axis
      * @return true if moving position was successful and false otherwise
@@ -226,6 +262,7 @@ public class WorldRenderable implements IRenderable, IUpdatable, GameObserver<Pl
             for (int j = 0; j < blockRenderables.get(i).size(); j++){
                 BlockRenderable cur = blockRenderables.get(i).get(j);
                 cur.render(renderer, cur.getPosition().difference(this.position));
+                //FIXME render entities depending on their position to render them behind blocks on top of other blocks!!!!
             }
         }
 
@@ -237,10 +274,28 @@ public class WorldRenderable implements IRenderable, IUpdatable, GameObserver<Pl
 
     }
 
-    @Override
-    public void update(GameObservable<Player> observable, Player newData) {
-        //FIXME adjust world in such a way, that the player is in the center of the screen
-        //FIXME only if player is close to boundaries, don't move screen
+    /**
+     *
+     * @param position position of renderable the caller wants to receive
+     * @return the wanted BlockRenderable
+     */
+    public BlockRenderable getRenderableByPosition(Position position){
+        //FIXME check if position is in bounds of current WorldRenderable
+        Position relative = position.difference(this.position);
+        return blockRenderables.get(relative.getBlockY()).get(relative.getBlockX());
+    }
+
+    /**
+     *
+     * @param position position where to set the renderable (relative to the world, NOT to the renderable)
+     * @param br the Renderable that is to be set
+     * @return true if change was successful, false otherwise
+     */
+    public boolean setRenderableByPosition(Position position, BlockRenderable br){
+        Position relative = position.difference(this.position);
+        blockRenderables.get(relative.getBlockY()).set(relative.getBlockX(), br);
+
+        return true;
     }
 
     /**
@@ -296,7 +351,7 @@ public class WorldRenderable implements IRenderable, IUpdatable, GameObserver<Pl
         return position;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public GameObserver<Entity> getPlayerObserver() {
+        return playerObserver;
     }
 }
