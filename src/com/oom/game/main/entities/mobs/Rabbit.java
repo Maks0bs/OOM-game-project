@@ -9,7 +9,7 @@ import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 
 public class Rabbit extends NPC {
-    public static final String NAME = "Rabbit", TYPE = "Rabbit";
+    public static final String NAME = "Rabbit", TYPE = "Rabbit", DEFAULT_STATE = "Rabbit";
     public static final int SIZE_X = World.BLOCK_SIZE / 4, SIZE_Y = World.BLOCK_SIZE / 4,
             HEALTH_POINTS = 4, ATTACK_POINTS = 1, EXP_POINTS = 2;
 
@@ -17,7 +17,7 @@ public class Rabbit extends NPC {
      * see constructor of {@link NPC}
      */
     public Rabbit(Position position){
-        super(NAME, position, SIZE_X, SIZE_Y, HEALTH_POINTS, ATTACK_POINTS, EXP_POINTS);
+        super(NAME, position, SIZE_X, SIZE_Y, DEFAULT_STATE, HEALTH_POINTS, ATTACK_POINTS, EXP_POINTS);
         System.out.println("A new Rabbit has spawned!");
     }
     /*

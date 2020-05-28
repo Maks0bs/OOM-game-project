@@ -2,8 +2,10 @@ package com.oom.game.main.environment;
 
 import com.oom.game.main.entities.Creature;
 import com.oom.game.main.entities.Entity;
+import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.blocks.EmptyVoid;
-import com.oom.game.main.environment.exceptions.WorldResizeException;
+import com.oom.game.main.environment.blocks.Grass;
+import com.oom.game.main.environment.utils.exceptions.WorldResizeException;
 import com.oom.game.main.environment.utils.Block;
 
 import java.util.ArrayList;
@@ -32,6 +34,24 @@ public class World {
     */
     private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
     private ArrayList<Entity> entities = new ArrayList<Entity>();//FIXME save entities in a Set / Map
+    /*
+        At the moment there can only be one player
+     */
+    private Player player = null;
+
+    /**
+     * @return default world (100x100), filled with 10000 grass blocks
+     */
+    public static World generateDefaultWorld(){
+        World world = new World(100, 100);
+        for (int i = 0; i < 100; i++){
+            for (int j = 0; j < 100; j++){
+                world.addBlock(new Position(j, i, true), new Grass());
+            }
+        }
+
+        return world;
+    }
 
     /**
      *
@@ -90,7 +110,6 @@ public class World {
     }
 
     /**
-     * TODO maybe replace boolean return type with exceptions
      * @param position position of the block to be added
      * @param block new block to be added ON TOP of the current structure (if any).
      *              If the current structure is EmptyVoid {@link Void} then replace this block with this parameter completely
@@ -101,6 +120,29 @@ public class World {
         if (curBlock instanceof EmptyVoid){ //if there is no block (Empty void), then replace
             //FIXME it is a bad idea to use instance of, change to smth else
             blocks.get(position.getBlockY()).set(position.getBlockX(), block);
+            return true;
+        }
+        else{ //otherwise there is a floor block, add one on top, but check if block on top already exists
+            if (curBlock.hasBlockOnTop()){
+                return false;
+            }
+            curBlock.setBlockOnTop(block);
+            return true;
+        }
+    }
+
+    /**
+     * @param i position of the block to be added on y-axis
+     * @param j position of the block to be added on x-axis
+     * @param block new block to be added ON TOP of the current structure (if any).
+     *              If the current structure is EmptyVoid {@link Void} then replace this block with this parameter completely
+     * @return true is block was added, false if something went wrong
+     */
+    public boolean addBlock(int i, int j, Block block){
+        Block curBlock = this.getBlock(i, j);
+        if (curBlock instanceof EmptyVoid){ //if there is no block (Empty void), then replace
+            //FIXME it is a bad idea to use instance of, change to smth else
+            blocks.get(i).set(j, block);
             return true;
         }
         else{ //otherwise there is a floor block, add one on top, but check if block on top already exists
@@ -131,12 +173,32 @@ public class World {
         }
     }
 
+    /**
+     * NOTE: deletion shouldn't leave any null pointers. Please use the EmptyVoid {@link Void} block as a placeholder.
+     * @param i position of the block to be removed on y-axis
+     * @param j position of the block to be removed on x-axis
+     * @return true if block was removed successfully, false on error
+     */
+    public boolean removeBlock(int i, int j){
+        Block curBlock = this.getBlock(i, j);
+        if (curBlock instanceof EmptyVoid){ //if there is no block (Empty void), then replace
+            return false;
+        } else if (curBlock.hasBlockOnTop()){
+
+            curBlock.setBlockOnTop(null);
+            return true;
+        } else {
+            blocks.get(i).set(j, new EmptyVoid());
+            return true;
+        }
+    }
+
     /*
         TODO In order to remove and add entities more easily
         TODO an ID field should be added to all game objects
      */
     /**
-     *
+     * !!!Note!!! please do not use this method to add players. See addPlayer method;
      * @param entity the entity you want to add. Should only be added on walkable blocks!!!
      * @return true if it is legal to insert entity in current position, false otherwise
      */
@@ -159,8 +221,37 @@ public class World {
             }
         }
 
+
         entities.add(entity);
         return true;
+    }
+
+    /**
+     * Please use only this method to add players. Do not use addEntity for that
+     * @param player player to be bound to this world
+     * @return true if player was bound successfully, false otherwise
+     */
+    public boolean addPlayer(Player player){
+        if (this.player == null){
+            this.player = player;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @return true if player is bound to this world, false otherwise
+     */
+    public boolean hasPlayer(){
+        return this.player != null;
+    }
+
+    /**
+     * Unbinds player from current world
+     */
+    public void removePlayer(){
+        this.player = null;
     }
 
 
@@ -232,5 +323,9 @@ public class World {
 
     public void setEntities(ArrayList<Entity> entities) {
         this.entities = entities;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

@@ -1,6 +1,8 @@
 package com.oom.game.main.entities;
 
 import com.oom.game.main.environment.Position;
+import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.utils.GameObservable;
 
 /*
     Entity is a general class for all game game objects, which you can interact with
@@ -8,6 +10,7 @@ import com.oom.game.main.environment.Position;
  */
 public abstract class Entity {
     // position of left top corner
+    protected String state = "Default";
     protected Position position;
     /*
         Clarification for sizeX and sizeY:
@@ -19,15 +22,18 @@ public abstract class Entity {
      */
     protected int sizeX, sizeY;
 
+    protected GameObservable<Entity> observable = new GameObservable<Entity>();
+
     /**
      * @param position position of new entity
      * @param sizeX size of entity on the x-axis
      * @param sizeY size of entity on the y-axis
      */
-    public Entity(Position position, int sizeX, int sizeY) {
+    public Entity(Position position, int sizeX, int sizeY, String state) {
         this.position = position;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
+        this.state = state;
     }
 
     /**
@@ -71,5 +77,32 @@ public abstract class Entity {
 
     public void setPosition(Position position) {
         this.position = position;
+        this.observable.notifyObservers(this);
+    }
+
+    /**
+     * FIXME add this method to UMK
+     * @param dx change of current entity by x-axis
+     * @param dy change of current entity by y-axis
+     */
+    public void move(int dx, int dy){
+        this.position.setX(this.position.getX() + dx);
+        this.position.setY(this.position.getY() + dy);
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public GameObservable<Entity> getObservable() {
+        return observable;
+    }
+
+    public void setObservable(GameObservable<Entity> observable) {
+        this.observable = observable;
     }
 }
