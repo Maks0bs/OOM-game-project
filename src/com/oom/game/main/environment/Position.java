@@ -40,7 +40,6 @@ public class Position {
     }
 
     /**
-     * FIXME add this method to UML
      * @param diff the position to remove from this one
      * @return the result of subtraction of diff position from current one (or vector from this to diff)
      */
@@ -49,7 +48,6 @@ public class Position {
     }
 
     /**
-     * FIXME add this method to UML
      * @param diff the position to add to this one
      * @return the result of addition of diff position to the current one
      */

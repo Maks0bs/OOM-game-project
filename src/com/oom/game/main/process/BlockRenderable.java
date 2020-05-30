@@ -12,9 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class BlockRenderable extends NodeRenderable implements GameObserver<Block> {
-    /*
-        FIXME add this class to UML
-     */
+
     private Block block;
 
     /**

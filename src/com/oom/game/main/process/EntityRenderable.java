@@ -14,9 +14,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class EntityRenderable extends NodeRenderable implements GameObserver<Entity> {
-    /*
-        FIXME add this class to UML
-     */
+
     private Entity entity;
 
     /**
