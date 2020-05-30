@@ -5,20 +5,21 @@ package com.oom.game.main.environment.utils;
  */
 
 public interface WalkAction {
-    int DEFAULT_WALKING_SPEED = 1;
+    int DEFAULT_WALKING_STEP = 1;
     /**
      *
      * @return walking speed in pixels/tick
      */
-    int getBaseWalkingSpeed();
+    double getBaseWalkingSpeed();
 
     /**
      *
      * @return true if creatures can walk on this block, false otherwise
      */
     boolean canWalk();
+
     /**
-     * Action that should be performed when a block gets walked on
+     * Action that should be performed when an entity walk on top of this block
      */
-    void execute();
+    void onWalk();
 }

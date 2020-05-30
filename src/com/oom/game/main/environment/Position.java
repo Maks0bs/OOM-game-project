@@ -8,7 +8,7 @@ package com.oom.game.main.environment;
  */
 
 
-public class Position {
+public class Position{
     public static final int DEFAULT_POSITION = 0;
     private int x = DEFAULT_POSITION, y = DEFAULT_POSITION;
 
@@ -37,6 +37,15 @@ public class Position {
     public Position(int x, int y){
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     * This constructor is used to deep clone an existing position
+     * @param position position to clone
+     */
+    public Position(Position position){
+        this.x = position.getX();
+        this.y = position.getY();
     }
 
     /**
@@ -87,5 +96,11 @@ public class Position {
 
     public void setY(int y) {
         this.y = y;
+
+    }
+
+    @Override
+    public String toString() {
+        return "X: " + x + ", Y: " + y;
     }
 }

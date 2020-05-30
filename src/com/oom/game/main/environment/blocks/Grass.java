@@ -7,6 +7,6 @@ public class Grass extends Block {
     public static final String DEFAULT_STATE = "Grass";
     public Grass(){
         super(DEFAULT_STATE);
-        this.walkAction = new FloorWalkAction();
+        this.walkAction = new FloorWalkAction(1);
     }
 }

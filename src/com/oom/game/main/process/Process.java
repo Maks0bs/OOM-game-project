@@ -1,12 +1,14 @@
 package com.oom.game.main.process;
 
-import com.oom.game.main.Main;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.Barrel;
 import com.oom.game.main.environment.blocks.StoneTileFloor;
-import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.process.render.GUIRenderable;
+import com.oom.game.main.process.render.MainRenderable;
+import com.oom.game.main.process.render.WorldRenderable;
+import com.oom.game.main.process.utils.PlayerControl;
 import com.oom.game.main.utils.GameKeyEventManager;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
@@ -33,6 +35,7 @@ public class Process {
         FIXME may add several players simultaneously
      */
     private Player player;
+    private PlayerControl playerControl;
     private ArrayList<GameObserver<IRenderable> > observers = new ArrayList<GameObserver<IRenderable>>();
 
 
@@ -76,6 +79,8 @@ public class Process {
         this.mainRenderable = new MainRenderable(worldRenderable, guiRenderable);
         mainRenderable.setRenderer(defaultRenderer);
 
+        //player.getObservable().registerObserver(worldRenderable.getPlayerObserver());
+
 
 
         this.keyEventManager = new GameKeyEventManager();
@@ -93,9 +98,13 @@ public class Process {
                 keyEventManager
         );
 
-        world.addBlock(new Position(1, 1, true), new Barrel());
+        world.addBlock(2, 1, new Barrel());
+        world.addBlock(5, 5, new Barrel());
+
+        world.removeBlock(4, 4);
 
     }
+
 
 
     /**
@@ -106,58 +115,14 @@ public class Process {
             Mocking normal game process here
          */
 
-        PlayerControl playerControl = new PlayerControl();
-        playerControl.enable();
+        this.playerControl = new PlayerControl(mainRenderable, world);
+        this.playerControl.enable();
+
+        //FIXME this doesnt work !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //mainRenderable.getWorldRenderable().updatePosition(new Position(50, 50, true));
 
     }
 
-    /**
-     * Class made for automating results of pressing keys and other actions to control player
-     */
-    private class PlayerControl implements GameObserver<MainRenderable> {
-        private boolean enabled = false;
-        private int lastSteps = 0, curJump = 0;
-        private static final int NO_STEPS = Integer.MIN_VALUE;
 
-        PlayerControl(){
-            mainRenderable.getObservable().registerObserver(this);
-        }
-
-        public void enable(){
-            enabled = true;
-        }
-
-        public void disable(){
-            enabled = false;
-            lastSteps = NO_STEPS;
-            curJump = 0;
-        }
-
-
-        @Override
-        public void update(GameObservable<MainRenderable> observable, MainRenderable newData) {
-            if(!enabled){
-                return;
-            }
-
-            if (newData.getFramesWhilePressed() > 0){
-                if (lastSteps != NO_STEPS){
-                    curJump = newData.getFramesWhilePressed() - lastSteps;
-                }
-                lastSteps = newData.getFramesWhilePressed();
-            }
-
-            //FIXME find what block is currently under the player
-            //FIXME find the center of the player rectangle and the pixel in the center defines the block under the player
-            Block posBlock = world.getBlock(0, 0);
-            if (posBlock.getWalkAction() != null && posBlock.getWalkAction().getBaseWalkingSpeed() < curJump){
-                //FIXME move player one pixel in the direction which is defined by current pressed keys
-
-                //FIXME then update the world according to the current player position!!!
-            }
-
-            mainRenderable.getWorldRenderable().movePosition(1, 1);
-        }
-    }
 
 }

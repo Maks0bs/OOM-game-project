@@ -50,6 +50,17 @@ public abstract class Entity {
     }
 
     /**
+     * FIXME add this method to UMK
+     * @param dx change of current entity by x-axis
+     * @param dy change of current entity by y-axis
+     */
+    public void move(int dx, int dy){
+        this.position.setX(this.position.getX() + dx);
+        this.position.setY(this.position.getY() + dy);
+        this.observable.notifyObservers(this);
+    }
+
+    /**
      * Default info (mainly for console output) of entity
      * @return default info of entity
      */
@@ -80,15 +91,6 @@ public abstract class Entity {
         this.observable.notifyObservers(this);
     }
 
-    /**
-     * FIXME add this method to UMK
-     * @param dx change of current entity by x-axis
-     * @param dy change of current entity by y-axis
-     */
-    public void move(int dx, int dy){
-        this.position.setX(this.position.getX() + dx);
-        this.position.setY(this.position.getY() + dy);
-    }
 
     public String getState() {
         return state;
@@ -102,7 +104,4 @@ public abstract class Entity {
         return observable;
     }
 
-    public void setObservable(GameObservable<Entity> observable) {
-        this.observable = observable;
-    }
 }
