@@ -5,9 +5,7 @@ import com.oom.game.main.entities.interaction.AggresiveBehaviour;
 import java.util.HashSet;
 
 public class Level1Aggresion implements AggresiveBehaviour {
-    /*
-        FIXME add this class to UML
-     */
+
     public Level1Aggresion(){
         //aggressive against peaceful mobs
     }

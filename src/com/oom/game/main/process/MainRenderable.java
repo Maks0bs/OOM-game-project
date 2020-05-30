@@ -1,6 +1,5 @@
 package com.oom.game.main.process;
 
-import com.oom.game.main.ui.utils.GUITextures;
 import com.oom.game.main.utils.GameObservable;
 import gameCore.IRenderable;
 import gameCore.IUpdatable;
@@ -10,7 +9,6 @@ import gameCore.eventSystem.IEventListener;
 import gameCore.input.keyboard.KeyPressedEvent;
 import gameCore.input.keyboard.KeyReleasedEvent;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class MainRenderable implements IRenderable, IUpdatable, IEventListener {
