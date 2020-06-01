@@ -40,12 +40,13 @@ public class BlockRenderable extends NodeRenderable {
         if (block.hasBlockOnTop()){
             BufferedImage bottom = BlockTextures.getTextureByState(block.getState());
             BufferedImage top = BlockTextures.getTextureByState(block.getBlockOnTop().getState());
-            BufferedImage combined = new BufferedImage(bottom.getWidth(), bottom.getHeight(), BufferedImage.TYPE_INT_RGB);
+            topRenderable = new BlockRenderable(block.getBlockOnTop(), this.position);
+            /*BufferedImage combined = new BufferedImage(bottom.getWidth(), bottom.getHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics g = combined.getGraphics();
             g.drawImage(bottom, 0, 0, null);
             g.drawImage(top, 0, 0, null);
             g.dispose();
-            this.image = combined;
+            this.image = combined;*/
         }
     }
 

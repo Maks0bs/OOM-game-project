@@ -71,8 +71,23 @@ public class Process {
             }
         }
 
-        Wolf wolf = new Wolf(new Position(8, 8, true));
-        world.addEntity(wolf);
+        Wolf wolf1 = new Wolf(new Position(8, 8, true));
+        world.addEntity(wolf1);
+        Wolf wolf2 = new Wolf(new Position(5, 8, true));
+        world.addEntity(wolf2);
+        Wolf wolf3 = new Wolf(new Position(8, 7, true));
+        world.addEntity(wolf3);
+        Wolf wolf4 = new Wolf(new Position(8, 6, true));
+        world.addEntity(wolf4);
+        Wolf wolf5 = new Wolf(new Position(10, 9, true));
+        world.addEntity(wolf5);
+        Wolf wolf6 = new Wolf(new Position(12, 5, true));
+        world.addEntity(wolf6);
+        Wolf wolf7 = new Wolf(new Position(2, 7, true));
+        world.addEntity(wolf7);
+        Wolf wolf8 = new Wolf(new Position(2, 4, true));
+        world.addEntity(wolf8);
+
 
         GUIRenderable guiRenderable = new GUIRenderable();
         WorldRenderable worldRenderable = new WorldRenderable(
