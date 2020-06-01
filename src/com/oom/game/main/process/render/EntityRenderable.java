@@ -2,9 +2,11 @@ package com.oom.game.main.process.render;
 
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.utils.EntityTextures;
+import com.oom.game.main.environment.Position;
 import com.oom.game.main.process.render.NodeRenderable;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
+import gameCore.Renderer;
 
 public class EntityRenderable extends NodeRenderable implements GameObserver<Entity> {
     /*
@@ -28,6 +30,7 @@ public class EntityRenderable extends NodeRenderable implements GameObserver<Ent
         this.entity = newData;
         //FIXME maybe change state to animate movement
     }
+
 
     @Override
     protected String getNodeType() {

@@ -89,11 +89,6 @@ public class WorldRenderable implements IRenderable, IUpdatable {
             blockRenderables.add(temp);
         }
 
-
-        for (int i = 0; i < world.getEntities().size(); i++){
-            entityRenderables.add(new EntityRenderable(world.getEntities().get(i)));
-        }
-
         worldObserver = new GameObserver<World>() {
             @Override
             public void update(GameObservable<World> observable, World newData) {
@@ -113,6 +108,11 @@ public class WorldRenderable implements IRenderable, IUpdatable {
             }
         };
         world.getObservable().registerObserver(worldObserver);
+
+
+        for (int i = 0; i < world.getEntities().size(); i++) {
+            entityRenderables.add(new EntityRenderable(world.getEntities().get(i)));
+        }
 
         if (world.hasPlayer()){
             entityRenderables.add(new EntityRenderable(world.getPlayer()));

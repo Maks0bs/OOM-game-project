@@ -1,5 +1,6 @@
 package com.oom.game.main.process;
 
+import com.oom.game.main.entities.mobs.Wolf;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
@@ -69,6 +70,9 @@ public class Process {
                 }
             }
         }
+
+        Wolf wolf = new Wolf(new Position(8, 8, true));
+        world.addEntity(wolf);
 
         GUIRenderable guiRenderable = new GUIRenderable();
         WorldRenderable worldRenderable = new WorldRenderable(

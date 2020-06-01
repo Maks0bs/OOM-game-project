@@ -91,6 +91,12 @@ public abstract class Entity {
         this.observable.notifyObservers(this);
     }
 
+    public void setPositionDeep(Position position){
+        this.position.setX(position.getX());
+        this.position.setY(position.getY());
+        this.observable.notifyObservers(this);
+    }
+
 
     public String getState() {
         return state;
