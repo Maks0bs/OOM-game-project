@@ -87,6 +87,8 @@ public class Process {
         keyEventManager.register(mainRenderable);
 
 
+        //FIXME if world is smaller than the window, than adjust the window
+
         this.game = new Game(
                 "OOM GAME",
                 (int) screenSize.getWidth() / 2,

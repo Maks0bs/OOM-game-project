@@ -66,6 +66,7 @@ public class WorldRenderable implements IRenderable, IUpdatable {
 
     /**
      * Default constructor
+     * It is very important that world is larger than the window, in which it will be rendered
      */
     public WorldRenderable(World world, int width, int height){
         this.world = world;
@@ -73,8 +74,6 @@ public class WorldRenderable implements IRenderable, IUpdatable {
         this.height = height;
 
         this.position = new Position(0, 0, false);
-        //FIXME fill up starting renderables array with initial blocks
-        //FIXME later add entities
         for (int i = 0; i <= height / World.BLOCK_SIZE; i++){
             ArrayList<BlockRenderable> temp = new ArrayList<>();
             for (int j = 0; j <= width / World.BLOCK_SIZE; j++){
@@ -120,10 +119,24 @@ public class WorldRenderable implements IRenderable, IUpdatable {
             playerObserver = new GameObserver<>() {
                 @Override
                 public void update(GameObservable<Entity> observable, Entity newData) {
-                    //FIXME adjust world in such a way, that the player is in the center of the screen
-                    //FIXME only if player is close to boundaries, don't move screen
+                    //FIXME character is not exactly in the center of the screen - should be adjusted
                     Position newPosition = new Position(newData.getPosition());
-                    updatePosition(newPosition);
+                    int diffStartX = newPosition.getX() - (width / 2);
+                    int diffEndX = world.getBlockCountX() * World.BLOCK_SIZE - (width / 2)
+                            - newPosition.getX() - newData.getSizeX();
+                    int diffStartY = newPosition.getY() - (height / 2);
+                    int diffEndY = world.getBlockCountY() * World.BLOCK_SIZE - (height / 2)
+                            - newPosition.getY() - newData.getSizeY();
+
+                    Position toUpdate = new Position(position);
+                    if (diffStartX > 0 && diffEndX > 0){
+                        toUpdate.setX(diffStartX);
+                    }
+                    if (diffStartY > 0 && diffEndY > 0){
+                        toUpdate.setY(diffStartY);
+                    }
+
+                    updatePosition(toUpdate);
                 }
             };
 
