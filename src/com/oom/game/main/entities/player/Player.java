@@ -1,20 +1,25 @@
 package com.oom.game.main.entities.player;
 
+import com.oom.game.main.entities.WorldItem;
+import com.oom.game.main.entities.utils.BuffItem;
 import com.oom.game.main.entities.Creature;
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.interaction.ProgressiveCreature;
+import com.oom.game.main.entities.utils.BuffItemWrapper;
+import com.oom.game.main.entities.utils.InventoryItem;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
-import com.oom.game.main.process.utils.movement.PlayerControl;
-import com.oom.game.main.utils.GameObservable;
-import com.oom.game.main.utils.GameObserver;
-import gameCore.IRenderable;
+import com.oom.game.main.process.utils.control.PlayerControl;
+
+import java.util.ArrayList;
 
 public class Player extends Creature implements ProgressiveCreature {
     public static String DEFAULT_STATE = "PlayerDefault";
     public static int DEFAULT_HEALTH_POINTS = 100, DEFAULT_ATTACK_POINTS = 5;
     //MAYBE IT WOULD BE NECESSARY TO ADD WORLD REFERENCE FOR PLAYER TO KNOW POSITION AND BLOCK UNDER HIM, ETC.
     private PlayerControl control = null;
+    private ArrayList<InventoryItem> inventory = new ArrayList<>();
+    private BuffItem weapon = null, amulet = null;
 
     public static Player generateDefaultPlayer(){
         return new Player("Player", new Position(0, 0, true),
@@ -54,6 +59,36 @@ public class Player extends Creature implements ProgressiveCreature {
             return;
         }
         victim.counterAttack(this);
+    }
+
+    /**
+     * Gets when F key is pressed
+     * Replaces current weapon with the given one
+     */
+    public void pickUpWeapon(WorldItem item){
+        inventory.add(item.getInventoryItem());
+        if (item.getInventoryItem() instanceof BuffItem){
+            weapon = (BuffItem) item.getInventoryItem();
+        }
+    }
+
+    /**
+     * FIXME this method is going to be removed. This is temporary, to fulfill Uebungsblatt 5
+     * Enchant current weapon with random enchantment
+     */
+    public void enchantWeaponRandomly(){
+        if (weapon == null){
+            return;
+        }
+        weapon = BuffItemWrapper.enchantRandomly(weapon);
+    }
+
+    /**
+     * Replaces current amulet with the given one
+     */
+    public void pickUpAmulet(WorldItem item){
+        inventory.add(item.getInventoryItem());
+        //TODO implement this
     }
 
     /**
@@ -129,5 +164,23 @@ public class Player extends Creature implements ProgressiveCreature {
 
     public void setControl(PlayerControl control) {
         this.control = control;
+    }
+
+    @Override
+    public int getHealthPoints() {
+        if (weapon != null){
+            return super.getHealthPoints() + (int) ((double)weapon.getAddHealth() * weapon.getMultHealth());
+        } else{
+            return super.getHealthPoints();
+        }
+    }
+
+    @Override
+    public int getAttackPoints() {
+        if (weapon != null){
+            return super.getAttackPoints() + (int) ((double)weapon.getAddAttack() * weapon.getMultAttack());
+        } else{
+            return super.getAttackPoints();
+        }
     }
 }

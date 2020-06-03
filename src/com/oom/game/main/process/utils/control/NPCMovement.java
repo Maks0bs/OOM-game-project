@@ -1,17 +1,13 @@
-package com.oom.game.main.process.utils.movement;
+package com.oom.game.main.process.utils.control;
 
-import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.NPC;
-import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.process.render.WorldRenderable;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 
-import java.util.HashMap;
-
 /**
- * Always create Movement for every entity you want to move somehow and activate this movement in the appropriate Process
+ * Always create Movement for every entity you want to move somehow and activate this control in the appropriate Process
  * Fear always overrides aggressive behaviour, i. e. if a creature is afraid of another in the radius and
  * aggressive against another one in the radius, than it will run away from the one it's afraid of
  * in the first place

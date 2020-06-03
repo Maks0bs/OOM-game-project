@@ -1,7 +1,7 @@
 package com.oom.game.main.environment;
 
 /*
-    Added this class to better manage creature movement.
+    Added this class to better manage creature control.
     Might need to move back to normal coords afterwards.
     The problem is that coords most likely have to be int.
 

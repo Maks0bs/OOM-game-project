@@ -28,7 +28,7 @@ public class EntityRenderable extends NodeRenderable implements GameObserver<Ent
     @Override
     public void update(GameObservable<Entity> observable, Entity newData) {
         this.entity = newData;
-        //FIXME maybe change state to animate movement
+        //FIXME maybe change state to animate control
     }
 
 

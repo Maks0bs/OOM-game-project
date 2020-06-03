@@ -73,6 +73,10 @@ public abstract class Entity {
         this.observable.notifyObservers(this);
     }
 
+    public Position getCenterPosition(){
+        return new Position(position.getX() + sizeX / 2, position.getY() + sizeY / 2);
+    }
+
     /**
      * Default info (mainly for console output) of entity
      * @return default info of entity

@@ -1,4 +1,4 @@
-package com.oom.game.main.process.utils.movement;
+package com.oom.game.main.process.utils.control;
 
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
