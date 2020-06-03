@@ -51,7 +51,12 @@ public class PlayerControl implements GameObserver<MainRenderable> {
         );
         Block blockUnder = world.getBlock(blockPos);
 
+        if (!blockUnder.getWalkAction().canWalk()){
+            return;
+        }
         double base = blockUnder.getWalkAction().getBaseWalkingSpeed();
+
+        Position prevPos = new Position(player.getPosition());
 
         for (int i = 0; i < CONTROL_KEYS.length; i++){
             Character c = CONTROL_KEYS[i];
@@ -78,6 +83,17 @@ public class PlayerControl implements GameObserver<MainRenderable> {
                 //FIXME perform action on walk
             }
         }
+
+        //Here we check if we walked on a non-walkable block and cancel this move if it happened
+        Position blockPosNew = new Position(
+                player.getPosition().getX() + (player.getSizeX() / 2),
+                player.getPosition().getY() + (player.getSizeY() / 2)
+        );
+        Block blockUnderNew = world.getBlock(blockPosNew);
+        if (!blockUnderNew.getWalkAction().canWalk()){
+            player.setPositionDeep(prevPos);
+        }
+
 
     }
 }
