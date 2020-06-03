@@ -9,9 +9,9 @@ import com.oom.game.main.environment.blocks.StoneTileFloor;
 import com.oom.game.main.process.render.GUIRenderable;
 import com.oom.game.main.process.render.MainRenderable;
 import com.oom.game.main.process.render.WorldRenderable;
-import com.oom.game.main.process.utils.PlayerControl;
+import com.oom.game.main.process.utils.movement.NPCMovement;
+import com.oom.game.main.process.utils.movement.PlayerControl;
 import com.oom.game.main.utils.GameKeyEventManager;
-import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 import gameCore.Game;
 import gameCore.IRenderable;
@@ -71,7 +71,7 @@ public class Process {
             }
         }
 
-        Wolf wolf1 = new Wolf(new Position(8, 8, true));
+        /*Wolf wolf1 = new Wolf(new Position(8, 8, true));
         world.addEntity(wolf1);
         Wolf wolf2 = new Wolf(new Position(5, 8, true));
         world.addEntity(wolf2);
@@ -87,6 +87,8 @@ public class Process {
         world.addEntity(wolf7);
         Wolf wolf8 = new Wolf(new Position(2, 4, true));
         world.addEntity(wolf8);
+        Wolf wolf9 = new Wolf(new Position(7, 7, true));
+        world.addEntity(wolf9);*/
 
 
         GUIRenderable guiRenderable = new GUIRenderable();
@@ -137,10 +139,19 @@ public class Process {
          */
 
         this.playerControl = new PlayerControl(mainRenderable, world);
+        this.player.setControl(playerControl);
         this.playerControl.enable();
 
         //FIXME this doesnt work !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //mainRenderable.getWorldRenderable().updatePosition(new Position(50, 50, true));
+
+        Wolf wolf1 = new Wolf(new Position(8, 8, true));
+        world.addEntity(wolf1);
+
+        NPCMovement wolfMovement = new NPCMovement(wolf1, this.world, mainRenderable.getWorldRenderable());
+        wolf1.setMovement(wolfMovement);
+
+
 
     }
 

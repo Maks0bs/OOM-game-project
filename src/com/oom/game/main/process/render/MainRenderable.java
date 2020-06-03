@@ -41,6 +41,21 @@ public class MainRenderable implements IRenderable, IUpdatable, IEventListener {
      * {@link IRenderable}
      */
     public void render(){
+        render(this.renderer);
+    }
+
+    /**
+     * {@link IUpdatable}
+     * FIXME might not need to call this method here
+     * FIXME might need to put it only to NodeRenderable to update only those components that have actually changed
+     */
+    @Override
+    public void update(long elapsedMillis) {
+        keyTickUpdate();
+        render(this.renderer);
+    }
+
+    private void keyTickUpdate(){
         if (pressedTime.size() > 0){
             //FIXME using iterators here might cause problems with multithreading
             Character[] keys = new Character[pressedTime.keySet().size()];
@@ -52,17 +67,6 @@ public class MainRenderable implements IRenderable, IUpdatable, IEventListener {
             }
             this.observable.notifyObservers(this);
         }
-        render(this.renderer);
-    }
-
-    /**
-     * {@link IUpdatable}
-     * FIXME might not need to call this method here
-     * FIXME might need to put it only to NodeRenderable to update only those components that have actually changed
-     */
-    @Override
-    public void update(long elapsedMillis) {
-        render();
     }
 
     /**

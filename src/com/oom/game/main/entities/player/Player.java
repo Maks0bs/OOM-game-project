@@ -5,6 +5,7 @@ import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.interaction.ProgressiveCreature;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
+import com.oom.game.main.process.utils.movement.PlayerControl;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 import gameCore.IRenderable;
@@ -13,6 +14,7 @@ public class Player extends Creature implements ProgressiveCreature {
     public static String DEFAULT_STATE = "PlayerDefault";
     public static int DEFAULT_HEALTH_POINTS = 100, DEFAULT_ATTACK_POINTS = 5;
     //MAYBE IT WOULD BE NECESSARY TO ADD WORLD REFERENCE FOR PLAYER TO KNOW POSITION AND BLOCK UNDER HIM, ETC.
+    private PlayerControl control = null;
 
     public static Player generateDefaultPlayer(){
         return new Player("Player", new Position(0, 0, true),
@@ -119,5 +121,13 @@ public class Player extends Creature implements ProgressiveCreature {
     @Override
     public void displayProgress() {
         System.out.println(this.getInfo());
+    }
+
+    public PlayerControl getControl() {
+        return control;
+    }
+
+    public void setControl(PlayerControl control) {
+        this.control = control;
     }
 }

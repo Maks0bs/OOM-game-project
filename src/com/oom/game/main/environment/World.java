@@ -34,6 +34,9 @@ public class World {
         2   Block Block Block
        ...
     */
+
+    //FIXME add docs for observer (write what specs are sent as additional parameter on what event)
+
     private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
     private ArrayList<Entity> entities = new ArrayList<Entity>();//FIXME save entities in a Set / Map
     /*
@@ -235,7 +238,7 @@ public class World {
 
 
         entities.add(entity);
-        this.observable.notifyObservers(this);
+        this.observable.notifyObservers(this, entity);
         return true;
     }
 

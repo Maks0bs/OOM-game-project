@@ -31,6 +31,7 @@ public class BlockRenderable extends NodeRenderable {
         this.block = block;
     }
 
+    //FIXME IMPORTANT the situation when block on top gets removed is not handled here!!!!!!!
 
     /**
      * function to toggle display the block on top of the one that is saved in BlockRenderable as a member
@@ -47,6 +48,9 @@ public class BlockRenderable extends NodeRenderable {
             g.drawImage(top, 0, 0, null);
             g.dispose();
             this.image = combined;*/
+        }
+        else{
+            topRenderable = null;
         }
     }
 
@@ -69,6 +73,14 @@ public class BlockRenderable extends NodeRenderable {
     @Override
     protected String getNodeType() {
         return "Block";
+    }
+
+    public BlockRenderable getTopRenderable() {
+        return topRenderable;
+    }
+
+    public void setTopRenderable(BlockRenderable topRenderable) {
+        this.topRenderable = topRenderable;
     }
 
     public boolean isDisplayTop() {

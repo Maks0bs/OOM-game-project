@@ -1,7 +1,11 @@
 package com.oom.game.main.entities;
 
-import com.oom.game.main.entities.interaction.AggresiveBehaviour;
+import com.oom.game.main.entities.interaction.AggressiveBehaviour;
+import com.oom.game.main.entities.interaction.FearBehaviour;
+import com.oom.game.main.entities.mobs.strategies.NoneAggresion;
+import com.oom.game.main.entities.mobs.strategies.NoneFear;
 import com.oom.game.main.environment.Position;
+import com.oom.game.main.process.utils.movement.NPCMovement;
 
 public class NPC extends Creature {
     /*
@@ -19,7 +23,9 @@ public class NPC extends Creature {
      *  FIXME when strategies in this class change, a special method should be called
      *  FIXME to notify the creature (the same for block) to change its texture
      */
-    protected AggresiveBehaviour aggresiveBehaviour = null;
+    protected AggressiveBehaviour aggresiveBehaviour = new NoneAggresion();
+    protected FearBehaviour fearBehaviour = new NoneFear();
+    protected NPCMovement movement = null;
 
     /**
      * see constructor of {@link Creature}
@@ -50,11 +56,21 @@ public class NPC extends Creature {
         System.out.println(this.name + " was defeated and drops " + this.expPoints + " XP points");
     }
 
-    public AggresiveBehaviour getAggresiveBehaviour() {
+    public AggressiveBehaviour getAggresiveBehaviour() {
         return aggresiveBehaviour;
     }
 
-    public void setAggresiveBehaviour(AggresiveBehaviour aggresiveBehaviour) {
+
+
+    public void setAggresiveBehaviour(AggressiveBehaviour aggresiveBehaviour) {
         this.aggresiveBehaviour = aggresiveBehaviour;
+    }
+
+    public NPCMovement getMovement() {
+        return movement;
+    }
+
+    public void setMovement(NPCMovement movement) {
+        this.movement = movement;
     }
 }
