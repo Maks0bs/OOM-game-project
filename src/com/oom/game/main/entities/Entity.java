@@ -1,6 +1,7 @@
 package com.oom.game.main.entities;
 
 import com.oom.game.main.environment.Position;
+import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.utils.Block;
 import com.oom.game.main.utils.GameObservable;
 
@@ -46,6 +47,18 @@ public abstract class Entity {
                 x0 = this.position.getX(), y0 = this.position.getY();
 
 
+        return !( (x > x0 + this.sizeX - 1) || (x + sx - 1 < x0) || (y > y0 + this.sizeY - 1) || (y + sy - 1 < y0));
+    }
+
+    /**
+     * FIXME add this method to UML
+     * @param pos position of the block
+     * @return true if block overlaps with current entity
+     */
+    public boolean overlapsWithBlock(Position pos){
+        int x = pos.getX(), y = pos.getY(),
+                sx = World.BLOCK_SIZE, sy = World.BLOCK_SIZE,
+                x0 = this.position.getX(), y0 = this.position.getY();
         return !( (x > x0 + this.sizeX - 1) || (x + sx - 1 < x0) || (y > y0 + this.sizeY - 1) || (y + sy - 1 < y0));
     }
 

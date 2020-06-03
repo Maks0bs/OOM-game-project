@@ -50,4 +50,12 @@ public class EntityRenderable extends NodeRenderable implements GameObserver<Ent
         entity.getObservable().unregisterObserver(this);
         super.finalize();
     }
+
+    public Entity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
 }

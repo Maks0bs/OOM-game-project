@@ -1,6 +1,7 @@
 package com.oom.game.main.process.render;
 
 import com.oom.game.main.entities.Entity;
+import com.oom.game.main.entities.NPC;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
@@ -28,7 +29,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class WorldRenderable implements IRenderable, IUpdatable {
+public class WorldRenderable implements IRenderable {
     /*
         FIXME add this class to UML
 
@@ -64,6 +65,7 @@ public class WorldRenderable implements IRenderable, IUpdatable {
 
     private GameObserver<Entity> playerObserver = null;
     private GameObserver<World> worldObserver = null;
+    private GameObservable<WorldRenderable> observable = new GameObservable<>();
 
     /**
      * Default constructor
@@ -98,13 +100,18 @@ public class WorldRenderable implements IRenderable, IUpdatable {
 
             @Override
             public void update(GameObservable<World> observable, World newData, Object specs) {
-                //FIXME improve type check (do it without dynamic upcast)
+                //FIXME improve type check (do it without dynamic upcast and without instanceof)
                 if (specs instanceof Position){
                     Position pos = (Position) specs;
                     Block b = newData.getBlock(pos);
                     setRenderableByPosition(pos, new BlockRenderable(b, pos));
                     BlockRenderable br = getRenderableByPosition(pos);
                     br.displayTopBlock();
+                } else if (specs instanceof Entity){
+                    int pos = newData.getEntities().size();
+                    entityRenderables.add(new EntityRenderable(
+                            newData.getEntities().get(pos - 1))
+                    );
                 }
             }
         };
@@ -258,6 +265,8 @@ public class WorldRenderable implements IRenderable, IUpdatable {
             }
         }
 
+        //FIXME check to add new renderable entities!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
         //Updating position for new Renderables
 
@@ -288,21 +297,6 @@ public class WorldRenderable implements IRenderable, IUpdatable {
             FIXME that if a block (on top of another) is in front of the entity, the entity gets rendered before,
             FIXME so that there is and illusion of 3d
             URGENT!!!!!!!!
-            !
-            !
-            !
-            !
-            !
-            !
-            !
-            !
-            !
-            !
-            !
-            !
-            !
-            !
-            !
          */
 
         //FIXME this is very inefficient! it sorts on every render.
@@ -335,28 +329,41 @@ public class WorldRenderable implements IRenderable, IUpdatable {
             }
         });
 
-        for (int i = 0; i < entityRenderables.size(); i++){
-            System.out.println(entityRenderables.get(i).getPosition());
-        }
-
-        System.out.println("");
-        System.out.println("");
-
-        int curEntity = 0; //this is a head entity. Because they are sorted we will iterate through them and render accordingly. increase head, when current gets rendered
-
         for (int i = 0; i < blockRenderables.size(); i++){
             for (int j = 0; j < blockRenderables.get(i).size(); j++){
                 BlockRenderable cur = blockRenderables.get(i).get(j);
                 cur.render(renderer, cur.getPosition().difference(this.position));
-                //FIXME render entities depending on their position to render them behind blocks on top of other blocks!!!!
-                //FIXME check if head entity overlaps with current block. Render them accordingly
+
             }
         }
 
 
-        for (int i = 0; i < entityRenderables.size(); i++){
-            EntityRenderable cur = entityRenderables.get(i);
-            cur.render(renderer, cur.getPosition().difference(this.position));
+        for (int e = 0; e < entityRenderables.size(); e++){
+            EntityRenderable cur = entityRenderables.get(e);
+            //observable.notifyObservers(this, cur.getEntity());
+            Position relativeEntityPos = cur.getPosition().difference(this.position);
+            cur.render(renderer, relativeEntityPos);
+            //cur.render(renderer, relativeEntityPos);
+            for (int i = relativeEntityPos.getBlockY();
+                 i <= (relativeEntityPos.getY() + cur.getEntity().getSizeY()) / World.BLOCK_SIZE;
+                 i++
+            ){
+                int blockCenterY = i * World.BLOCK_SIZE + World.BLOCK_SIZE / 2;
+                for (int j = relativeEntityPos.getBlockX();
+                     j <= (relativeEntityPos.getX() + cur.getEntity().getSizeX()) / World.BLOCK_SIZE;
+                     j++
+                ){
+                    if (blockCenterY > (relativeEntityPos.getY() + cur.getEntity().getSizeY())){
+                        BlockRenderable curBR = blockRenderables.get(i).get(j);
+                        if (curBR.getTopRenderable() == null){
+                            continue;
+                        }
+                        curBR.getTopRenderable()
+                                .render(renderer, curBR.getPosition().difference(this.position));
+                    }
+
+                }
+            }
         }
 
     }
@@ -390,16 +397,6 @@ public class WorldRenderable implements IRenderable, IUpdatable {
      */
     public void render(){
         render(this.renderer);
-    }
-
-    /**
-     * {@link IUpdatable}
-     * FIXME might not need to call this method here
-     * FIXME might need to put it only to NodeRenderable to update only those components that have actually changed
-     */
-    @Override
-    public void update(long elapsedMillis) {
-        render();
     }
 
     public Renderer getRenderer() {
@@ -440,5 +437,9 @@ public class WorldRenderable implements IRenderable, IUpdatable {
 
     public GameObserver<Entity> getPlayerObserver() {
         return playerObserver;
+    }
+
+    public GameObservable<WorldRenderable> getObservable() {
+        return observable;
     }
 }
