@@ -44,7 +44,6 @@ public class Block {
     }
 
     /**
-     * FIXME add this method to UML, because it has to do with observable
      * @param state new state
      */
     public void setState(String state) {
@@ -56,7 +55,6 @@ public class Block {
     }
 
     /**
-     * FIXME add this method to UML, because it has to do with observable
      * @param blockOnTop new blockOnTop
      */
     public void setBlockOnTop(Block blockOnTop) {

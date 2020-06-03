@@ -51,7 +51,6 @@ public abstract class Entity {
     }
 
     /**
-     * FIXME add this method to UML
      * @param pos position of the block
      * @return true if block overlaps with current entity
      */
@@ -63,7 +62,6 @@ public abstract class Entity {
     }
 
     /**
-     * FIXME add this method to UMK
      * @param dx change of current entity by x-axis
      * @param dy change of current entity by y-axis
      */
