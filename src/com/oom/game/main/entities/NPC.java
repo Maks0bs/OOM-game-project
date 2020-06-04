@@ -5,7 +5,7 @@ import com.oom.game.main.entities.interaction.FearBehaviour;
 import com.oom.game.main.entities.mobs.strategies.NoneAggresion;
 import com.oom.game.main.entities.mobs.strategies.NoneFear;
 import com.oom.game.main.environment.Position;
-import com.oom.game.main.process.utils.movement.NPCMovement;
+import com.oom.game.main.process.utils.control.NPCMovement;
 
 public class NPC extends Creature {
     /*

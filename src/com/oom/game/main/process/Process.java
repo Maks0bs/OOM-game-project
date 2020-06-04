@@ -1,5 +1,7 @@
 package com.oom.game.main.process;
 
+import com.oom.game.main.entities.WorldItem;
+import com.oom.game.main.entities.items.Axe;
 import com.oom.game.main.entities.mobs.Wolf;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
@@ -9,8 +11,8 @@ import com.oom.game.main.environment.blocks.StoneTileFloor;
 import com.oom.game.main.process.render.GUIRenderable;
 import com.oom.game.main.process.render.MainRenderable;
 import com.oom.game.main.process.render.WorldRenderable;
-import com.oom.game.main.process.utils.movement.NPCMovement;
-import com.oom.game.main.process.utils.movement.PlayerControl;
+import com.oom.game.main.process.utils.control.NPCMovement;
+import com.oom.game.main.process.utils.control.PlayerControl;
 import com.oom.game.main.utils.GameKeyEventManager;
 import com.oom.game.main.utils.GameObserver;
 import gameCore.Game;
@@ -140,6 +142,16 @@ public class Process {
         this.playerControl = new PlayerControl(mainRenderable, world);
         this.player.setControl(playerControl);
         this.playerControl.enable();
+        player.pickUpWeapon(new WorldItem(null, null, new Axe()));
+        player.enchantWeaponRandomly();
+        player.enchantWeaponRandomly();
+        player.enchantWeaponRandomly();
+        player.enchantWeaponRandomly();
+        player.enchantWeaponRandomly();
+        player.enchantWeaponRandomly();
+        player.enchantWeaponRandomly();
+
+
 
         //FIXME this doesnt work !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //mainRenderable.getWorldRenderable().updatePosition(new Position(50, 50, true));

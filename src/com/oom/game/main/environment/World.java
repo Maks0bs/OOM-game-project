@@ -2,6 +2,7 @@ package com.oom.game.main.environment;
 
 import com.oom.game.main.entities.Creature;
 import com.oom.game.main.entities.Entity;
+import com.oom.game.main.entities.WorldItem;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.blocks.EmptyVoid;
 import com.oom.game.main.environment.blocks.Grass;
@@ -11,6 +12,8 @@ import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
     !!!IMPORTANT NOTICE!!!
@@ -39,6 +42,7 @@ public class World {
 
     private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
     private ArrayList<Entity> entities = new ArrayList<Entity>();//FIXME save entities in a Set / Map
+    private Map<Position, WorldItem> items = new HashMap<>();//!!! Save items only to this map
     /*
         At the moment there can only be one player
      */
@@ -360,8 +364,11 @@ public class World {
     }
 
     public GameObservable<World> getObservable() {
-
-        System.out.println(observable);
         return observable;
     }
+
+    public Map<Position, WorldItem> getItems() {
+        return items;
+    }
+
 }

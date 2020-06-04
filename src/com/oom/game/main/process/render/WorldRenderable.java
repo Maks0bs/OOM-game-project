@@ -2,7 +2,9 @@ package com.oom.game.main.process.render;
 
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.NPC;
+import com.oom.game.main.entities.WorldItem;
 import com.oom.game.main.entities.player.Player;
+import com.oom.game.main.entities.utils.InventoryItem;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.utils.BlockTextures;
@@ -82,7 +84,7 @@ public class WorldRenderable implements IRenderable {
                         world.getBlock(i, j),
                         new Position(j, i, true)
                 );
-                cur.displayTopBlock();
+                cur.displayTopBlock();//FIXME this method has a lot of dead code in it, fix this!!!!!!
 
                 temp.add(cur);
             }
@@ -118,6 +120,11 @@ public class WorldRenderable implements IRenderable {
 
         for (int i = 0; i < world.getEntities().size(); i++){
             entityRenderables.add(new EntityRenderable(world.getEntities().get(i)));
+        }
+
+        ArrayList<WorldItem> items = new ArrayList<>(world.getItems().values());
+        for (int i = 0; i < items.size(); i++){
+            entityRenderables.add(new EntityRenderable(items.get(i)));
         }
 
 
@@ -289,6 +296,9 @@ public class WorldRenderable implements IRenderable {
     @Override
     public void render(Renderer renderer) {
 
+
+        System.out.println(world.getPlayer().getAttackPoints() + " " + world.getPlayer().getHealthPoints());
+
         /*
             FIXME URGENT sort array of entities and render them together with blocks in such an order,
             FIXME that if a block (on top of another) is in front of the entity, the entity gets rendered before,
@@ -335,9 +345,11 @@ public class WorldRenderable implements IRenderable {
         }
 
 
+
         for (int e = 0; e < entityRenderables.size(); e++){
             EntityRenderable cur = entityRenderables.get(e);
-            //observable.notifyObservers(this, cur.getEntity());
+            //FIXME if entities fall into their aggression and fear radiuses ,then
+            //FIXME observable.notifyObservers(this, cur.getEntity());
             Position relativeEntityPos = cur.getPosition().difference(this.position);
             cur.render(renderer, relativeEntityPos);
             //cur.render(renderer, relativeEntityPos);
@@ -352,6 +364,7 @@ public class WorldRenderable implements IRenderable {
                 ){
                     if (blockCenterY > (relativeEntityPos.getY() + cur.getEntity().getSizeY())){
                         BlockRenderable curBR = blockRenderables.get(i).get(j);
+                        //FIXME sometimes the line above causes IndexOutOfBoundException (idk why)
                         if (curBR.getTopRenderable() == null){
                             continue;
                         }
@@ -363,6 +376,17 @@ public class WorldRenderable implements IRenderable {
             }
         }
 
+    }
+
+    /**
+     * !!!For now items cannot be moved in any way, they stay static troughout the whole game,
+     * this might be changed
+     * @param item item to add to world
+     * @return true if item was added successfully, false otherwise
+     */
+    public boolean addItem(WorldItem item){
+        //FIXME IMPLEMENT THIS METHOD!!!!!!!!!!
+        return true;
     }
 
     /**
