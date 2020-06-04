@@ -12,9 +12,7 @@ public class NPC extends Creature {
         In this case this.expPoints is the reward
         that players receive after defeating the NPC
      */
-    /*
-        FIXME expand UML with strategies
-     */
+
     //FIXME refactor creatures and entities with strategy pattern
 
     public static final int DEFAULT_EXP_KILL_REWARD = 5;

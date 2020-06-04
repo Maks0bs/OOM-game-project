@@ -6,9 +6,7 @@ import jdk.jfr.Description;
 import java.util.ArrayList;
 
 public class GameObservable<T> {
-    /*
-        FIXME add this class to UML
-     */
+
     /*
         FIXME change ArrayList to HashSet!!!
      */

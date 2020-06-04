@@ -7,9 +7,7 @@ import gameCore.Renderer;
 import java.awt.image.BufferedImage;
 
 public abstract class NodeRenderable implements IRenderable {
-    /*
-        FIXME add this class to UML
-     */
+
     protected BufferedImage image; //FIXME bind image to the correspondent entity
     protected Position position;
     protected float scaleX = 1, scaleY = 1;

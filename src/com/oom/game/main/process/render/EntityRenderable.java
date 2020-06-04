@@ -9,9 +9,7 @@ import com.oom.game.main.utils.GameObserver;
 import gameCore.Renderer;
 
 public class EntityRenderable extends NodeRenderable implements GameObserver<Entity> {
-    /*
-        FIXME add this class to UML
-     */
+
     private Entity entity;
     private String curState = null;
 
