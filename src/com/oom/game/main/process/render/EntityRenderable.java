@@ -13,6 +13,7 @@ public class EntityRenderable extends NodeRenderable implements GameObserver<Ent
         FIXME add this class to UML
      */
     private Entity entity;
+    private String curState = null;
 
     /**
      *
@@ -23,11 +24,16 @@ public class EntityRenderable extends NodeRenderable implements GameObserver<Ent
         this.image = EntityTextures.getTextureByState(entity.getState());
         entity.getObservable().registerObserver(this);
         this.entity = entity;
+        curState = entity.getState();
     }
 
     @Override
     public void update(GameObservable<Entity> observable, Entity newData) {
-        this.entity = newData;
+        if (!curState.equals(newData.getState())){
+            this.image = EntityTextures.getTextureByState(newData.getState());
+        }
+
+        curState = newData.getState();
         //FIXME maybe change state to animate control
     }
 

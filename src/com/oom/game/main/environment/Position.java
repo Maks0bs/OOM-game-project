@@ -68,6 +68,16 @@ public class Position{
 
     /**
      *
+     * @return block position relative to the current pos (e. g. for (56, 65) the block position is (32, 64) )
+     */
+    public Position getBlockPosition(){
+        int x = this.getBlockX();
+        int y = this.getBlockY();
+        return new Position(x, y, true);
+    }
+
+    /**
+     *
      * @return x-coordinate of block by the given exact x-coordinate
      */
     public int getBlockX(){

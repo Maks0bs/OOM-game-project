@@ -2,6 +2,7 @@ package com.oom.game.main.process;
 
 import com.oom.game.main.entities.WorldItem;
 import com.oom.game.main.entities.items.Axe;
+import com.oom.game.main.entities.items.Sword;
 import com.oom.game.main.entities.mobs.Wolf;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
@@ -22,6 +23,8 @@ import gameCore.Renderer;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Process {
     /*
@@ -73,24 +76,8 @@ public class Process {
             }
         }
 
-        /*Wolf wolf1 = new Wolf(new Position(8, 8, true));
-        world.addEntity(wolf1);
-        Wolf wolf2 = new Wolf(new Position(5, 8, true));
-        world.addEntity(wolf2);
-        Wolf wolf3 = new Wolf(new Position(8, 7, true));
-        world.addEntity(wolf3);
-        Wolf wolf4 = new Wolf(new Position(8, 6, true));
-        world.addEntity(wolf4);
-        Wolf wolf5 = new Wolf(new Position(10, 9, true));
-        world.addEntity(wolf5);
-        Wolf wolf6 = new Wolf(new Position(12, 5, true));
-        world.addEntity(wolf6);
-        Wolf wolf7 = new Wolf(new Position(2, 7, true));
-        world.addEntity(wolf7);
-        Wolf wolf8 = new Wolf(new Position(2, 4, true));
-        world.addEntity(wolf8);
-        Wolf wolf9 = new Wolf(new Position(7, 7, true));
-        world.addEntity(wolf9);*/
+
+        //DO NOT ADD ANY ENTITIES TO WORLD BEFORE creating mainRenderable
 
 
         GUIRenderable guiRenderable = new GUIRenderable();
@@ -143,14 +130,6 @@ public class Process {
         this.playerControl = new PlayerControl(mainRenderable, world);
         this.player.setControl(playerControl);
         this.playerControl.enable();
-        player.pickUpWeapon(new WorldItem(null, null, new Axe()));
-        player.enchantWeaponRandomly();
-        player.enchantWeaponRandomly();
-        player.enchantWeaponRandomly();
-        player.enchantWeaponRandomly();
-        player.enchantWeaponRandomly();
-        player.enchantWeaponRandomly();
-        player.enchantWeaponRandomly();
 
 
 
@@ -159,6 +138,19 @@ public class Process {
 
         Wolf wolf1 = new Wolf(new Position(8, 8, true));
         world.addEntity(wolf1);
+
+        Wolf wolf2 = new Wolf(new Position(18, 6, true));
+        world.addEntity(wolf2);
+
+        Wolf wolf3 = new Wolf(new Position(25, 6, true));
+        world.addEntity(wolf3);
+
+        WorldItem swordItem1 = new WorldItem(new Position(20, 120), "Sword", new Sword());
+        world.addItem(swordItem1);
+        WorldItem swordItem2 = new WorldItem(new Position(40, 140), "Sword", new Sword());
+        world.addItem(swordItem2);
+
+
 
         NPCMovement wolfMovement = new NPCMovement(wolf1, this.world, mainRenderable.getWorldRenderable());
         wolf1.setMovement(wolfMovement);

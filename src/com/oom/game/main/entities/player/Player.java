@@ -69,7 +69,14 @@ public class Player extends Creature implements ProgressiveCreature {
         inventory.add(item.getInventoryItem());
         if (item.getInventoryItem() instanceof BuffItem){
             weapon = (BuffItem) item.getInventoryItem();
+            this.setState("WeaponizedPlayer");
         }
+
+        System.out.println(
+                "New stats: \n" +
+                "HP: " + this.getHealthPoints() + "\n" +
+                "ATK: " + this.getAttackPoints()
+        );
     }
 
     /**
@@ -81,6 +88,11 @@ public class Player extends Creature implements ProgressiveCreature {
             return;
         }
         weapon = BuffItemWrapper.enchantRandomly(weapon);
+        System.out.println(
+            "New stats: \n" +
+                    "HP: " + this.getHealthPoints() + "\n" +
+                    "ATK: " + this.getAttackPoints()
+        );
     }
 
     /**

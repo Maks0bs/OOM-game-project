@@ -28,10 +28,15 @@ import gameCore.Renderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
 public class WorldRenderable implements IRenderable {
+    public static final class WORLD_UPDATES {
+        public static final int ADD_ENTITY = 1;
+        public static final int REMOVE_ENTITY = 2;
+        public static final int ADD_BLOCK = 3;
+        public static final int REMOVE_BLOCK = 4;
+    }
     /*
         FIXME add this class to UML
 
@@ -103,17 +108,38 @@ public class WorldRenderable implements IRenderable {
             @Override
             public void update(GameObservable<World> observable, World newData, Object specs) {
                 //FIXME improve type check (do it without dynamic upcast and without instanceof)
-                if (specs instanceof Position){
+
+            }
+
+            @Override
+            public void update(GameObservable<World> observable, World newData, Object specs, int id) {
+                if ((id == WORLD_UPDATES.ADD_BLOCK || id == WORLD_UPDATES.REMOVE_BLOCK)
+                        && specs instanceof Position
+                ){
                     Position pos = (Position) specs;
                     Block b = newData.getBlock(pos);
                     setRenderableByPosition(pos, new BlockRenderable(b, pos));
                     BlockRenderable br = getRenderableByPosition(pos);
                     br.displayTopBlock();
-                } else if (specs instanceof Entity){
+                } else if (id == WORLD_UPDATES.ADD_ENTITY && specs instanceof Entity){
                     int pos = newData.getEntities().size();
-                    entityRenderables.add(new EntityRenderable(
-                            newData.getEntities().get(pos - 1))
-                    );
+                    Entity entity = (Entity) specs;
+
+                    if ((entity.getPosition().getX() >= position.getX()) &&
+                            (entity.getPosition().getX() <= position.getX() + width) &&
+                            (entity.getPosition().getY() >= position.getY()) &&
+                            (entity.getPosition().getY() <= position.getX() + height)
+                    ){
+                        entityRenderables.add(new EntityRenderable(entity));
+                    }
+                } else if (id == WORLD_UPDATES.REMOVE_ENTITY && specs instanceof Entity){
+                    Entity entity = (Entity) specs;
+                    for (int i = 0; i < entityRenderables.size(); i++){
+                        if (entity == entityRenderables.get(i).getEntity()){
+                            entityRenderables.remove(i);
+                            break;
+                        }
+                    }
                 }
             }
         };
@@ -124,10 +150,10 @@ public class WorldRenderable implements IRenderable {
             entityRenderables.add(new EntityRenderable(world.getEntities().get(i)));
         }
 
-        ArrayList<WorldItem> items = new ArrayList<>(world.getItems().values());
+        /*ArrayList<WorldItem> items = new ArrayList<>(world.getItems().values());
         for (int i = 0; i < items.size(); i++){
             entityRenderables.add(new EntityRenderable(items.get(i)));
-        }
+        }*/
 
 
 
@@ -273,9 +299,38 @@ public class WorldRenderable implements IRenderable {
         }
 
         //FIXME check to add new renderable entities!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        ArrayList<Entity> entities = world.getEntities();
+        Set<Entity> entitiesSet = new HashSet<>();
+        for (int i = 0; i < entities.size(); i++){
+            Entity cur = entities.get(i);
+            if ((cur.getPosition().getX() >= position.getX()) &&
+                (cur.getPosition().getX() <= position.getX() + width) &&
+                (cur.getPosition().getY() >= position.getY()) &&
+                (cur.getPosition().getY() <= position.getX() + height)
+            ){
+                entitiesSet.add(cur);
+            }
+        }
+
+        int i = 0;
 
 
-        //Updating position for new Renderables
+
+
+        while(i < entityRenderables.size()){
+            EntityRenderable cur = entityRenderables.get(i);
+            entitiesSet.remove(cur.getEntity());
+            if (cur.getEntity() != world.getPlayer() && entitiesSet.contains(cur.getEntity())){
+                entityRenderables.remove(i);
+            } else {
+                i++;
+            }
+        }
+
+        for (Entity e : entitiesSet){
+            entityRenderables.add(new EntityRenderable(e));
+        }
+
 
 
         this.position = newPosition;
@@ -300,7 +355,7 @@ public class WorldRenderable implements IRenderable {
     public void render(Renderer renderer) {
 
 
-        System.out.println(world.getPlayer().getAttackPoints() + " " + world.getPlayer().getHealthPoints());
+        //System.out.println("Player stats: " + world.getPlayer().getAttackPoints() + " " + world.getPlayer().getHealthPoints());
 
         /*
             FIXME URGENT sort array of entities and render them together with blocks in such an order,
@@ -312,32 +367,36 @@ public class WorldRenderable implements IRenderable {
         //FIXME this is very inefficient! it sorts on every render.
         //FIXME the problem is that positions of entities can change dynamically
         //FIXME so you may not be able to store them in maps (i think so at least). Should think of a better solution
-        entityRenderables.sort(new Comparator<EntityRenderable>() {
-            @Override
-            public int compare(EntityRenderable o1, EntityRenderable o2) {
-                Position pos1 = o1.getPosition(), pos2 = o2.getPosition();
-                if (pos1.getY() == pos2.getY()){
-                    if (pos1.getX() == pos2.getX()){
-                        return 0;
-                    }
 
-                    if (pos1.getX() < pos2.getX()){
-                        return -1;
+        synchronized (entityRenderables){//FIXME i have no idea how synchronized fixed ConcurrentModificationException. But it works for now
+            entityRenderables.sort(new Comparator<>() {
+                @Override
+                public int compare(EntityRenderable o1, EntityRenderable o2) {
+                    Position pos1 = o1.getPosition(), pos2 = o2.getPosition();
+                    if (pos1.getY() == pos2.getY()){
+                        if (pos1.getX() == pos2.getX()){
+                            return 0;
+                        }
+
+                        if (pos1.getX() < pos2.getX()){
+                            return -1;
+                        }
+                        else{
+                            return 1;
+                        }
                     }
                     else{
-                        return 1;
+                        if (pos1.getY() < pos2.getY()){
+                            return -1;
+                        }
+                        else{
+                            return 1;
+                        }
                     }
                 }
-                else{
-                    if (pos1.getY() < pos2.getY()){
-                        return -1;
-                    }
-                    else{
-                        return 1;
-                    }
-                }
-            }
-        });
+            });
+        }
+
 
         for (int i = 0; i < blockRenderables.size(); i++){
             for (int j = 0; j < blockRenderables.get(i).size(); j++){
@@ -350,6 +409,7 @@ public class WorldRenderable implements IRenderable {
 
 
         for (int e = 0; e < entityRenderables.size(); e++){
+
             EntityRenderable cur = entityRenderables.get(e);
             //FIXME if entities fall into their aggression and fear radiuses ,then
             //FIXME observable.notifyObservers(this, cur.getEntity());
@@ -360,13 +420,21 @@ public class WorldRenderable implements IRenderable {
                  i <= (relativeEntityPos.getY() + cur.getEntity().getSizeY()) / World.BLOCK_SIZE;
                  i++
             ){
+                if (i < 0 || i >= blockRenderables.size()){
+                    continue;
+                }
                 int blockCenterY = i * World.BLOCK_SIZE + World.BLOCK_SIZE / 2;
                 for (int j = relativeEntityPos.getBlockX();
                      j <= (relativeEntityPos.getX() + cur.getEntity().getSizeX()) / World.BLOCK_SIZE;
                      j++
                 ){
+                    if (j < 0 || j >= blockRenderables.get(i).size()){
+                        continue;
+                    }
                     if (blockCenterY > (relativeEntityPos.getY() + cur.getEntity().getSizeY())){
-                        BlockRenderable curBR = blockRenderables.get(i).get(j);
+                        BlockRenderable curBR = blockRenderables
+                                .get(i)
+                                .get(j);
                         //FIXME sometimes the line above causes IndexOutOfBoundException (idk why)
                         if (curBR.getTopRenderable() == null){
                             continue;
@@ -379,17 +447,7 @@ public class WorldRenderable implements IRenderable {
             }
         }
 
-    }
 
-    /**
-     * !!!For now items cannot be moved in any way, they stay static troughout the whole game,
-     * this might be changed
-     * @param item item to add to world
-     * @return true if item was added successfully, false otherwise
-     */
-    public boolean addItem(WorldItem item){
-        //FIXME IMPLEMENT THIS METHOD!!!!!!!!!!
-        return true;
     }
 
     /**

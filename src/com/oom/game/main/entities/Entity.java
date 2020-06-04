@@ -121,6 +121,7 @@ public abstract class Entity {
 
     public void setState(String state) {
         this.state = state;
+        this.observable.notifyObservers(this);
     }
 
     public GameObservable<Entity> getObservable() {

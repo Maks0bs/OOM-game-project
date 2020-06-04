@@ -1,5 +1,8 @@
 package com.oom.game.main.process.render;
 
+import com.oom.game.main.entities.WorldItem;
+import com.oom.game.main.entities.player.Player;
+import com.oom.game.main.environment.World;
 import com.oom.game.main.utils.GameObservable;
 import gameCore.IRenderable;
 import gameCore.IUpdatable;
@@ -9,6 +12,7 @@ import gameCore.eventSystem.IEventListener;
 import gameCore.input.keyboard.KeyPressedEvent;
 import gameCore.input.keyboard.KeyReleasedEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
@@ -78,6 +82,22 @@ public class MainRenderable implements IRenderable, IUpdatable, IEventListener {
             Character cur = ((KeyPressedEvent) event).getKeySymbol();
             if (!pressedTime.containsKey(cur)) {
                 pressedTime.put(cur, 0);
+            }
+            if (cur == 'e'){
+                worldRenderable.getWorld().getPlayer().enchantWeaponRandomly();
+            }
+            if (cur == 'f'){
+                Player player = worldRenderable.getWorld().getPlayer();
+                ArrayList<WorldItem> items = worldRenderable.getWorld().getItemsUnderEntity(player);
+                if (items == null || items.size() == 0){
+                    return;
+                }
+
+                //FIXME URGENT WorldItems don't get deleted from items map. This allows you to click F several times to reset weapon on position, where a weapon was lying before it got picked up, but there is no item now!!!
+                WorldItem pickedUp = items.get(0);
+                System.out.println(worldRenderable.getWorld().removeItem(pickedUp.getPosition().getBlockPosition()));
+
+                player.pickUpWeapon(pickedUp);
             }
         } else if (event instanceof KeyReleasedEvent){
             Character cur = ((KeyReleasedEvent) event).getKeySymbol();

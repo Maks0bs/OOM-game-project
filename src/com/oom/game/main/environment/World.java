@@ -8,6 +8,7 @@ import com.oom.game.main.environment.blocks.EmptyVoid;
 import com.oom.game.main.environment.blocks.Grass;
 import com.oom.game.main.environment.utils.exceptions.WorldResizeException;
 import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.process.render.WorldRenderable;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 
@@ -42,7 +43,9 @@ public class World {
 
     private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
     private ArrayList<Entity> entities = new ArrayList<Entity>();//FIXME save entities in a Set / Map
-    private Map<Position, WorldItem> items = new HashMap<>();//!!! Save items only to this map
+    private Map<String, ArrayList<WorldItem> > items = new HashMap<>();
+    //!!! Save items only to this map. Each position contains a list of items it currently has
+
     /*
         At the moment there can only be one player
      */
@@ -131,7 +134,7 @@ public class World {
             //FIXME it is a bad idea to use instance of, change to smth else
             blocks.get(position.getBlockY()).set(position.getBlockX(), block);
             //TODO might need to make a deep copy HERE and in a lot of other places (where block updates occur)
-            this.observable.notifyObservers(this, position);
+            this.observable.notifyObservers(this, position, WorldRenderable.WORLD_UPDATES.ADD_BLOCK);
             return true;
         }
         else{ //otherwise there is a floor block, add one on top, but check if block on top already exists
@@ -139,7 +142,7 @@ public class World {
                 return false;
             }
             curBlock.setBlockOnTop(block);
-            this.observable.notifyObservers(this, position);
+            this.observable.notifyObservers(this, position, WorldRenderable.WORLD_UPDATES.ADD_BLOCK);
             return true;
         }
     }
@@ -156,7 +159,8 @@ public class World {
         if (curBlock instanceof EmptyVoid){ //if there is no block (Empty void), then replace
             //FIXME it is a bad idea to use instance of, change to smth else
             blocks.get(i).set(j, block);
-            this.observable.notifyObservers(this, new Position(j, i, true));
+            this.observable.notifyObservers(this, new Position(j, i, true),
+                    WorldRenderable.WORLD_UPDATES.ADD_BLOCK);
             return true;
         }
         else{ //otherwise there is a floor block, add one on top, but check if block on top already exists
@@ -164,7 +168,8 @@ public class World {
                 return false;
             }
             curBlock.setBlockOnTop(block);
-            this.observable.notifyObservers(this, new Position(j, i, true));
+            this.observable.notifyObservers(this, new Position(j, i, true),
+                    WorldRenderable.WORLD_UPDATES.ADD_BLOCK);
             return true;
         }
     }
@@ -181,11 +186,11 @@ public class World {
         } else if (curBlock.hasBlockOnTop()){
 
             curBlock.setBlockOnTop(null);
-            this.observable.notifyObservers(this, position);
+            this.observable.notifyObservers(this, position, WorldRenderable.WORLD_UPDATES.REMOVE_BLOCK);
             return true;
         } else {
             blocks.get(position.getBlockY()).set(position.getBlockX(), new EmptyVoid());
-            this.observable.notifyObservers(this, position);
+            this.observable.notifyObservers(this, position, WorldRenderable.WORLD_UPDATES.REMOVE_BLOCK);
             return true;
         }
     }
@@ -203,11 +208,13 @@ public class World {
         } else if (curBlock.hasBlockOnTop()){
 
             curBlock.setBlockOnTop(null);
-            this.observable.notifyObservers(this, new Position(j, i, true));
+            this.observable.notifyObservers(this, new Position(j, i, true),
+                    WorldRenderable.WORLD_UPDATES.REMOVE_BLOCK);
             return true;
         } else {
             blocks.get(i).set(j, new EmptyVoid());
-            this.observable.notifyObservers(this, new Position(j, i, true));
+            this.observable.notifyObservers(this, new Position(j, i, true),
+                    WorldRenderable.WORLD_UPDATES.REMOVE_BLOCK);
             return true;
         }
     }
@@ -242,8 +249,94 @@ public class World {
 
 
         entities.add(entity);
-        this.observable.notifyObservers(this, entity);
+        this.observable.notifyObservers(this, entity, WorldRenderable.WORLD_UPDATES.ADD_ENTITY);
         return true;
+    }
+
+    /**
+     * !!!ONLY USE THIS FUNCTION TO ADD ITEMS, do NOT use addEntity
+     * !!!For now items cannot be moved in any way, they stay static troughout the whole game,
+     * this might be changed
+     * @param item item to add to world
+     * @return true if item was added successfully, false otherwise
+     */
+    public boolean addItem(WorldItem item){
+        for (int i = item.getPosition().getBlockY();
+             i <= (item.getPosition().getY() + item.getSizeY()) / BLOCK_SIZE;
+             i++
+        ){
+
+            for (int j = item.getPosition().getBlockX();
+                 j <= (item.getPosition().getX() + item.getSizeX()) / BLOCK_SIZE;
+                 j++
+            ){
+                Position pos = new Position(j, i, true);
+                if (!items.containsKey(pos.toString())){
+                    items.put(pos.toString(), new ArrayList<>());
+                }
+
+                items.get( (new Position(j, i, true)).toString()).add(item);
+
+
+            }
+        }
+
+        return this.addEntity(item);
+    }
+
+    /**
+     * PLEASE ONLY USE THIS FUNCTION WITH POSITION THAT ARE BLOCK POSITION (like (0, 64) or (128, 96) )
+     * remove the item on top of all the others on given position
+     * @param pos position, on which the item should be removed
+     * @return true, if deletion was successful, false otherwise
+     */
+    public boolean removeItem(Position pos){
+        if (items.containsKey(pos.toString())){
+            ArrayList<WorldItem> itemsOnBlock = items.get(pos.toString());
+            if (itemsOnBlock.size() == 0){
+                return false;
+            }
+            WorldItem item = itemsOnBlock.get(itemsOnBlock.size() - 1);
+            return removeEntity(item);
+        } else{
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param entity entity to check with what items it overlaps
+     * @return list of items under the given entity
+     */
+    public ArrayList<WorldItem> getItemsUnderEntity(Entity entity){
+        ArrayList<WorldItem> res = new ArrayList<>();
+        for (int i = entity.getPosition().getBlockY();
+             i <= (entity.getPosition().getY() + entity.getSizeY()) / BLOCK_SIZE;
+             i++
+        ){
+
+            for (int j = entity.getPosition().getBlockX();
+                 j <= (entity.getPosition().getX() + entity.getSizeX()) / BLOCK_SIZE;
+                 j++
+            ){
+                Position pos = new Position(j, i, true);
+                if (items.containsKey(pos.toString())){
+                    ArrayList<WorldItem> cp = items.get(pos.toString());
+                    for (int k = 0; k < cp.size(); k++){
+                        WorldItem cur = cp.get(k);
+                        if (entity.overlapsWith(cur)){
+                            res.add(cur);
+                        }
+                    }
+                }
+            }
+        }
+
+        return res;
+    }
+
+    public ArrayList<WorldItem> getItemsByPosition(Position pos){
+        return items.get(pos);
     }
 
     /**
@@ -254,7 +347,7 @@ public class World {
     public boolean addPlayer(Player player){
         if (this.player == null){
             this.player = player;
-            this.observable.notifyObservers(this);
+            this.observable.notifyObservers(this, player, WorldRenderable.WORLD_UPDATES.ADD_ENTITY);
             return true;
         }
         return false;
@@ -272,7 +365,7 @@ public class World {
      * Unbinds player from current world
      */
     public void removePlayer(){
-        this.observable.notifyObservers(this);
+        this.observable.notifyObservers(this, this.player, WorldRenderable.WORLD_UPDATES.REMOVE_ENTITY);
         this.player = null;
     }
 
@@ -331,7 +424,7 @@ public class World {
         for (int i = 0; i < entities.size(); i++){
             if (entities.get(i) == entity){//here addresses are compared, and that's what wee need, don't use .equals()
                 entities.remove(i);
-                this.observable.notifyObservers(this);
+                this.observable.notifyObservers(this, entity, WorldRenderable.WORLD_UPDATES.REMOVE_ENTITY);
                 return true;
             }
         }
@@ -365,10 +458,6 @@ public class World {
 
     public GameObservable<World> getObservable() {
         return observable;
-    }
-
-    public Map<Position, WorldItem> getItems() {
-        return items;
     }
 
 }
