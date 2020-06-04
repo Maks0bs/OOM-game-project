@@ -26,7 +26,6 @@ import java.util.ArrayList;
 public class Process {
     /*
         FIXME add docs to Process class
-        FIXME add this class to UML in a normal way (right now it's disgusting)
      */
     private Renderer defaultRenderer = null; //this might not be necessary, as all data of this renderer is included in game
     private MainRenderable mainRenderable = null; //this might not be necessary, as all of it is included in game

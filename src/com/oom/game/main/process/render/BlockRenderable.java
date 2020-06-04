@@ -12,9 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class BlockRenderable extends NodeRenderable {
-    /*
-        FIXME add this class to UML
-     */
+
     private Block block;
     //Very bad solution - remembering last block on top
     private BlockRenderable topRenderable = null;

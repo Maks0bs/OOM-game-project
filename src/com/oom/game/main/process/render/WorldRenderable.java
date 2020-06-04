@@ -33,8 +33,6 @@ import java.util.Comparator;
 
 public class WorldRenderable implements IRenderable {
     /*
-        FIXME add this class to UML
-
         FIXME add observable / observer pattern
         FIXME Renderer = observer, key and click listeners + data classes are observables
      */
@@ -283,7 +281,6 @@ public class WorldRenderable implements IRenderable {
     }
 
     /**
-     * FIXME add this method to UML
      * @param dx change of position by x-axis
      * @param dy change of position by y-axis
      * @return true if moving position was successful and false otherwise
