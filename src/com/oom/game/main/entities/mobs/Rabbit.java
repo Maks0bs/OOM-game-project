@@ -5,6 +5,7 @@ package com.oom.game.main.entities.mobs;
  */
 
 import com.oom.game.main.entities.NPC;
+import com.oom.game.main.entities.mobs.strategies.DefaultPredatorFear;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 
@@ -18,7 +19,7 @@ public class Rabbit extends NPC {
      */
     public Rabbit(Position position){
         super(NAME, position, SIZE_X, SIZE_Y, DEFAULT_STATE, HEALTH_POINTS, ATTACK_POINTS, EXP_POINTS);
-        System.out.println("A new Rabbit has spawned!");
+        super.fearBehaviour = new DefaultPredatorFear();
     }
     /*
         FIXME add a constructor to create a rabbit with custom stats
