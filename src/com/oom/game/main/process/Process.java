@@ -126,7 +126,7 @@ public class Process {
             Mocking normal game process here
          */
 
-        this.playerControl = new PlayerControl(mainRenderable, world);
+        this.playerControl = new PlayerControl(mainRenderable, world, 2);
         this.player.setControl(playerControl);
         this.playerControl.enable();
 
@@ -155,8 +155,18 @@ public class Process {
 
 
 
-        NPCMovement wolfMovement = new NPCMovement(wolf1, this.world, mainRenderable.getWorldRenderable());
+        NPCMovement wolfMovement = new NPCMovement(wolf1, this.world, mainRenderable.getWorldRenderable(), 0.25);
         wolf1.setMovement(wolfMovement);
+
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        wolfMovement.enable();
+                    }
+                },
+                1500
+        );
 
 
 

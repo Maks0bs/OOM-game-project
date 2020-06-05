@@ -14,7 +14,7 @@ import com.oom.game.main.process.utils.control.PlayerControl;
 import java.util.ArrayList;
 
 public class Player extends Creature implements ProgressiveCreature {
-    public static String DEFAULT_STATE = "PlayerDefault";
+    public static String DEFAULT_STATE = "PlayerDefault", NAME = "Player";
     public static int DEFAULT_HEALTH_POINTS = 100, DEFAULT_ATTACK_POINTS = 5;
     //MAYBE IT WOULD BE NECESSARY TO ADD WORLD REFERENCE FOR PLAYER TO KNOW POSITION AND BLOCK UNDER HIM, ETC.
     private PlayerControl control = null;
@@ -22,7 +22,7 @@ public class Player extends Creature implements ProgressiveCreature {
     private BuffItem weapon = null, amulet = null;
 
     public static Player generateDefaultPlayer(){
-        return new Player("Player", new Position(0, 0, true),
+        return new Player(NAME, new Position(0, 0, true),
                 World.BLOCK_SIZE, World.BLOCK_SIZE,
                 DEFAULT_STATE, DEFAULT_HEALTH_POINTS, DEFAULT_ATTACK_POINTS, 0
         );

@@ -13,6 +13,13 @@ public class Position{
     private int x = DEFAULT_POSITION, y = DEFAULT_POSITION;
 
 
+    public static double dist(Position pos1, Position pos2){
+        double diffX = pos1.getX() - pos2.getX();
+        double diffY = pos1.getY() - pos2.getY();
+
+        return Math.sqrt(diffX * diffX + diffY * diffY);
+    }
+
     /**
      *
      * @param x x-coordinate of current object

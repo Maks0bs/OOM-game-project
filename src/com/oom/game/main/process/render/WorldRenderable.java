@@ -11,6 +11,7 @@ import com.oom.game.main.environment.blocks.utils.BlockTextures;
 import com.oom.game.main.environment.utils.Block;
 import com.oom.game.main.process.render.BlockRenderable;
 import com.oom.game.main.process.render.EntityRenderable;
+import com.oom.game.main.process.utils.control.NPCMovement;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 import gameCore.IRenderable;
@@ -407,10 +408,14 @@ public class WorldRenderable implements IRenderable {
 
 
         for (int e = 0; e < entityRenderables.size(); e++){
-
             EntityRenderable cur = entityRenderables.get(e);
-            //FIXME if entities fall into their aggression and fear radiuses ,then
-            //FIXME observable.notifyObservers(this, cur.getEntity());
+            //FIXME if entities fall into their aggression and fear radiuses. This is handled in NPCMovement
+            observable.notifyObservers(this);
+
+
+
+
+
             Position relativeEntityPos = cur.getPosition().difference(this.position);
             cur.render(renderer, relativeEntityPos);
             for (int i = relativeEntityPos.getBlockY();

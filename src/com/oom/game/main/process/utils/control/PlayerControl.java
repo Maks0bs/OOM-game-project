@@ -19,11 +19,13 @@ public class PlayerControl implements GameObserver<MainRenderable> {
     private HashMap<Character, Double> pressedDistance = new HashMap<>();
     private World world = null;
     private Player player = null;
+    private double speed = 1;
 
-    public PlayerControl(MainRenderable mainRenderable, World world){
+    public PlayerControl(MainRenderable mainRenderable, World world, double speed){
 
         this.player = world.getPlayer();
         this.world = world;
+        this.speed = speed;
         mainRenderable.getObservable().registerObserver(this);
         for (int i = 0; i < CONTROL_KEYS.length; i++){
             pressedDistance.put(CONTROL_KEYS[i], 0d);
@@ -61,7 +63,7 @@ public class PlayerControl implements GameObserver<MainRenderable> {
         for (int i = 0; i < CONTROL_KEYS.length; i++){
             Character c = CONTROL_KEYS[i];
             if (newData.keyIsPressed(c)){
-                double newValue = pressedDistance.get(c) + base;
+                double newValue = pressedDistance.get(c) + base * speed;
                 int diff = (int)(newValue);
                 pressedDistance.replace(c, newValue - diff);
                 //FIXME don't move one time, make it in a loop and move one pixel at a time to make it look more smooth
@@ -83,6 +85,8 @@ public class PlayerControl implements GameObserver<MainRenderable> {
                 //FIXME perform action on walk
             }
         }
+
+        //FIXME this approach disables walking into an unwalkable and walking in other direction (i know what i mean here)
 
         //Here we check if we walked on a non-walkable block and cancel this move if it happened
         Position blockPosNew = new Position(

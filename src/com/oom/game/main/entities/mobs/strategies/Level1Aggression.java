@@ -13,6 +13,7 @@ public class Level1Aggression implements AggressiveBehaviour {
      */
     public Level1Aggression(){
         aggresiveAgainst.add("Rabbit");
+        aggresiveAgainst.add("Player");
     }
 
     @Override
