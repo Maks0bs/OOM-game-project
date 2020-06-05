@@ -1,6 +1,7 @@
 package com.oom.game.main.entities;
 
 import com.oom.game.main.environment.Position;
+import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.utils.Block;
 import com.oom.game.main.utils.GameObservable;
 
@@ -50,6 +51,31 @@ public abstract class Entity {
     }
 
     /**
+     * @param pos position of the block
+     * @return true if block overlaps with current entity
+     */
+    public boolean overlapsWithBlock(Position pos){
+        int x = pos.getX(), y = pos.getY(),
+                sx = World.BLOCK_SIZE, sy = World.BLOCK_SIZE,
+                x0 = this.position.getX(), y0 = this.position.getY();
+        return !( (x > x0 + this.sizeX - 1) || (x + sx - 1 < x0) || (y > y0 + this.sizeY - 1) || (y + sy - 1 < y0));
+    }
+
+    /**
+     * @param dx change of current entity by x-axis
+     * @param dy change of current entity by y-axis
+     */
+    public void move(int dx, int dy){
+        this.position.setX(this.position.getX() + dx);
+        this.position.setY(this.position.getY() + dy);
+        this.observable.notifyObservers(this);
+    }
+
+    public Position getCenterPosition(){
+        return new Position(position.getX() + sizeX / 2, position.getY() + sizeY / 2);
+    }
+
+    /**
      * Default info (mainly for console output) of entity
      * @return default info of entity
      */
@@ -80,14 +106,13 @@ public abstract class Entity {
         this.observable.notifyObservers(this);
     }
 
-    /**
-     * @param dx change of current entity by x-axis
-     * @param dy change of current entity by y-axis
-     */
-    public void move(int dx, int dy){
-        this.position.setX(this.position.getX() + dx);
-        this.position.setY(this.position.getY() + dy);
+    public void setPositionDeep(Position position){
+        this.position.setX(position.getX());
+        this.position.setY(position.getY());
+        this.observable.notifyObservers(this);
+
     }
+
 
     public String getState() {
         return state;
@@ -95,13 +120,11 @@ public abstract class Entity {
 
     public void setState(String state) {
         this.state = state;
+        this.observable.notifyObservers(this);
     }
 
     public GameObservable<Entity> getObservable() {
         return observable;
     }
 
-    public void setObservable(GameObservable<Entity> observable) {
-        this.observable = observable;
-    }
 }

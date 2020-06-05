@@ -11,16 +11,25 @@ import java.util.EventListener;
 public class GameKeyEventManager implements IEventManager {
     private ArrayList<IEventListener> observers = new ArrayList<>();
 
+    /**
+     * {@link IEventManager}
+     */
     @Override
     public void register(IEventListener eventListener) {
         observers.add(eventListener);
     }
 
+    /**
+     * {@link IEventManager}
+     */
     @Override
     public void unregister(IEventListener eventListener) {
         observers.remove(eventListener);
     }
 
+    /**
+     * {@link IEventManager}
+     */
     @Override
     public void fire(IEvent event) {
         for (int i = 0; i < observers.size(); i++){

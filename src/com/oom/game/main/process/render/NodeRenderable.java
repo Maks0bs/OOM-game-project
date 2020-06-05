@@ -1,4 +1,4 @@
-package com.oom.game.main.process;
+package com.oom.game.main.process.render;
 
 import com.oom.game.main.environment.Position;
 import gameCore.IRenderable;

@@ -7,6 +7,6 @@ public class StoneTileFloor extends Block {
     public static final String DEFAULT_STATE = "StoneTileFloor";
     public StoneTileFloor(){
         super(DEFAULT_STATE);
-        this.walkAction = new FloorWalkAction();
+        this.walkAction = new FloorWalkAction(2.5);
     }
 }

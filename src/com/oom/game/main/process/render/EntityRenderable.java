@@ -1,21 +1,17 @@
-package com.oom.game.main.process;
+package com.oom.game.main.process.render;
 
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.utils.EntityTextures;
 import com.oom.game.main.environment.Position;
-import com.oom.game.main.environment.blocks.utils.BlockTextures;
-import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.process.render.NodeRenderable;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
-import gameCore.IRenderable;
 import gameCore.Renderer;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class EntityRenderable extends NodeRenderable implements GameObserver<Entity> {
 
     private Entity entity;
+    private String curState = null;
 
     /**
      *
@@ -26,12 +22,19 @@ public class EntityRenderable extends NodeRenderable implements GameObserver<Ent
         this.image = EntityTextures.getTextureByState(entity.getState());
         entity.getObservable().registerObserver(this);
         this.entity = entity;
+        curState = entity.getState();
     }
 
     @Override
     public void update(GameObservable<Entity> observable, Entity newData) {
-        this.entity = newData;
+        if (!curState.equals(newData.getState())){
+            this.image = EntityTextures.getTextureByState(newData.getState());
+        }
+
+        curState = newData.getState();
+        //FIXME maybe change state to animate control
     }
+
 
     @Override
     protected String getNodeType() {
@@ -50,5 +53,13 @@ public class EntityRenderable extends NodeRenderable implements GameObserver<Ent
     protected void finalize() throws Throwable {
         entity.getObservable().unregisterObserver(this);
         super.finalize();
+    }
+
+    public Entity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(Entity entity) {
+        this.entity = entity;
     }
 }

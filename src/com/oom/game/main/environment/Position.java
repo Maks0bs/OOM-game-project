@@ -1,17 +1,24 @@
 package com.oom.game.main.environment;
 
 /*
-    Added this class to better manage creature movement.
+    Added this class to better manage creature control.
     Might need to move back to normal coords afterwards.
     The problem is that coords most likely have to be int.
 
  */
 
 
-public class Position {
+public class Position{
     public static final int DEFAULT_POSITION = 0;
     private int x = DEFAULT_POSITION, y = DEFAULT_POSITION;
 
+
+    public static double dist(Position pos1, Position pos2){
+        double diffX = pos1.getX() - pos2.getX();
+        double diffY = pos1.getY() - pos2.getY();
+
+        return Math.sqrt(diffX * diffX + diffY * diffY);
+    }
 
     /**
      *
@@ -40,6 +47,15 @@ public class Position {
     }
 
     /**
+     * This constructor is used to deep clone an existing position
+     * @param position position to clone
+     */
+    public Position(Position position){
+        this.x = position.getX();
+        this.y = position.getY();
+    }
+
+    /**
      * @param diff the position to remove from this one
      * @return the result of subtraction of diff position from current one (or vector from this to diff)
      */
@@ -53,6 +69,16 @@ public class Position {
      */
     public Position sum(Position diff){
         return new Position(this.getX() + diff.getX(), this.getY() + diff.getY());
+    }
+
+    /**
+     *
+     * @return block position relative to the current pos (e. g. for (56, 65) the block position is (32, 64) )
+     */
+    public Position getBlockPosition(){
+        int x = this.getBlockX();
+        int y = this.getBlockY();
+        return new Position(x, y, true);
     }
 
     /**
@@ -85,5 +111,11 @@ public class Position {
 
     public void setY(int y) {
         this.y = y;
+
+    }
+
+    @Override
+    public String toString() {
+        return "X: " + x + ", Y: " + y;
     }
 }

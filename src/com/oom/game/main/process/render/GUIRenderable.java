@@ -1,6 +1,7 @@
-package com.oom.game.main.process;
+package com.oom.game.main.process.render;
 
 import com.oom.game.main.environment.Position;
+import com.oom.game.main.process.render.NodeRenderable;
 import com.oom.game.main.ui.utils.GUITextures;
 import gameCore.IRenderable;
 import gameCore.Renderer;

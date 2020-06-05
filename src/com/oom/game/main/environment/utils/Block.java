@@ -2,8 +2,11 @@ package com.oom.game.main.environment.utils;
 
 //this class has to be observable
 
+import com.oom.game.main.environment.blocks.strategies.NoneMoveAction;
+import com.oom.game.main.environment.blocks.strategies.NonePlayerInteraction;
+import com.oom.game.main.environment.blocks.strategies.NoneSolidBlockAction;
+import com.oom.game.main.environment.blocks.strategies.NoneWalkAction;
 import com.oom.game.main.utils.GameObservable;
-import com.oom.game.main.utils.GameObserver;
 
 public class Block {
     /*
@@ -11,15 +14,14 @@ public class Block {
      */
     protected String state = "Default"; //State defines the texture that will be used to display this block
     protected Block blockOnTop = null;
-    protected PlayerInteraction playerInteraction = null;
-    protected WalkAction walkAction = null;
-    protected DamageAction damageAction = null;
-    protected MoveAction moveAction = null;
+    protected PlayerInteraction playerInteraction = new NonePlayerInteraction();
+    protected WalkAction walkAction = new NoneWalkAction();
+    protected SolidBlockAction solidBlockAction = new NoneSolidBlockAction();
+    protected MoveAction moveAction = new NoneMoveAction();
     /*
         It's possible to implement this through extending from observable class, but it's not possible
         to extend in such a way in Player class. That's why this pattern is used.
      */
-    protected GameObservable<Block> observable = new GameObservable<Block>();
 
     /**
      *
@@ -42,12 +44,10 @@ public class Block {
     }
 
     /**
-     * FIXME add this method to UML, because it has to do with observable
      * @param state new state
      */
     public void setState(String state) {
         this.state = state;
-        this.observable.notifyObservers(this);
     }
 
     public Block getBlockOnTop() {
@@ -55,13 +55,11 @@ public class Block {
     }
 
     /**
-     * FIXME add this method to UML, because it has to do with observable
      * @param blockOnTop new blockOnTop
      */
     public void setBlockOnTop(Block blockOnTop) {
         //FIXME sometimes this function gets called 2 times (noticed on initialization)
         this.blockOnTop = blockOnTop;
-        this.observable.notifyObservers(this);
     }
 
     public PlayerInteraction getPlayerInteraction() {
@@ -80,12 +78,12 @@ public class Block {
         this.walkAction = walkAction;
     }
 
-    public DamageAction getDamageAction() {
-        return damageAction;
+    public SolidBlockAction getSolidBlockAction() {
+        return solidBlockAction;
     }
 
-    public void setDamageAction(DamageAction damageAction) {
-        this.damageAction = damageAction;
+    public void setSolidBlockAction(SolidBlockAction solidBlockAction) {
+        this.solidBlockAction = solidBlockAction;
     }
 
     public MoveAction getMoveAction() {
@@ -96,11 +94,4 @@ public class Block {
         this.moveAction = moveAction;
     }
 
-    public GameObservable<Block> getObservable() {
-        return observable;
-    }
-
-    public void setObservable(GameObservable<Block> observable) {
-        this.observable = observable;
-    }
 }
