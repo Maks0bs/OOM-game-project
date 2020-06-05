@@ -297,6 +297,23 @@ public class World {
                 return false;
             }
             WorldItem item = itemsOnBlock.get(itemsOnBlock.size() - 1);
+
+            for (int i = item.getPosition().getBlockY();
+                 i <= (item.getPosition().getY() + item.getSizeY()) / BLOCK_SIZE;
+                 i++
+            ){
+
+                for (int j = item.getPosition().getBlockX();
+                     j <= (item.getPosition().getX() + item.getSizeX()) / BLOCK_SIZE;
+                     j++
+                ){
+                    Position posDel = new Position(j, i, true);
+                    if (items.containsKey(posDel.toString())){
+                        items.get(posDel.toString()).remove(item);
+                    }
+                }
+            }
+
             return removeEntity(item);
         } else{
             return false;
@@ -324,13 +341,15 @@ public class World {
                     ArrayList<WorldItem> cp = items.get(pos.toString());
                     for (int k = 0; k < cp.size(); k++){
                         WorldItem cur = cp.get(k);
-                        if (entity.overlapsWith(cur)){
+                        if (!res.contains(cur) && entity.overlapsWith(cur)){
                             res.add(cur);
                         }
                     }
                 }
             }
         }
+
+
 
         return res;
     }

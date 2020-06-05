@@ -304,11 +304,13 @@ public class WorldRenderable implements IRenderable {
             if ((cur.getPosition().getX() >= position.getX()) &&
                 (cur.getPosition().getX() <= position.getX() + width) &&
                 (cur.getPosition().getY() >= position.getY()) &&
-                (cur.getPosition().getY() <= position.getX() + height)
+                (cur.getPosition().getY() <= position.getY() + height)
             ){
+
                 entitiesSet.add(cur);
             }
         }
+
 
         int i = 0;
 
@@ -352,7 +354,6 @@ public class WorldRenderable implements IRenderable {
     public void render(Renderer renderer) {
 
 
-        //System.out.println("Player stats: " + world.getPlayer().getAttackPoints() + " " + world.getPlayer().getHealthPoints());
 
         /*
             FIXME URGENT sort array of entities and render them together with blocks in such an order,
@@ -412,7 +413,6 @@ public class WorldRenderable implements IRenderable {
             //FIXME observable.notifyObservers(this, cur.getEntity());
             Position relativeEntityPos = cur.getPosition().difference(this.position);
             cur.render(renderer, relativeEntityPos);
-            //cur.render(renderer, relativeEntityPos);
             for (int i = relativeEntityPos.getBlockY();
                  i <= (relativeEntityPos.getY() + cur.getEntity().getSizeY()) / World.BLOCK_SIZE;
                  i++

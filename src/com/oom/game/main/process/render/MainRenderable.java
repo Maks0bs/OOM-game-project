@@ -95,7 +95,7 @@ public class MainRenderable implements IRenderable, IUpdatable, IEventListener {
 
                 //FIXME URGENT WorldItems don't get deleted from items map. This allows you to click F several times to reset weapon on position, where a weapon was lying before it got picked up, but there is no item now!!!
                 WorldItem pickedUp = items.get(0);
-                System.out.println(worldRenderable.getWorld().removeItem(pickedUp.getPosition().getBlockPosition()));
+                worldRenderable.getWorld().removeItem(pickedUp.getPosition().getBlockPosition());
 
                 player.pickUpWeapon(pickedUp);
             }

@@ -148,6 +148,10 @@ public class Process {
         world.addItem(swordItem1);
         WorldItem swordItem2 = new WorldItem(new Position(40, 140), "Sword", new Sword());
         world.addItem(swordItem2);
+        WorldItem axeItem1 = new WorldItem(new Position(200, 300), "Axe", new Axe());
+        world.addItem(axeItem1);
+        WorldItem axeItem2 = new WorldItem(new Position(250, 450), "Axe", new Axe());
+        world.addItem(axeItem2);
 
 
 
