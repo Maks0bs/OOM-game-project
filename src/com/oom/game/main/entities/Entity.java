@@ -110,6 +110,7 @@ public abstract class Entity {
         this.position.setX(position.getX());
         this.position.setY(position.getY());
         this.observable.notifyObservers(this);
+
     }
 
 

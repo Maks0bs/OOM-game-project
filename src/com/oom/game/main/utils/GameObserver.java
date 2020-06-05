@@ -2,7 +2,6 @@ package com.oom.game.main.utils;
 
 public interface GameObserver<T> {
 
-
     /**
      *
      * @param observable observable that caused the update (for reference)

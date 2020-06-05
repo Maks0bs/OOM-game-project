@@ -1,21 +1,12 @@
 package com.oom.game.main.process.render;
 
 import com.oom.game.main.entities.Entity;
-import com.oom.game.main.entities.NPC;
-import com.oom.game.main.entities.WorldItem;
-import com.oom.game.main.entities.player.Player;
-import com.oom.game.main.entities.utils.InventoryItem;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
-import com.oom.game.main.environment.blocks.utils.BlockTextures;
 import com.oom.game.main.environment.utils.Block;
-import com.oom.game.main.process.render.BlockRenderable;
-import com.oom.game.main.process.render.EntityRenderable;
-import com.oom.game.main.process.utils.control.NPCMovement;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 import gameCore.IRenderable;
-import gameCore.IUpdatable;
 import gameCore.Renderer;
 
 /*
@@ -27,8 +18,6 @@ import gameCore.Renderer;
     FIXME might need to fix some issues in above notes
  */
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.*;
 
 public class WorldRenderable implements IRenderable {
