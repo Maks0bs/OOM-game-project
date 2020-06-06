@@ -43,7 +43,6 @@ public class Player extends Creature implements ProgressiveCreature {
         The process of attacking and counterattacking
         TODO may be influenced by various effects of attacker / victim
      */
-
     /**
      * Basic player attack functionality
      * @param victim the creature that this player wants to attack
@@ -63,7 +62,7 @@ public class Player extends Creature implements ProgressiveCreature {
     }
 
     /**
-     * Gets when F key is pressed
+     * Gets fired when F key is pressed
      * Replaces current weapon with the given one
      */
     public void pickUpWeapon(WorldItem item){

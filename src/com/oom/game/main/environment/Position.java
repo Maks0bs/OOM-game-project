@@ -1,18 +1,19 @@
 package com.oom.game.main.environment;
 
-/*
-    Added this class to better manage creature control.
-    Might need to move back to normal coords afterwards.
-    The problem is that coords most likely have to be int.
-
+/**
+    Added this class to better manage entity control.
  */
-
-
 public class Position{
     public static final int DEFAULT_POSITION = 0;
     private int x = DEFAULT_POSITION, y = DEFAULT_POSITION;
 
 
+    /**
+     *
+     * @param pos1 first point
+     * @param pos2 second point
+     * @return distance between 2 given points
+     */
     public static double dist(Position pos1, Position pos2){
         double diffX = pos1.getX() - pos2.getX();
         double diffY = pos1.getY() - pos2.getY();

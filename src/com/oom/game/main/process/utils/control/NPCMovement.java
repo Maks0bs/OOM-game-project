@@ -18,16 +18,11 @@ import java.util.HashMap;
  * in the first place
  */
 public class NPCMovement implements GameObserver<WorldRenderable> {
-    public static final class INTERACTION_UPDATES {
-        public static final int VICTIM_IN_SIGHT = -1;
-    }
-    public static final Character CONTROL_KEYS [] = new Character[]{'w', 'a', 's', 'd'};
     private boolean enabled = false;
     private double speed = 0;
     private Creature angryOn = null;
     private int optimizationCounter = 0;
     private double defaultMotionAngle = 0;
-    //private HashMap<String, Double> directions = new HashMap<>();
     private double moveX = 0, moveY = 0;
     private World world = null;
     private NPC creature;
@@ -37,10 +32,6 @@ public class NPCMovement implements GameObserver<WorldRenderable> {
         this.world = world;
         this.speed = speed;
         worldRenderable.getObservable().registerObserver(this);
-//        directions.put("down", 0d);
-//        directions.put("up", 0d);
-//        directions.put("left", 0d);
-//        directions.put("right", 0d);
 
     }
 

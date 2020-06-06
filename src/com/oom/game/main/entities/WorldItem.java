@@ -17,14 +17,22 @@ public class WorldItem extends Entity {
 
     //All items are 16x16 renderables by default
 
+    /**
+     *
+     * {@link Entity}
+     * @param inventoryItem inner inventory item for working with item and inventory logic
+     */
     public WorldItem(Position position, int sizeX, int sizeY, String state, InventoryItem inventoryItem){
-        //super(position, sizeX, sizeY, state);
         super(position, sizeX, sizeY, state);
         this.inventoryItem = inventoryItem;
     }
 
+    /**
+     *
+     * {@link Entity}
+     * @param inventoryItem inner inventory item for working with item and inventory logic
+     */
     public WorldItem(Position position, String state, InventoryItem inventoryItem){
-        //super(position, sizeX, sizeY, state);
         super(position, World.BLOCK_SIZE / 2, World.BLOCK_SIZE / 2, state);
         this.inventoryItem = inventoryItem;
     }

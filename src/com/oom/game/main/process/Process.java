@@ -26,18 +26,18 @@ import java.util.ArrayList;
 
 public class Process {
     /*
-        FIXME add docs to Process class
+        FIXME add normal docs to Process class
      */
     private MainRenderable mainRenderable = null;
     private World world;
-    /*
+    /**
         This player is the main game entity;
-        FIXME may add several players simultaneously
      */
     private Player player;
 
+    //FIXME maybe create constructor with custom values (graphics / renderer / game)
     /**
-     * FIXME maybe create constructor with custom values (graphics / renderer / game)
+     *
      * Default constructor for Process
      */
     public Process(){
@@ -70,13 +70,12 @@ public class Process {
 
         //DO NOT ADD ANY ENTITIES TO WORLD BEFORE creating mainRenderable
 
-
         GUIRenderable guiRenderable = new GUIRenderable();
         WorldRenderable worldRenderable = new WorldRenderable(
                 world,
                 (int) screenSize.getWidth() / 2,
                 (int) screenSize.getHeight() / 2
-        ); //FIXME replace with MainRenderable (instead of WorldRenderable)
+        );
         this.mainRenderable = new MainRenderable(worldRenderable, guiRenderable);
         mainRenderable.setRenderer(defaultRenderer);
 

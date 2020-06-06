@@ -6,6 +6,8 @@ package com.oom.game.main.entities.utils;
 public class InventoryItem {
     private String name = null;
 
+    //FIXME this class should be expanded to provide normal items api
+
     public InventoryItem(String name){
         this.name = name;
     }

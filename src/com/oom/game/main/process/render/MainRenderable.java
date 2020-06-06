@@ -48,10 +48,13 @@ public class MainRenderable implements IRenderable, IUpdatable, IEventListener {
         render(this.renderer);
     }
 
+    /*
+     *  FIXME might not need to call this method here
+     *  FIXME might need to put it only to NodeRenderable to update only those components that have actually changed
+     */
     /**
      * {@link IUpdatable}
-     * FIXME might not need to call this method here
-     * FIXME might need to put it only to NodeRenderable to update only those components that have actually changed
+     *
      */
     @Override
     public void update(long elapsedMillis) {
@@ -93,7 +96,6 @@ public class MainRenderable implements IRenderable, IUpdatable, IEventListener {
                     return;
                 }
 
-                //FIXME URGENT WorldItems don't get deleted from items map. This allows you to click F several times to reset weapon on position, where a weapon was lying before it got picked up, but there is no item now!!!
                 WorldItem pickedUp = items.get(0);
                 worldRenderable.getWorld().removeItem(pickedUp.getPosition().getBlockPosition());
 

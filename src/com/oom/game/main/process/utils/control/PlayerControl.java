@@ -21,6 +21,12 @@ public class PlayerControl implements GameObserver<MainRenderable> {
     private Player player = null;
     private double speed = 1;
 
+    /**
+     *
+     * @param mainRenderable renderable to read input from
+     * @param world world to read data from
+     * @param speed base movement speed of player in the given world
+     */
     public PlayerControl(MainRenderable mainRenderable, World world, double speed){
 
         this.player = world.getPlayer();
@@ -32,10 +38,16 @@ public class PlayerControl implements GameObserver<MainRenderable> {
         }
     }
 
+    /**
+     * Enables these controls
+     */
     public void enable(){
         enabled = true;
     }
 
+    /**
+     * disables these controls
+     */
     public void disable(){
         enabled = false;
     }

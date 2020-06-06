@@ -13,6 +13,14 @@ public abstract class BuffItem extends InventoryItem {
     private double multHealth, multAttack;
 
 
+    /**
+     *
+     * @param name {@link InventoryItem}
+     * @param addHealth the amount of health that this item adds
+     * @param multHealth the multiplication coefficient of health that this item sets for wearer
+     * @param addAttack the amount of attack points that this item adds
+     * @param multAttack the multiplication coefficient of attack points that this item sets for wearer
+     */
     public BuffItem(String name, int addHealth, double multHealth, int addAttack, double multAttack){
         super(name);
         this.addHealth = addHealth;

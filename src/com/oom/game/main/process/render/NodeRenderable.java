@@ -8,10 +8,10 @@ import java.awt.image.BufferedImage;
 
 public abstract class NodeRenderable implements IRenderable {
 
-    protected BufferedImage image; //FIXME bind image to the correspondent entity
+    protected BufferedImage image;
     protected Position position;
     protected float scaleX = 1, scaleY = 1;
-    protected Renderer renderer = null;//FIXME encapsulate renderer
+    protected Renderer renderer = null;
 
     /**
      *

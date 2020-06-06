@@ -21,6 +21,10 @@ public abstract class BuffItemWrapper extends BuffItem {
         }
     }
 
+    /**
+     *
+     * @param name {@link InventoryItem}
+     */
     public BuffItemWrapper(String name){
         super(name);
     }

@@ -27,27 +27,23 @@ public class WorldRenderable implements IRenderable {
         public static final int ADD_BLOCK = 3;
         public static final int REMOVE_BLOCK = 4;
     }
-    /*
-        FIXME add observable / observer pattern
-        FIXME Renderer = observer, key and click listeners + data classes are observables
-     */
 
 
-    private Renderer renderer = null; //FIXME encapsulate renderer
-    /*
+    private Renderer renderer = null;
+    /**
         No setters for world, width, height, because they should not be changed
         as WorldRenderable is a separate static rendering process that only changes
         when blocks / entities on screen change
      */
     private World world;
     private int width, height;
-    /*
+    /**
         The current renderable field is described by the position (top left corner)
         and its width and height. All stuff in this area should be rendered as specified
         by the current member values
      */
     private Position position;
-    /*
+    /**
         There are separate arrays for saving blocks and creatures only because of optimisation
         We could call World class getBlock method and create new NodeRederables every time
         but it is VERY VERY inefficient (might even cause lag)
@@ -95,12 +91,11 @@ public class WorldRenderable implements IRenderable {
 
             @Override
             public void update(GameObservable<World> observable, World newData, Object specs) {
-                //FIXME improve type check (do it without dynamic upcast and without instanceof)
-
             }
 
             @Override
             public void update(GameObservable<World> observable, World newData, Object specs, int id) {
+                //FIXME improve type check (do it without dynamic upcast and without instanceof)
                 if ((id == WORLD_UPDATES.ADD_BLOCK || id == WORLD_UPDATES.REMOVE_BLOCK)
                         && specs instanceof Position
                 ){
@@ -138,10 +133,6 @@ public class WorldRenderable implements IRenderable {
             entityRenderables.add(new EntityRenderable(world.getEntities().get(i)));
         }
 
-        /*ArrayList<WorldItem> items = new ArrayList<>(world.getItems().values());
-        for (int i = 0; i < items.size(); i++){
-            entityRenderables.add(new EntityRenderable(items.get(i)));
-        }*/
 
 
 
@@ -286,7 +277,6 @@ public class WorldRenderable implements IRenderable {
             }
         }
 
-        //FIXME check to add new renderable entities!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         ArrayList<Entity> entities = world.getEntities();
         Set<Entity> entitiesSet = new HashSet<>();
         for (int i = 0; i < entities.size(); i++){
@@ -356,7 +346,8 @@ public class WorldRenderable implements IRenderable {
         //FIXME the problem is that positions of entities can change dynamically
         //FIXME so you may not be able to store them in maps (i think so at least). Should think of a better solution
 
-        synchronized (entityRenderables){//FIXME i have no idea how synchronized fixed ConcurrentModificationException. But it works for now
+        synchronized (entityRenderables){
+            //FIXME i have no idea how synchronized fixed ConcurrentModificationException. But it works for now
             entityRenderables.sort(new Comparator<>() {
                 @Override
                 public int compare(EntityRenderable o1, EntityRenderable o2) {
@@ -398,7 +389,6 @@ public class WorldRenderable implements IRenderable {
 
         for (int e = 0; e < entityRenderables.size(); e++){
             EntityRenderable cur = entityRenderables.get(e);
-            //FIXME if entities fall into their aggression and fear radiuses. This is handled in NPCMovement
             observable.notifyObservers(this);
 
 
@@ -423,10 +413,7 @@ public class WorldRenderable implements IRenderable {
                         continue;
                     }
                     if (blockCenterY > (relativeEntityPos.getY() + cur.getEntity().getSizeY())){
-                        BlockRenderable curBR = blockRenderables
-                                .get(i)
-                                .get(j);
-                        //FIXME sometimes the line above causes IndexOutOfBoundException (idk why)
+                        BlockRenderable curBR = blockRenderables.get(i).get(j);
                         if (curBR.getTopRenderable() == null){
                             continue;
                         }

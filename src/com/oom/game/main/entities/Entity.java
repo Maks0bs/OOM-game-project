@@ -13,7 +13,7 @@ public abstract class Entity {
     // position of left top corner
     protected String state = "Default";
     protected Position position;
-    /*
+    /**
         Clarification for sizeX and sizeY:
         the entity takes up pixels on x-axis
         from position.getX() to (position.get.getX() + sizeX - 1), both inclusive; The same for sizeY;
@@ -71,6 +71,10 @@ public abstract class Entity {
         this.observable.notifyObservers(this);
     }
 
+    /**
+     *
+     * @return the position right in the middle of the current entity
+     */
     public Position getCenterPosition(){
         return new Position(position.getX() + sizeX / 2, position.getY() + sizeY / 2);
     }
@@ -101,11 +105,19 @@ public abstract class Entity {
         return position;
     }
 
+    /**
+     *
+     * @param position position to shallow copy and set for current entity
+     */
     public void setPosition(Position position) {
         this.position = position;
         this.observable.notifyObservers(this);
     }
 
+    /**
+     *
+     * @param position position to deep copy and set for current entity
+     */
     public void setPositionDeep(Position position){
         this.position.setX(position.getX());
         this.position.setY(position.getY());
