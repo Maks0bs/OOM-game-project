@@ -50,8 +50,9 @@ public class Main {
             e.printStackTrace();
             return;
         }
+
+
         Process process = new Process();
         process.run();
-
     }
 }

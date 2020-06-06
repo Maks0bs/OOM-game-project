@@ -13,6 +13,7 @@ import com.oom.game.main.process.utils.control.PlayerControl;
 
 import java.util.ArrayList;
 
+
 public class Player extends Creature implements ProgressiveCreature {
     public static String DEFAULT_STATE = "PlayerDefault", NAME = "Player";
     public static int DEFAULT_HEALTH_POINTS = 100, DEFAULT_ATTACK_POINTS = 5;

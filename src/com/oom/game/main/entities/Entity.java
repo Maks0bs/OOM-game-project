@@ -5,7 +5,7 @@ import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.utils.Block;
 import com.oom.game.main.utils.GameObservable;
 
-/*
+/**
     Entity is a general class for all game game objects, which you can interact with
     Like creatures, items,
  */

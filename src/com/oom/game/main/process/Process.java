@@ -23,26 +23,18 @@ import gameCore.Renderer;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Process {
     /*
         FIXME add docs to Process class
      */
-    private Renderer defaultRenderer = null; //this might not be necessary, as all data of this renderer is included in game
-    private MainRenderable mainRenderable = null; //this might not be necessary, as all of it is included in game
-    private Game game = null;
+    private MainRenderable mainRenderable = null;
     private World world;
-    private GameKeyEventManager keyEventManager = null;
     /*
         This player is the main game entity;
         FIXME may add several players simultaneously
      */
     private Player player;
-    private PlayerControl playerControl;
-    private ArrayList<GameObserver<IRenderable> > observers = new ArrayList<GameObserver<IRenderable>>();
-
 
     /**
      * FIXME maybe create constructor with custom values (graphics / renderer / game)
@@ -55,7 +47,7 @@ public class Process {
             FIXME upd 18.05.2020: Basic BufferedImage graphics. This approach is still quite disguisting,
             FIXME but at least there is not NullPointerException
          */
-        this.defaultRenderer = new Renderer(
+        Renderer defaultRenderer = new Renderer(
                 (new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB))
                 .getGraphics()
         );
@@ -88,17 +80,16 @@ public class Process {
         this.mainRenderable = new MainRenderable(worldRenderable, guiRenderable);
         mainRenderable.setRenderer(defaultRenderer);
 
-        //player.getObservable().registerObserver(worldRenderable.getPlayerObserver());
 
 
-
-        this.keyEventManager = new GameKeyEventManager();
+        GameKeyEventManager keyEventManager = new GameKeyEventManager();
         keyEventManager.register(mainRenderable);
 
 
         //FIXME if world is smaller than the window, than adjust the window
 
-        this.game = new Game(
+        //Launching the game. In this class we have refs to all necessary Objects
+        Game game = new Game(
                 "OOM GAME",
                 (int) screenSize.getWidth() / 2,
                 (int) screenSize.getHeight() / 2,
@@ -109,31 +100,27 @@ public class Process {
                 keyEventManager
         );
 
-        world.addBlock(2, 1, new Barrel());
-        world.addBlock(5, 5, new Barrel());
 
-        world.removeBlock(4, 4);
 
     }
 
 
 
     /**
-     * method is responsible for executing world / game logic and adding stuff to it
+     * method is responsible for executing world / game logic and adding stuff to it, like a playground
      */
     public void run() {
         /*
             Mocking normal game process here
          */
+        world.addBlock(2, 1, new Barrel());
+        world.addBlock(5, 5, new Barrel());
 
-        this.playerControl = new PlayerControl(mainRenderable, world, 2);
+        world.removeBlock(4, 4);
+
+        PlayerControl playerControl = new PlayerControl(mainRenderable, world, 2);
         this.player.setControl(playerControl);
-        this.playerControl.enable();
-
-
-
-        //FIXME this doesnt work !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //mainRenderable.getWorldRenderable().updatePosition(new Position(50, 50, true));
+        playerControl.enable();
 
         Wolf wolf1 = new Wolf(new Position(8, 8, true));
         world.addEntity(wolf1);
@@ -165,7 +152,7 @@ public class Process {
                         wolfMovement.enable();
                     }
                 },
-                1500
+                2000
         );
 
 

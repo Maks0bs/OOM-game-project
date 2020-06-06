@@ -6,6 +6,7 @@ import com.oom.game.main.environment.World;
 
 
 /**
+ *
  * WorldItem is the Entity that is going to be displayed in the world.
  * When picked up or used, only the properties of the correspondent InventoryItem are used!!!!!
  */

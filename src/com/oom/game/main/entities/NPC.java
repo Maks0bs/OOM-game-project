@@ -7,6 +7,9 @@ import com.oom.game.main.entities.mobs.strategies.NoneFear;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.process.utils.control.NPCMovement;
 
+/**
+ * NPC have some props that players should not have and vice versa
+ */
 public class NPC extends Creature {
     /*
         In this case this.expPoints is the reward

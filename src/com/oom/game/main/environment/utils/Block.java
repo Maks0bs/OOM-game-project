@@ -1,7 +1,5 @@
 package com.oom.game.main.environment.utils;
 
-//this class has to be observable
-
 import com.oom.game.main.environment.blocks.strategies.NoneMoveAction;
 import com.oom.game.main.environment.blocks.strategies.NonePlayerInteraction;
 import com.oom.game.main.environment.blocks.strategies.NoneSolidBlockAction;

@@ -4,7 +4,7 @@ import com.oom.game.main.entities.mobs.Rabbit;
 import com.oom.game.main.entities.mobs.Wolf;
 import com.oom.game.main.environment.Position;
 
-/*
+/**
     Creature is an entity with stats and some props
  */
 public abstract class Creature extends Entity {

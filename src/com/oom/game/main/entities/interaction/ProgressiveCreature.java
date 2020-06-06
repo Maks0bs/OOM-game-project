@@ -1,5 +1,6 @@
 package com.oom.game.main.entities.interaction;
 
+
 public interface ProgressiveCreature {
     /**
      *

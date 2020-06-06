@@ -5,6 +5,7 @@ import com.oom.game.main.entities.Creature;
 import java.util.HashSet;
 import java.util.Set;
 
+
 public interface FearBehaviour {
     /**
      *
