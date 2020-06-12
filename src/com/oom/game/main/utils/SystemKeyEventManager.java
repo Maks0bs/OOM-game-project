@@ -3,13 +3,31 @@ package com.oom.game.main.utils;
 import gameCore.eventSystem.IEvent;
 import gameCore.eventSystem.IEventListener;
 import gameCore.eventSystem.IEventManager;
-import gameCore.input.keyboard.KeyEvent;
 
 import java.util.ArrayList;
-import java.util.EventListener;
 
-public class GameKeyEventManager implements IEventManager {
+public final class SystemKeyEventManager implements IEventManager {
     private ArrayList<IEventListener> observers = new ArrayList<>();
+
+    private static SystemKeyEventManager instance = null;
+
+    /**
+     * Default private constructor for singleton to function
+     */
+    private SystemKeyEventManager(){
+
+    }
+
+    /**
+     *
+     * @return the only instance of system key event manager [singleton]
+     */
+    public static SystemKeyEventManager getInstance() {
+        if (instance == null){
+            instance = new SystemKeyEventManager();
+        }
+        return instance;
+    }
 
     /**
      * {@link IEventManager}

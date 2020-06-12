@@ -3,6 +3,7 @@ package com.oom.game.main.process.render;
 import com.oom.game.main.entities.WorldItem;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.World;
+import com.oom.game.main.process.utils.control.PlayerControl;
 import com.oom.game.main.utils.GameObservable;
 import gameCore.IRenderable;
 import gameCore.IUpdatable;
@@ -19,13 +20,15 @@ import java.util.HashMap;
     This class has to deal with all system events like key strokes, clicks, etc.
     It then gives data to its correspondent Process with the help of observers
  */
-public class MainRenderable implements IRenderable, IUpdatable, IEventListener {
+public class MainRenderable implements IRenderable, IUpdatable {
 
     private Renderer renderer = null; //FIXME encapsulate renderer
     private WorldRenderable worldRenderable = null;
     private GUIRenderable guiRenderable = null;
+    /*
+        This observable is mainly used to let subscribers know about tick / frame updates in game (currently 30 timer per second)
+     */
     private GameObservable<MainRenderable> observable = new GameObservable<>();
-    private HashMap<Character, Integer> pressedTime = new HashMap<>();
 
     public MainRenderable(WorldRenderable worldRenderable, GUIRenderable guiRenderable){
         this.worldRenderable = worldRenderable;
@@ -58,75 +61,8 @@ public class MainRenderable implements IRenderable, IUpdatable, IEventListener {
      */
     @Override
     public void update(long elapsedMillis) {
-        keyTickUpdate();
+        this.observable.notifyObservers(this);
         render(this.renderer);
-    }
-
-    private void keyTickUpdate(){
-        if (pressedTime.size() > 0){
-            //FIXME using iterators here might cause problems with multithreading
-            Character[] keys = new Character[pressedTime.keySet().size()];
-            pressedTime.keySet().toArray(keys);
-            for (int i = 0; i < keys.length; i++){
-                Character c = keys[i];
-                int curValue = pressedTime.get(c);
-                pressedTime.put(c, curValue + 1);
-            }
-            this.observable.notifyObservers(this);
-        }
-    }
-
-    /**
-     * {@link IEventListener}
-     */
-    @Override
-    public void onEvent(IEvent event) {
-        if (event instanceof KeyPressedEvent){
-            Character cur = ((KeyPressedEvent) event).getKeySymbol();
-            if (!pressedTime.containsKey(cur)) {
-                pressedTime.put(cur, 0);
-            }
-            if (cur == 'e'){
-                worldRenderable.getWorld().getPlayer().enchantWeaponRandomly();
-            }
-            if (cur == 'f'){
-                Player player = worldRenderable.getWorld().getPlayer();
-                ArrayList<WorldItem> items = worldRenderable.getWorld().getItemsUnderEntity(player);
-                if (items == null || items.size() == 0){
-                    return;
-                }
-
-                WorldItem pickedUp = items.get(0);
-                worldRenderable.getWorld().removeItem(pickedUp.getPosition().getBlockPosition());
-
-                player.pickUpWeapon(pickedUp);
-            }
-        } else if (event instanceof KeyReleasedEvent){
-            Character cur = ((KeyReleasedEvent) event).getKeySymbol();
-            pressedTime.remove(cur);
-        }
-    }
-
-    /**
-     *
-     * @param c character responsible for pressed key
-     * @return the amount of frames that this key has been kept pressed for
-     */
-    public int getKeyPressedTime(Character c){
-        return pressedTime.get(c);
-    }
-
-    /**
-     *
-     * @return true if some keys are currently pressed, false otherwise
-     */
-
-    public boolean keyIsPressed(Character c){
-        return pressedTime.containsKey(c);
-    }
-
-    public Renderer getRenderer() {
-        return renderer;
     }
 
     public void setRenderer(Renderer renderer) {
@@ -137,9 +73,6 @@ public class MainRenderable implements IRenderable, IUpdatable, IEventListener {
         return worldRenderable;
     }
 
-    public void setWorldRenderable(WorldRenderable worldRenderable) {
-        this.worldRenderable = worldRenderable;
-    }
 
     public GameObservable<MainRenderable> getObservable() {
         return observable;

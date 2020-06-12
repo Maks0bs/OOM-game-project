@@ -5,6 +5,8 @@ import com.oom.game.main.entities.items.Axe;
 import com.oom.game.main.entities.items.Sword;
 import com.oom.game.main.entities.mobs.Wolf;
 import com.oom.game.main.entities.player.Player;
+import com.oom.game.main.entities.player.commands.EnchantWeaponRandCommand;
+import com.oom.game.main.entities.player.commands.PickUpWeaponCommand;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.Barrel;
@@ -14,15 +16,15 @@ import com.oom.game.main.process.render.MainRenderable;
 import com.oom.game.main.process.render.WorldRenderable;
 import com.oom.game.main.process.utils.control.NPCMovement;
 import com.oom.game.main.process.utils.control.PlayerControl;
-import com.oom.game.main.utils.GameKeyEventManager;
-import com.oom.game.main.utils.GameObserver;
+import com.oom.game.main.utils.GameCommand;
+import com.oom.game.main.utils.GameKeyActionManager;
+import com.oom.game.main.utils.SystemKeyEventManager;
+import com.oom.game.main.utils.TestLoggingCommand;
 import gameCore.Game;
-import gameCore.IRenderable;
 import gameCore.Renderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class Process {
     /*
@@ -81,10 +83,6 @@ public class Process {
 
 
 
-        GameKeyEventManager keyEventManager = new GameKeyEventManager();
-        keyEventManager.register(mainRenderable);
-
-
         //FIXME if world is smaller than the window, than adjust the window
 
         //Launching the game. In this class we have refs to all necessary Objects
@@ -96,7 +94,7 @@ public class Process {
                 mainRenderable, //renderable
                 30,
                 mainRenderable, //updatable
-                keyEventManager
+                SystemKeyEventManager.getInstance()
         );
 
 
@@ -120,6 +118,63 @@ public class Process {
         PlayerControl playerControl = new PlayerControl(mainRenderable, world, 2);
         this.player.setControl(playerControl);
         playerControl.enable();
+
+
+        GameKeyActionManager actionManager = GameKeyActionManager.getInstance();
+
+        //Setting up controls
+        actionManager.setCommandOnPress('a', new GameCommand() {
+            @Override
+            public void execute() {
+                playerControl.activateDirection(PlayerControl.DIRECTIONS.LEFT);
+            }
+        });
+        actionManager.setCommandOnPress('s', new GameCommand() {
+            @Override
+            public void execute() {
+                playerControl.activateDirection(PlayerControl.DIRECTIONS.DOWN);
+            }
+        });
+        actionManager.setCommandOnPress('d', new GameCommand() {
+            @Override
+            public void execute() {
+                playerControl.activateDirection(PlayerControl.DIRECTIONS.RIGHT);
+            }
+        });
+        actionManager.setCommandOnPress('w', new GameCommand() {
+            @Override
+            public void execute() {
+                playerControl.activateDirection(PlayerControl.DIRECTIONS.UP);
+            }
+        });
+        actionManager.setCommandsOnRelease('a', new GameCommand() {
+            @Override
+            public void execute() {
+                playerControl.disableDirection(PlayerControl.DIRECTIONS.LEFT);
+            }
+        });
+        actionManager.setCommandsOnRelease('s', new GameCommand() {
+            @Override
+            public void execute() {
+                playerControl.disableDirection(PlayerControl.DIRECTIONS.DOWN);
+            }
+        });
+        actionManager.setCommandsOnRelease('d', new GameCommand() {
+            @Override
+            public void execute() {
+                playerControl.disableDirection(PlayerControl.DIRECTIONS.RIGHT);
+            }
+        });
+        actionManager.setCommandsOnRelease('w', new GameCommand() {
+            @Override
+            public void execute() {
+                playerControl.disableDirection(PlayerControl.DIRECTIONS.UP);
+            }
+        });
+
+        actionManager.setCommandOnPress('e', new EnchantWeaponRandCommand(player));
+        actionManager.setCommandOnPress('f', new PickUpWeaponCommand(world, player));
+        actionManager.setCommandOnPress('m', new TestLoggingCommand('m'));
 
         Wolf wolf1 = new Wolf(new Position(8, 8, true));
         world.addEntity(wolf1);

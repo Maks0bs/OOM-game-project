@@ -2,8 +2,8 @@
     <h1> OOM Game Project </h1>
     <h2> Game info </h2>
     <h3> Running the game </h3>
-    <p> Right now game is not compiled into a production build. It can only be run throught the IDE (at least for now). </p>
-    <p> To run the game you also need to add gameCore.jar as a library in the project. This file will be available later.</p>
+    <p> Right now game is not compiled into a production build. It can only be run through the IDE (at least for now). </p>
+    <p> To run the game you also need to add gameCore.jar as a library in the project. This file is in the gameCore directory of this repo. This file is essential for all game processes</p>
     <h3> Game process </h3>
     <p> The character spawns in the top left corner (please do not go out of bounds of the world, game might crash, this will be addressed in the future). </p>
     <p> To move the character use WASD keys. To pick up weapon, come up to the lying item and press F. Character stats will be displayed in console. </p>
