@@ -59,17 +59,6 @@ public class Process {
         this.world = World.generateDefaultWorld();
         this.player = Player.generateDefaultPlayer();
         world.addPlayer(player);
-
-        for (int i = 0; i < world.getBlockCountY(); i++){
-            for (int j = 0; j < world.getBlockCountX(); j++){
-                if ((i + j) % 2 == 1){
-                    world.removeBlock(i, j);
-                    world.addBlock(i, j, new StoneTileFloor());
-                }
-            }
-        }
-
-
         //DO NOT ADD ANY ENTITIES TO WORLD BEFORE creating mainRenderable
 
         GUIRenderable guiRenderable = new GUIRenderable();
@@ -80,8 +69,6 @@ public class Process {
         );
         this.mainRenderable = new MainRenderable(worldRenderable, guiRenderable);
         mainRenderable.setRenderer(defaultRenderer);
-
-
 
         //FIXME if world is smaller than the window, than adjust the window
 
@@ -96,9 +83,6 @@ public class Process {
                 mainRenderable, //updatable
                 SystemKeyEventManager.getInstance()
         );
-
-
-
     }
 
 
@@ -110,6 +94,16 @@ public class Process {
         /*
             Mocking normal game process here
          */
+
+        for (int i = 0; i < world.getBlockCountY(); i++){
+            for (int j = 0; j < world.getBlockCountX(); j++){
+                if ((i + j) % 2 == 1){
+                    world.removeBlock(i, j);
+                    world.addBlock(i, j, new StoneTileFloor());
+                }
+            }
+        }
+
         world.addBlock(2, 1, new Barrel());
         world.addBlock(5, 5, new Barrel());
 

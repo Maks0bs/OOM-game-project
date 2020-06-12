@@ -100,6 +100,13 @@ public class WorldRenderable implements IRenderable {
                         && specs instanceof Position
                 ){
                     Position pos = (Position) specs;
+                    Position relativePos = pos.difference(position);
+                    if (!(
+                            relativePos.getX() >= 0 && relativePos.getX() <= width &&
+                            relativePos.getY() >= 0 && relativePos.getY() <= height)
+                    ){
+                        return;
+                    }
                     Block b = newData.getBlock(pos);
                     setRenderableByPosition(pos, new BlockRenderable(b, pos));
                     BlockRenderable br = getRenderableByPosition(pos);
