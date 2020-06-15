@@ -10,8 +10,8 @@ import java.util.Map;
 
 public final class GameKeyActionManager implements IEventListener {
     private static GameKeyActionManager manager = null;
-    private Map<Character, GameCommand> commandsOnPress = new HashMap<>();
-    private Map<Character, GameCommand> commandsOnRelease = new HashMap<>();
+    private Map<Integer, GameCommand> commandsOnPress = new HashMap<>();
+    private Map<Integer, GameCommand> commandsOnRelease = new HashMap<>();
 
     /**
      * Default private constructor for singleton to function
@@ -36,7 +36,7 @@ public final class GameKeyActionManager implements IEventListener {
      * @param c key character to assign the command to
      * @param command the command that is associated with the key stroke on the given character key
      */
-    public void setCommandOnPress(char c, GameCommand command){
+    public void setCommandOnPress(int c, GameCommand command){
         commandsOnPress.put(c, command);
     }
 
@@ -44,7 +44,7 @@ public final class GameKeyActionManager implements IEventListener {
      *
      * @param c key character the command assigned to the stroke of which should be removed
      */
-    public void removeCommandOnPress(char c){
+    public void removeCommandOnPress(int c){
         commandsOnPress.put(c, new NoneCommand());
     }
 
@@ -53,7 +53,7 @@ public final class GameKeyActionManager implements IEventListener {
      * @param c key character to assign the command to
      * @param command the command that is associated with the key release event on the given character key
      */
-    public void setCommandsOnRelease(char c, GameCommand command){
+    public void setCommandsOnRelease(int c, GameCommand command){
         commandsOnRelease.put(c, command);
     }
 
@@ -61,7 +61,7 @@ public final class GameKeyActionManager implements IEventListener {
      *
      * @param c key character the command assigned to the release event of which should be removed
      */
-    public void removeCommandOnRelease(char c){
+    public void removeCommandOnRelease(int c){
         commandsOnRelease.put(c, new NoneCommand());
     }
 
@@ -72,13 +72,13 @@ public final class GameKeyActionManager implements IEventListener {
     public void onEvent(IEvent event) {
         //System.out.println(event);
         if (event instanceof KeyPressedEvent){
-            char cur = ((KeyPressedEvent) event).getKeySymbol();
+            int cur = ((KeyPressedEvent) event).getKeyCode();
             GameCommand command = commandsOnPress.get(cur);
             if (command != null){
                 command.execute();
             }
         } else if (event instanceof KeyReleasedEvent){
-            char cur = ((KeyReleasedEvent) event).getKeySymbol();
+            int cur = ((KeyReleasedEvent) event).getKeyCode();
             GameCommand command = commandsOnRelease.get(cur);
             if (command != null){
                 command.execute();
