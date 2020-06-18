@@ -1,4 +1,4 @@
-package com.oom.game.main.utils;
+package com.oom.game.main.utils.command;
 
 /**
  * This class is simply for testing the command pattern in GameKeyActionManager and Process

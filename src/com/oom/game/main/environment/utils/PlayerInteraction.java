@@ -1,6 +1,8 @@
 package com.oom.game.main.environment.utils;
 
-public interface PlayerInteraction {
+import java.io.Serializable;
+
+public interface PlayerInteraction extends Serializable {
     /**
      * action that should be performed when user clicks on block as a player
      */

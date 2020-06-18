@@ -1,20 +1,11 @@
 package com.oom.game.main.process.render;
 
-import com.oom.game.main.entities.WorldItem;
-import com.oom.game.main.entities.player.Player;
+import com.oom.game.main.entities.Creature;
 import com.oom.game.main.environment.World;
-import com.oom.game.main.process.utils.control.PlayerControl;
 import com.oom.game.main.utils.GameObservable;
 import gameCore.IRenderable;
 import gameCore.IUpdatable;
 import gameCore.Renderer;
-import gameCore.eventSystem.IEvent;
-import gameCore.eventSystem.IEventListener;
-import gameCore.input.keyboard.KeyPressedEvent;
-import gameCore.input.keyboard.KeyReleasedEvent;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /*
     This class has to deal with all system events like key strokes, clicks, etc.
@@ -25,23 +16,31 @@ public class MainRenderable implements IRenderable, IUpdatable {
     private Renderer renderer = null; //FIXME encapsulate renderer
     private WorldRenderable worldRenderable = null;
     private GUIRenderable guiRenderable = null;
-    /*
-        This observable is mainly used to let subscribers know about tick / frame updates in game (currently 30 timer per second)
+    /**
+     * This observable is mainly used to let subscribers know about tick / frame updates in game (currently 30 timer per second)
      */
-    private GameObservable<MainRenderable> observable = new GameObservable<>();
+    private final GameObservable<MainRenderable> observable = new GameObservable<>();
+    /**
+     * This list has
+     */
 
     public MainRenderable(WorldRenderable worldRenderable, GUIRenderable guiRenderable){
         this.worldRenderable = worldRenderable;
         this.guiRenderable = guiRenderable;
     }
 
+
     /**
      * {@link IRenderable}
      */
     @Override
     public void render(Renderer renderer) {
-        worldRenderable.render(renderer);
-        guiRenderable.render(renderer);
+        if (worldRenderable != null){
+            worldRenderable.render(renderer);
+        }
+        if (guiRenderable != null){
+            guiRenderable.render(renderer);
+        }
     }
 
     /**
@@ -62,6 +61,15 @@ public class MainRenderable implements IRenderable, IUpdatable {
     @Override
     public void update(long elapsedMillis) {
         this.observable.notifyObservers(this);
+        if (worldRenderable != null) {
+            World world = worldRenderable.getWorld();
+            Creature[] creatures = world.getCreaturesWithMovement();
+            for (int i = 0; i < creatures.length; i++) {
+                world.getMovement(creatures[i]).update(world, creatures[i]);
+            }
+        }
+
+
         render(this.renderer);
     }
 
@@ -73,6 +81,17 @@ public class MainRenderable implements IRenderable, IUpdatable {
         return worldRenderable;
     }
 
+    public void setWorldRenderable(WorldRenderable worldRenderable) {
+        this.worldRenderable = worldRenderable;
+    }
+
+    public GUIRenderable getGuiRenderable() {
+        return guiRenderable;
+    }
+
+    public void setGuiRenderable(GUIRenderable guiRenderable) {
+        this.guiRenderable = guiRenderable;
+    }
 
     public GameObservable<MainRenderable> getObservable() {
         return observable;

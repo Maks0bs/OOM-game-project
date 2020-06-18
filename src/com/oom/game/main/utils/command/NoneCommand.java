@@ -1,4 +1,6 @@
-package com.oom.game.main.utils;
+package com.oom.game.main.utils.command;
+
+import com.oom.game.main.utils.command.GameCommand;
 
 public class NoneCommand implements GameCommand {
     @Override

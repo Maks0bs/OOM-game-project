@@ -1,6 +1,8 @@
 package com.oom.game.main.utils;
 
-public interface GameObserver<T> {
+import java.io.Serializable;
+
+public interface GameObserver<T> extends Serializable {
 
     /**
      *

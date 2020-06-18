@@ -1,7 +1,9 @@
 package com.oom.game.main.entities.interaction;
 
 
-public interface ProgressiveCreature {
+import java.io.Serializable;
+
+public interface ProgressiveCreature extends Serializable {
     /**
      *
      * @param exp amount of experience points to be added

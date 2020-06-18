@@ -1,9 +1,11 @@
 package com.oom.game.main.environment;
 
+import java.io.Serializable;
+
 /**
     Added this class to better manage entity control.
  */
-public class Position{
+public class Position implements Serializable {
     public static final int DEFAULT_POSITION = 0;
     private int x = DEFAULT_POSITION, y = DEFAULT_POSITION;
 

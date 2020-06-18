@@ -7,6 +7,7 @@ package com.oom.game.main;
 
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.utils.EntityTextures;
+import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.utils.BlockTextures;
 import com.oom.game.main.process.Process;
 import com.oom.game.main.ui.utils.GUITextures;
@@ -53,6 +54,5 @@ public class Main {
 
 
         Process process = new Process();
-        process.run();
     }
 }

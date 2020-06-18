@@ -6,7 +6,9 @@ package com.oom.game.main.environment.utils;
 
 import com.oom.game.main.environment.Position;
 
-public interface SolidBlockAction {
+import java.io.Serializable;
+
+public interface SolidBlockAction extends Serializable {
 
     /**
      * If a block is solid, it means that entities cannot go through it. No entity can overlap with a solid block

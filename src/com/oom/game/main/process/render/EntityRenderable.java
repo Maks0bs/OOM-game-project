@@ -8,10 +8,11 @@ import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 import gameCore.Renderer;
 
-public class EntityRenderable extends NodeRenderable implements GameObserver<Entity> {
+public class EntityRenderable extends NodeRenderable {
 
     private Entity entity;
     private String curState = null;
+    private GameObserver<Entity> observer = null;
 
     /**
      *
@@ -20,20 +21,23 @@ public class EntityRenderable extends NodeRenderable implements GameObserver<Ent
     public EntityRenderable(Entity entity) {
         super(null, entity.getPosition());
         this.image = EntityTextures.getTextureByState(entity.getState());
-        entity.getObservable().registerObserver(this);
+        observer = new GameObserver<Entity>() {
+            @Override
+            public void update(GameObservable<Entity> observable, Entity newData) {
+                if (!curState.equals(newData.getState())){
+                    image = EntityTextures.getTextureByState(newData.getState());
+                }
+
+                curState = newData.getState();
+                //FIXME maybe change state to animate control
+            }
+        };
+        entity.getObservable().registerObserver(observer);
+
         this.entity = entity;
         curState = entity.getState();
     }
 
-    @Override
-    public void update(GameObservable<Entity> observable, Entity newData) {
-        if (!curState.equals(newData.getState())){
-            this.image = EntityTextures.getTextureByState(newData.getState());
-        }
-
-        curState = newData.getState();
-        //FIXME maybe change state to animate control
-    }
 
 
     @Override
@@ -51,7 +55,7 @@ public class EntityRenderable extends NodeRenderable implements GameObserver<Ent
     @Override
     @Deprecated
     protected void finalize() throws Throwable {
-        entity.getObservable().unregisterObserver(this);
+        entity.getObservable().unregisterObserver(observer);
         super.finalize();
     }
 

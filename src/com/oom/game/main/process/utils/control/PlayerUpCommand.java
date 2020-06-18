@@ -1,6 +1,6 @@
 package com.oom.game.main.process.utils.control;
 
-import com.oom.game.main.utils.GameCommand;
+import com.oom.game.main.utils.command.GameCommand;
 
 /**
  * This class is just an example how such commands could be implemented for all possible control actions for player.

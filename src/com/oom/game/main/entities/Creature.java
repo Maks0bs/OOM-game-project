@@ -125,4 +125,5 @@ public abstract class Creature extends Entity {
     public void setExpPoints(int expPoints) {
         this.expPoints = expPoints;
     }
+
 }

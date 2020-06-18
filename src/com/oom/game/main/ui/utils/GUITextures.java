@@ -27,6 +27,10 @@ public class GUITextures {
     public static void generateList() throws IOException {
         //FIXME replace with File.list() method
         list.put("GuiTest", ImageIO.read((new File("res/gui/GuiTest.png")).getAbsoluteFile()));
+        list.put("canvas256x32", ImageIO.read((new File("res/gui/canvas256x32.png")).getAbsoluteFile()));
+        list.put("canvas512x32", ImageIO.read((new File("res/gui/canvas512x32.png")).getAbsoluteFile()));
+        list.put("canvas512x128", ImageIO.read((new File("res/gui/canvas512x128.png")).getAbsoluteFile()));
+
     }
 
     /**

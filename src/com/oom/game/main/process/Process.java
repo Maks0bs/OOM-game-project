@@ -14,17 +14,23 @@ import com.oom.game.main.environment.blocks.StoneTileFloor;
 import com.oom.game.main.process.render.GUIRenderable;
 import com.oom.game.main.process.render.MainRenderable;
 import com.oom.game.main.process.render.WorldRenderable;
-import com.oom.game.main.process.utils.control.NPCMovement;
+import com.oom.game.main.process.utils.control.DefaultNPCMovement;
 import com.oom.game.main.process.utils.control.PlayerControl;
-import com.oom.game.main.utils.GameCommand;
+import com.oom.game.main.utils.SerializationFacade;
+import com.oom.game.main.utils.command.GameCommand;
 import com.oom.game.main.utils.GameKeyActionManager;
 import com.oom.game.main.utils.SystemKeyEventManager;
-import com.oom.game.main.utils.TestLoggingCommand;
+import com.oom.game.main.utils.command.NoneCommand;
+import com.oom.game.main.utils.command.TestLoggingCommand;
 import gameCore.Game;
 import gameCore.Renderer;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class Process {
     /*
@@ -56,19 +62,22 @@ public class Process {
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        this.world = World.generateDefaultWorld();
-        this.player = Player.generateDefaultPlayer();
-        world.addPlayer(player);
         //DO NOT ADD ANY ENTITIES TO WORLD BEFORE creating mainRenderable
 
         GUIRenderable guiRenderable = new GUIRenderable();
-        WorldRenderable worldRenderable = new WorldRenderable(
-                world,
-                (int) screenSize.getWidth() / 2,
-                (int) screenSize.getHeight() / 2
-        );
-        this.mainRenderable = new MainRenderable(worldRenderable, guiRenderable);
+        //FIXME Set gui to main menu mode
+        this.mainRenderable = new MainRenderable(null, guiRenderable);
         mainRenderable.setRenderer(defaultRenderer);
+
+        GameKeyActionManager actionManager = GameKeyActionManager.getInstance();
+        actionManager.setCommandOnPress('s', new GameCommand() {
+            @Override
+            public void execute() {
+                run();
+            }
+        });
+
+
 
         //FIXME if world is smaller than the window, than adjust the window
 
@@ -83,39 +92,31 @@ public class Process {
                 mainRenderable, //updatable
                 SystemKeyEventManager.getInstance()
         );
+
+
+
+        SerializationFacade sf = new SerializationFacade();
+
+        actionManager.setCommandOnPress('l', new GameCommand() {
+            @Override
+            public void execute() {
+                World w = sf.load(game.getParent());
+                run(w);
+            }
+        });
+
+
+        actionManager.setCommandOnPress('p', new GameCommand() {
+            @Override
+            public void execute() {
+                sf.save(world);
+            }
+        });
+
     }
 
-
-
-    /**
-     * method is responsible for executing world / game logic and adding stuff to it, like a playground
-     */
-    public void run() {
-        /*
-            Mocking normal game process here
-         */
-
-        for (int i = 0; i < world.getBlockCountY(); i++){
-            for (int j = 0; j < world.getBlockCountX(); j++){
-                if ((i + j) % 2 == 1){
-                    world.removeBlock(i, j);
-                    world.addBlock(i, j, new StoneTileFloor());
-                }
-            }
-        }
-
-        world.addBlock(2, 1, new Barrel());
-        world.addBlock(5, 5, new Barrel());
-
-        world.removeBlock(4, 4);
-
-        PlayerControl playerControl = new PlayerControl(mainRenderable, world, 2);
-        this.player.setControl(playerControl);
-        playerControl.enable();
-
-
+    public static void setupBasicPlayerControl(PlayerControl playerControl){
         GameKeyActionManager actionManager = GameKeyActionManager.getInstance();
-
         //Setting up controls
         actionManager.setCommandOnPress('a', new GameCommand() {
             @Override
@@ -165,10 +166,90 @@ public class Process {
                 playerControl.disableDirection(PlayerControl.DIRECTIONS.UP);
             }
         });
+    }
+
+    /**
+     *
+     * @param world world to derive data from
+     */
+    public void run(World world){
+        mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.IN_GAME);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        GameKeyActionManager actionManager = GameKeyActionManager.getInstance();
+
+        this.world = world;
+        this.player = world.getPlayer();
+
+        WorldRenderable worldRenderable = new WorldRenderable(
+                this.world,
+                (int) screenSize.getWidth() / 2,
+                (int) screenSize.getHeight() / 2
+        );
+        mainRenderable.setWorldRenderable(worldRenderable);
+        mainRenderable.getWorldRenderable().updatePosition(mainRenderable.getWorldRenderable().getPosition());
+
+        PlayerControl playerControl = new PlayerControl(2);
+        setupBasicPlayerControl(playerControl);
+        world.assignMovement(player, playerControl);
+        playerControl.enable();
 
         actionManager.setCommandOnPress('e', new EnchantWeaponRandCommand(player));
         actionManager.setCommandOnPress('f', new PickUpWeaponCommand(world, player));
         actionManager.setCommandOnPress('m', new TestLoggingCommand('m'));
+    }
+
+    /**
+     * method is responsible for executing world / game logic and adding stuff to it, like a playground
+     */
+    public void run() {
+        /*
+            Mocking normal game process here
+         */
+        mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.IN_GAME);
+
+        GameKeyActionManager actionManager = GameKeyActionManager.getInstance();
+        actionManager.setCommandOnPress('s', new NoneCommand());
+
+        /*
+            Creating some random world
+         */
+        this.world = World.generateDefaultWorld();
+        this.player = Player.generateDefaultPlayer();
+        world.addPlayer(player);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        WorldRenderable worldRenderable = new WorldRenderable(
+                world,
+                (int) screenSize.getWidth() / 2,
+                (int) screenSize.getHeight() / 2
+        );
+
+        mainRenderable.setWorldRenderable(worldRenderable);
+
+        for (int i = 0; i < world.getBlockCountY(); i++){
+            for (int j = 0; j < world.getBlockCountX(); j++){
+                if ((i + j) % 2 == 1){
+                    world.removeBlock(i, j);
+                    world.addBlock(i, j, new StoneTileFloor());
+                }
+            }
+        }
+
+        world.addBlock(2, 1, new Barrel());
+        world.addBlock(5, 5, new Barrel());
+
+        world.removeBlock(4, 4);
+
+        PlayerControl playerControl = new PlayerControl(2);
+        setupBasicPlayerControl(playerControl);
+        world.assignMovement(player, playerControl);
+        playerControl.enable();
+
+        actionManager.setCommandOnPress('e', new EnchantWeaponRandCommand(player));
+        actionManager.setCommandOnPress('f', new PickUpWeaponCommand(world, player));
+        actionManager.setCommandOnPress('m', new TestLoggingCommand('m'));
+
 
         Wolf wolf1 = new Wolf(new Position(8, 8, true));
         world.addEntity(wolf1);
@@ -190,8 +271,8 @@ public class Process {
 
 
 
-        NPCMovement wolfMovement = new NPCMovement(wolf1, this.world, mainRenderable.getWorldRenderable(), 0.25);
-        wolf1.setMovement(wolfMovement);
+        DefaultNPCMovement wolfMovement = new DefaultNPCMovement(2);
+        world.assignMovement(wolf1, wolfMovement);
 
         new java.util.Timer().schedule(
                 new java.util.TimerTask() {
@@ -202,6 +283,30 @@ public class Process {
                 },
                 2000
         );
+
+//        new java.util.Timer().schedule(
+//                new java.util.TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        World newWorld = World.generateDefaultWorld();
+//                        world.removePlayer();
+//                        newWorld.addPlayer(player);
+//
+//
+//                        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//                        WorldRenderable newWorldRenderable = new WorldRenderable(
+//                                newWorld,
+//                                (int) screenSize.getWidth() / 2,
+//                                (int) screenSize.getHeight() / 2
+//                        );
+//                        mainRenderable.setWorldRenderable(newWorldRenderable);
+//                        world = newWorld;
+//
+//                    }
+//                },
+//                1000
+//        );
+
 
 
 
