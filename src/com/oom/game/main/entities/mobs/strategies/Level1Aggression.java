@@ -7,10 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Level1Aggression implements AggressiveBehaviour {
-    Set<String> aggresiveAgainst = new HashSet<>();
-    /*
-        FIXME add this class to UML
-     */
+    private Set<String> aggresiveAgainst = new HashSet<>();
     public Level1Aggression(){
         aggresiveAgainst.add("Rabbit");
         aggresiveAgainst.add("Player");

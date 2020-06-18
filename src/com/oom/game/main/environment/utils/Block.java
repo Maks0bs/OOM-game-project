@@ -1,14 +1,14 @@
 package com.oom.game.main.environment.utils;
 
-//this class has to be observable
-
 import com.oom.game.main.environment.blocks.strategies.NoneMoveAction;
 import com.oom.game.main.environment.blocks.strategies.NonePlayerInteraction;
 import com.oom.game.main.environment.blocks.strategies.NoneSolidBlockAction;
 import com.oom.game.main.environment.blocks.strategies.NoneWalkAction;
 import com.oom.game.main.utils.GameObservable;
 
-public class Block {
+import java.io.Serializable;
+
+public class Block implements Serializable {
     /*
         FIXME might need to replace state string member to int variable that can only take up certain constants, defined in block classes
      */

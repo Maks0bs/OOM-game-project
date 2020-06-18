@@ -3,9 +3,10 @@ package com.oom.game.main.utils;
 import gameCore.Game;
 import jdk.jfr.Description;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GameObservable<T> {
+public class GameObservable<T> implements Serializable {
 
     /*
         FIXME change ArrayList to HashSet!!!

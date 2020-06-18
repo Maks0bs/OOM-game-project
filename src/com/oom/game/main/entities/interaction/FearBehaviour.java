@@ -2,10 +2,12 @@ package com.oom.game.main.entities.interaction;
 
 import com.oom.game.main.entities.Creature;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public interface FearBehaviour {
+
+public interface FearBehaviour extends Serializable {
     /**
      *
      * @return set of creature types that the current one is afraid of

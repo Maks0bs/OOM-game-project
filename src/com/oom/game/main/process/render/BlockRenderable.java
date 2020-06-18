@@ -16,7 +16,7 @@ public class BlockRenderable extends NodeRenderable {
     private Block block;
     //Very bad solution - remembering last block on top
     private BlockRenderable topRenderable = null;
-    boolean displayTop = false;
+    private boolean displayTop = false;
 
     /**
      *
@@ -40,6 +40,7 @@ public class BlockRenderable extends NodeRenderable {
             BufferedImage bottom = BlockTextures.getTextureByState(block.getState());
             BufferedImage top = BlockTextures.getTextureByState(block.getBlockOnTop().getState());
             topRenderable = new BlockRenderable(block.getBlockOnTop(), this.position);
+
             /*BufferedImage combined = new BufferedImage(bottom.getWidth(), bottom.getHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics g = combined.getGraphics();
             g.drawImage(bottom, 0, 0, null);

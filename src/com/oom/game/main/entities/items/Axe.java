@@ -2,6 +2,7 @@ package com.oom.game.main.entities.items;
 
 import com.oom.game.main.entities.utils.BuffItem;
 
+
 public class Axe extends BuffItem {
     public static final int ATTACK_BASE = 10;
 

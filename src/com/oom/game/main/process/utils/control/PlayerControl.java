@@ -1,5 +1,6 @@
 package com.oom.game.main.process.utils.control;
 
+import com.oom.game.main.entities.Creature;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
@@ -8,44 +9,56 @@ import com.oom.game.main.process.render.MainRenderable;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 
+import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class made for automating results of pressing keys and other actions to control player
  */
-public class PlayerControl implements GameObserver<MainRenderable> {
-    public static final Character CONTROL_KEYS [] = new Character[]{'w', 'a', 's', 'd'};
-    private boolean enabled = false;
-    private HashMap<Character, Double> pressedDistance = new HashMap<>();
-    private World world = null;
-    private Player player = null;
-    private double speed = 1;
+public class PlayerControl extends CreatureMovement  {
+    public static final class DIRECTIONS {
+        public static final String UP = "U";
+        public static final String RIGHT = "R";
+        public static final String DOWN = "D";
+        public static final String LEFT = "L";
+        public static final String[] LIST = new String[]{UP, RIGHT, DOWN, LEFT};
+    }
+    private HashMap<String, Double> pressedDistance = new HashMap<>();
+    private Map<String, Boolean> activeDirections = new HashMap<>();
 
-    public PlayerControl(MainRenderable mainRenderable, World world, double speed){
+    /**
+     * @param speed base movement speed of player in the given world
+     */
+    public PlayerControl(double speed){
+        super(speed);
 
-        this.player = world.getPlayer();
-        this.world = world;
-        this.speed = speed;
-        mainRenderable.getObservable().registerObserver(this);
-        for (int i = 0; i < CONTROL_KEYS.length; i++){
-            pressedDistance.put(CONTROL_KEYS[i], 0d);
+        for (int i = 0; i < DIRECTIONS.LIST.length; i++){
+            pressedDistance.put(DIRECTIONS.LIST[i], 0d);
+            activeDirections.put(DIRECTIONS.LIST[i], false);
         }
     }
 
-    public void enable(){
-        enabled = true;
+    /**
+     * Lets the character move in given direction
+     * @param direction the direction that is now available
+     */
+    public void activateDirection(String direction){
+        activeDirections.replace(direction, true);
     }
 
-    public void disable(){
-        enabled = false;
-    }
 
+    /**
+     * Disables the character to move in given direction
+     * @param direction the direction that is now unavailable
+     */
+    public void disableDirection(String direction){
+        activeDirections.replace(direction, false);
+    }
 
     @Override
-    public void update(GameObservable<MainRenderable> observable, MainRenderable newData) {
-        if(!enabled){
-            return;
-        }
+    protected boolean executeUpdate(World world, Creature creature) {
+        Player player = (Player) creature;
 
         Position blockPos = new Position(
                 player.getPosition().getX() + (player.getSizeX() / 2),
@@ -54,37 +67,21 @@ public class PlayerControl implements GameObserver<MainRenderable> {
         Block blockUnder = world.getBlock(blockPos);
 
         if (!blockUnder.getWalkAction().canWalk()){
-            return;
+            return false;
         }
         double base = blockUnder.getWalkAction().getBaseWalkingSpeed();
 
         Position prevPos = new Position(player.getPosition());
 
-        for (int i = 0; i < CONTROL_KEYS.length; i++){
-            Character c = CONTROL_KEYS[i];
-            if (newData.keyIsPressed(c)){
-                double newValue = pressedDistance.get(c) + base * speed;
-                int diff = (int)(newValue);
-                pressedDistance.replace(c, newValue - diff);
-                //FIXME don't move one time, make it in a loop and move one pixel at a time to make it look more smooth
-                switch (c){
-                    case 'w':
-                        player.move(0, -diff);
-                        break;
-                    case 'a':
-                        player.move(-diff, 0);
-                        break;
-                    case 's':
-                        player.move(0,diff);
-                        break;
-                    case 'd':
-                        player.move(diff, 0);
-                        break;
-                }
+        for (int i = 0; i < DIRECTIONS.LIST.length; i++){
+            String c = DIRECTIONS.LIST[i];
+            if (activeDirections.get(c)){
+                movePlayer(player, c, base * speed);
 
                 //FIXME perform action on walk
             }
         }
+
 
         //FIXME this approach disables walking into an unwalkable and walking in other direction (i know what i mean here)
 
@@ -96,8 +93,34 @@ public class PlayerControl implements GameObserver<MainRenderable> {
         Block blockUnderNew = world.getBlock(blockPosNew);
         if (!blockUnderNew.getWalkAction().canWalk()){
             player.setPositionDeep(prevPos);
+            return false;
         }
 
+        return true;
+    }
 
+    /**
+     * move the player down
+     * @param dist the distance to move the player on
+     */
+    public void movePlayer(Player player, String dir, double dist){
+        double newValue = pressedDistance.get(dir) + dist;
+        int diff = (int)(newValue);
+        pressedDistance.replace(dir, newValue - diff);
+
+        switch (dir){
+            case DIRECTIONS.UP:
+                player.move(0, -diff);
+                break;
+            case DIRECTIONS.LEFT:
+                player.move(-diff, 0);
+                break;
+            case DIRECTIONS.DOWN:
+                player.move(0,diff);
+                break;
+            case DIRECTIONS.RIGHT:
+                player.move(diff, 0);
+                break;
+        }
     }
 }

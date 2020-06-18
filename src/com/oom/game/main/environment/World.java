@@ -9,12 +9,14 @@ import com.oom.game.main.environment.blocks.Grass;
 import com.oom.game.main.environment.utils.exceptions.WorldResizeException;
 import com.oom.game.main.environment.utils.Block;
 import com.oom.game.main.process.render.WorldRenderable;
+import com.oom.game.main.process.utils.control.CreatureMovement;
 import com.oom.game.main.utils.GameObservable;
-import com.oom.game.main.utils.GameObserver;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /*
     !!!IMPORTANT NOTICE!!!
@@ -25,7 +27,14 @@ import java.util.Map;
     !!!not more than one block!!!. Example: barrel on a grass block, but no barrels on that first barrel!
  */
 
-public class World {
+
+/*
+    Note for week 7:
+    World was already developed in a facade pattern and thus can be serialized quite well
+    That's why not many changes occurred to implement serialization
+ */
+
+public class World implements Serializable {
     public static final int BLOCK_SIZE = 32;
     private int blockCountX, blockCountY;
     /**
@@ -38,12 +47,10 @@ public class World {
         2   Block Block Block
        ...
     */
-
-    //FIXME add docs for observer (write what specs are sent as additional parameter on what event)
-
-    private ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
-    private ArrayList<Entity> entities = new ArrayList<Entity>();//FIXME save entities in a Set / Map
-    private Map<String, ArrayList<WorldItem> > items = new HashMap<>();
+    private final ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
+    private final ArrayList<Entity> entities = new ArrayList<Entity>();//FIXME save entities in a Set / Map
+    private final Map<String, ArrayList<WorldItem> > items = new HashMap<>();
+    private final Map<Creature, CreatureMovement> movements = new HashMap<>();
     //!!! Save items only to this map. Each position contains a list of items it currently has
 
     /*
@@ -354,6 +361,11 @@ public class World {
         return res;
     }
 
+    /**
+     *
+     * @param pos position to search items on
+     * @return a list of items that can be found on the block, which is at the specified position
+     */
     public ArrayList<WorldItem> getItemsByPosition(Position pos){
         return items.get(pos);
     }
@@ -448,6 +460,57 @@ public class World {
             }
         }
         return false;
+    }
+
+    /**
+     *
+     * @param entity entity to check
+     * @return true if given entity is related to this world, false otherwise
+     */
+    public boolean hasEntity(Entity entity){
+        return entities.contains(entity);
+    }
+
+    /**
+     *
+     * @param creature creature to associate with the given movement
+     * @param movement movement that has to occur for given creature
+     * @return true if the given creature is in the world and movement could be assigned to it, false otherwise
+     */
+    public boolean assignMovement(Creature creature, CreatureMovement movement){
+        if (!(hasEntity(creature) || creature == player)){
+            return false;
+        }
+        movements.put(creature, movement);
+        return true;
+    }
+
+    /**
+     *
+     * @param creature remove movement for given creature
+     */
+    public void removeMovement(Creature creature){
+        movements.remove(creature);
+    }
+
+    /**
+     *
+     * @param creature creature you want to get the movement for
+     * @return movement for specified creature
+     */
+    public CreatureMovement getMovement(Creature creature){
+        return movements.get(creature);
+    }
+
+    /**
+     *
+     * @return a list of creature that have been assigned a movement
+     */
+    public Creature[] getCreaturesWithMovement(){
+        Set<Creature> set = movements.keySet();
+        Creature[] result = new Creature[set.size()];
+        set.toArray(result);
+        return result;
     }
 
     public int getBlockCountX() {

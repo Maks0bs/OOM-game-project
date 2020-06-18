@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DefaultPredatorFear implements FearBehaviour {
-    Set<String> afraidOf = new HashSet<>();
+    private Set<String> afraidOf = new HashSet<>();
 
     public DefaultPredatorFear(){
         afraidOf.add("Wolf");

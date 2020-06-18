@@ -1,10 +1,12 @@
 package com.oom.game.main.environment.utils;
 
+import java.io.Serializable;
+
 /**
  * TODO define default speed/distance/time measurements in game (like ticks and pixels im Minecraft)
  */
 
-public interface WalkAction {
+public interface WalkAction extends Serializable {
     int DEFAULT_WALKING_STEP = 1;
     /**
      *

@@ -1,9 +1,5 @@
 package com.oom.game.main.entities.mobs;
 
-/*
-    Redundant separate class, should remove this and only use NPC class
- */
-
 import com.oom.game.main.entities.NPC;
 import com.oom.game.main.entities.mobs.strategies.Level1Aggression;
 import com.oom.game.main.environment.Position;

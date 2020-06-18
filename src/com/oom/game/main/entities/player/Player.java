@@ -9,15 +9,14 @@ import com.oom.game.main.entities.utils.BuffItemWrapper;
 import com.oom.game.main.entities.utils.InventoryItem;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
-import com.oom.game.main.process.utils.control.PlayerControl;
 
 import java.util.ArrayList;
+
 
 public class Player extends Creature implements ProgressiveCreature {
     public static String DEFAULT_STATE = "PlayerDefault", NAME = "Player";
     public static int DEFAULT_HEALTH_POINTS = 100, DEFAULT_ATTACK_POINTS = 5;
-    //MAYBE IT WOULD BE NECESSARY TO ADD WORLD REFERENCE FOR PLAYER TO KNOW POSITION AND BLOCK UNDER HIM, ETC.
-    private PlayerControl control = null;
+    //TODO MAYBE IT WOULD BE NECESSARY TO ADD WORLD REFERENCE FOR PLAYER TO KNOW POSITION AND BLOCK UNDER HIM, ETC.
     private ArrayList<InventoryItem> inventory = new ArrayList<>();
     private BuffItem weapon = null, amulet = null;
 
@@ -42,7 +41,6 @@ public class Player extends Creature implements ProgressiveCreature {
         The process of attacking and counterattacking
         TODO may be influenced by various effects of attacker / victim
      */
-
     /**
      * Basic player attack functionality
      * @param victim the creature that this player wants to attack
@@ -62,7 +60,7 @@ public class Player extends Creature implements ProgressiveCreature {
     }
 
     /**
-     * Gets when F key is pressed
+     * Gets fired when F key is pressed
      * Replaces current weapon with the given one
      */
     public void pickUpWeapon(WorldItem item){
@@ -170,13 +168,6 @@ public class Player extends Creature implements ProgressiveCreature {
         System.out.println(this.getInfo());
     }
 
-    public PlayerControl getControl() {
-        return control;
-    }
-
-    public void setControl(PlayerControl control) {
-        this.control = control;
-    }
 
     @Override
     public int getHealthPoints() {
