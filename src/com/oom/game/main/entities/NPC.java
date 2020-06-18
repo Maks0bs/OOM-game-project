@@ -5,7 +5,6 @@ import com.oom.game.main.entities.interaction.FearBehaviour;
 import com.oom.game.main.entities.mobs.strategies.NoneAggresion;
 import com.oom.game.main.entities.mobs.strategies.NoneFear;
 import com.oom.game.main.environment.Position;
-import com.oom.game.main.process.utils.control.NPCMovement;
 
 /**
  * NPC have some props that players should not have and vice versa
@@ -26,7 +25,6 @@ public class NPC extends Creature {
      */
     protected AggressiveBehaviour aggresiveBehaviour = new NoneAggresion();
     protected FearBehaviour fearBehaviour = new NoneFear();
-    protected NPCMovement movement = null;
 
     /**
      * see constructor of {@link Creature}
@@ -67,11 +65,4 @@ public class NPC extends Creature {
         this.aggresiveBehaviour = aggresiveBehaviour;
     }
 
-    public NPCMovement getMovement() {
-        return movement;
-    }
-
-    public void setMovement(NPCMovement movement) {
-        this.movement = movement;
-    }
 }

@@ -5,13 +5,16 @@ import gameCore.IRenderable;
 import gameCore.Renderer;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public abstract class NodeRenderable implements IRenderable {
+public abstract class NodeRenderable implements IRenderable, Serializable {
 
-    protected BufferedImage image;
+    protected transient BufferedImage image;
     protected Position position;
     protected float scaleX = 1, scaleY = 1;
     protected Renderer renderer = null;
+
+
 
     /**
      *
@@ -101,4 +104,6 @@ public abstract class NodeRenderable implements IRenderable {
     public void setPosition(Position position) {
         this.position = position;
     }
+
+
 }

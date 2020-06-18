@@ -5,11 +5,13 @@ import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.utils.Block;
 import com.oom.game.main.utils.GameObservable;
 
+import java.io.Serializable;
+
 /**
     Entity is a general class for all game game objects, which you can interact with
     Like creatures, items,
  */
-public abstract class Entity {
+public abstract class Entity implements Serializable {
     // position of left top corner
     protected String state = "Default";
     protected Position position;

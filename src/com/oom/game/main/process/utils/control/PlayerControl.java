@@ -1,5 +1,6 @@
 package com.oom.game.main.process.utils.control;
 
+import com.oom.game.main.entities.Creature;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
@@ -8,13 +9,14 @@ import com.oom.game.main.process.render.MainRenderable;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Class made for automating results of pressing keys and other actions to control player
  */
-public class PlayerControl implements GameObserver<MainRenderable> {
+public class PlayerControl extends CreatureMovement  {
     public static final class DIRECTIONS {
         public static final String UP = "U";
         public static final String RIGHT = "R";
@@ -22,31 +24,19 @@ public class PlayerControl implements GameObserver<MainRenderable> {
         public static final String LEFT = "L";
         public static final String[] LIST = new String[]{UP, RIGHT, DOWN, LEFT};
     }
-    private boolean enabled = false;
     private HashMap<String, Double> pressedDistance = new HashMap<>();
     private Map<String, Boolean> activeDirections = new HashMap<>();
-    private World world = null;
-    private Player player = null;
-    private double speed = 1d;
 
     /**
-     *
-     * @param mainRenderable renderable to read input from
-     * @param world world to read data from
      * @param speed base movement speed of player in the given world
      */
-    public PlayerControl(MainRenderable mainRenderable, World world, double speed){
+    public PlayerControl(double speed){
+        super(speed);
 
-        this.player = world.getPlayer();
-        this.world = world;
-        this.speed = speed;
-        mainRenderable.getObservable().registerObserver(this);
         for (int i = 0; i < DIRECTIONS.LIST.length; i++){
             pressedDistance.put(DIRECTIONS.LIST[i], 0d);
             activeDirections.put(DIRECTIONS.LIST[i], false);
         }
-
-        //FIXME this is going to be removed soon
     }
 
     /**
@@ -66,26 +56,9 @@ public class PlayerControl implements GameObserver<MainRenderable> {
         activeDirections.replace(direction, false);
     }
 
-    /**
-     * Enables these controls
-     */
-    public void enable(){
-        enabled = true;
-    }
-
-    /**
-     * disables these controls
-     */
-    public void disable(){
-        enabled = false;
-    }
-
-
     @Override
-    public void update(GameObservable<MainRenderable> observable, MainRenderable newData) {
-        if(!enabled){
-            return;
-        }
+    protected boolean executeUpdate(World world, Creature creature) {
+        Player player = (Player) creature;
 
         Position blockPos = new Position(
                 player.getPosition().getX() + (player.getSizeX() / 2),
@@ -94,7 +67,7 @@ public class PlayerControl implements GameObserver<MainRenderable> {
         Block blockUnder = world.getBlock(blockPos);
 
         if (!blockUnder.getWalkAction().canWalk()){
-            return;
+            return false;
         }
         double base = blockUnder.getWalkAction().getBaseWalkingSpeed();
 
@@ -103,7 +76,7 @@ public class PlayerControl implements GameObserver<MainRenderable> {
         for (int i = 0; i < DIRECTIONS.LIST.length; i++){
             String c = DIRECTIONS.LIST[i];
             if (activeDirections.get(c)){
-                movePlayer(c, base * speed);
+                movePlayer(player, c, base * speed);
 
                 //FIXME perform action on walk
             }
@@ -120,16 +93,17 @@ public class PlayerControl implements GameObserver<MainRenderable> {
         Block blockUnderNew = world.getBlock(blockPosNew);
         if (!blockUnderNew.getWalkAction().canWalk()){
             player.setPositionDeep(prevPos);
+            return false;
         }
 
-
+        return true;
     }
 
     /**
      * move the player down
      * @param dist the distance to move the player on
      */
-    public void movePlayer(String dir, double dist){
+    public void movePlayer(Player player, String dir, double dist){
         double newValue = pressedDistance.get(dir) + dist;
         int diff = (int)(newValue);
         pressedDistance.replace(dir, newValue - diff);

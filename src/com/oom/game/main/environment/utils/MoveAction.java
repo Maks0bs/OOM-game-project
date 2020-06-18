@@ -1,6 +1,8 @@
 package com.oom.game.main.environment.utils;
 
-public interface MoveAction {
+import java.io.Serializable;
+
+public interface MoveAction extends Serializable {
     /**
      * Action that should be performed when a block gets moved
      */

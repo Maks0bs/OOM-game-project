@@ -18,9 +18,10 @@ import gameCore.Renderer;
     FIXME might need to fix some issues in above notes
  */
 
+import java.io.Serializable;
 import java.util.*;
 
-public class WorldRenderable implements IRenderable {
+public class WorldRenderable implements IRenderable, Serializable {
     public static final class WORLD_UPDATES {
         public static final int ADD_ENTITY = 1;
         public static final int REMOVE_ENTITY = 2;
@@ -35,7 +36,7 @@ public class WorldRenderable implements IRenderable {
         as WorldRenderable is a separate static rendering process that only changes
         when blocks / entities on screen change
      */
-    private World world;
+    private final World world;
     private int width, height;
     /**
         The current renderable field is described by the position (top left corner)
@@ -51,12 +52,12 @@ public class WorldRenderable implements IRenderable {
         This array of blocks is extended by 1 on x-axis and y-axis.
         There are placeholder EmptyVoids in case the some updates occur and we have to move the rendered component
      */
-    private ArrayList<ArrayList<BlockRenderable> > blockRenderables = new ArrayList<>();
-    private ArrayList<EntityRenderable> entityRenderables = new ArrayList<>();
+    private final ArrayList<ArrayList<BlockRenderable> > blockRenderables = new ArrayList<>();
+    private final ArrayList<EntityRenderable> entityRenderables = new ArrayList<>();
 
     private GameObserver<Entity> playerObserver = null;
     private GameObserver<World> worldObserver = null;
-    private GameObservable<WorldRenderable> observable = new GameObservable<>();
+    private final GameObservable<WorldRenderable> observable = new GameObservable<>();
 
     /**
      * Default constructor
@@ -478,9 +479,6 @@ public class WorldRenderable implements IRenderable {
         return world;
     }
 
-    public void setWorld(World world) {
-        this.world = world;
-    }
 
     public int getWidth() {
         return width;
