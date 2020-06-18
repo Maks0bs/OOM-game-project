@@ -1,4 +1,6 @@
-package com.oom.game.main.utils;
+package com.oom.game.main.utils.command;
+
+import java.awt.*;
 
 public interface GameCommand {
     /**
@@ -10,6 +12,5 @@ public interface GameCommand {
      * Optional action that undoes the one specified in execute
      */
     public default void undo(){
-
     }
 }

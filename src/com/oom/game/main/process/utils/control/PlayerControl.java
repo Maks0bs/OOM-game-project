@@ -5,7 +5,6 @@ import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.utils.Block;
 import com.oom.game.main.process.render.MainRenderable;
-import com.oom.game.main.utils.GameCommand;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 

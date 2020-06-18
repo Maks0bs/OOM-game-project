@@ -1,5 +1,7 @@
 package com.oom.game.main.utils;
 
+import com.oom.game.main.utils.command.GameCommand;
+import com.oom.game.main.utils.command.NoneCommand;
 import gameCore.eventSystem.IEvent;
 import gameCore.eventSystem.IEventListener;
 import gameCore.input.keyboard.KeyPressedEvent;
@@ -10,8 +12,8 @@ import java.util.Map;
 
 public final class GameKeyActionManager implements IEventListener {
     private static GameKeyActionManager manager = null;
-    private Map<Integer, GameCommand> commandsOnPress = new HashMap<>();
-    private Map<Integer, GameCommand> commandsOnRelease = new HashMap<>();
+    private final Map<Integer, GameCommand> commandsOnPress = new HashMap<>();
+    private final Map<Integer, GameCommand> commandsOnRelease = new HashMap<>();
 
     /**
      * Default private constructor for singleton to function

@@ -1,7 +1,7 @@
 package com.oom.game.main.entities.player.commands;
 
 import com.oom.game.main.entities.player.Player;
-import com.oom.game.main.utils.GameCommand;
+import com.oom.game.main.utils.command.GameCommand;
 
 public class EnchantWeaponRandCommand implements GameCommand {
     private Player player;

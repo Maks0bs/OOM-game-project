@@ -16,10 +16,10 @@ import com.oom.game.main.process.render.MainRenderable;
 import com.oom.game.main.process.render.WorldRenderable;
 import com.oom.game.main.process.utils.control.NPCMovement;
 import com.oom.game.main.process.utils.control.PlayerControl;
-import com.oom.game.main.utils.GameCommand;
+import com.oom.game.main.utils.command.GameCommand;
 import com.oom.game.main.utils.GameKeyActionManager;
 import com.oom.game.main.utils.SystemKeyEventManager;
-import com.oom.game.main.utils.TestLoggingCommand;
+import com.oom.game.main.utils.command.TestLoggingCommand;
 import gameCore.Game;
 import gameCore.Renderer;
 
@@ -83,6 +83,7 @@ public class Process {
                 mainRenderable, //updatable
                 SystemKeyEventManager.getInstance()
         );
+
     }
 
 

@@ -3,7 +3,7 @@ package com.oom.game.main.entities.player.commands;
 import com.oom.game.main.entities.WorldItem;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.World;
-import com.oom.game.main.utils.GameCommand;
+import com.oom.game.main.utils.command.GameCommand;
 
 import java.util.ArrayList;
 
