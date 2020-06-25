@@ -7,7 +7,7 @@ import com.oom.game.main.utils.command.GameCommand;
 
 import java.util.ArrayList;
 
-public class PickUpWeaponCommand implements GameCommand {
+public class PickUpItemCommand implements GameCommand {
     private World world = null;
     private Player player = null;
 
@@ -16,7 +16,7 @@ public class PickUpWeaponCommand implements GameCommand {
      * @param world world to pick up the weapon in
      * @param player player that picks up the weapon
      */
-    public PickUpWeaponCommand(World world, Player player){
+    public PickUpItemCommand(World world, Player player){
         this.world = world;
         this.player = player;
     }
@@ -25,7 +25,7 @@ public class PickUpWeaponCommand implements GameCommand {
      *
      * @param world world with the player that picks up the weapon
      */
-    public PickUpWeaponCommand(World world){
+    public PickUpItemCommand(World world){
         this.world = world;
         this.player = world.getPlayer();
     }
@@ -40,6 +40,6 @@ public class PickUpWeaponCommand implements GameCommand {
         WorldItem pickedUp = items.get(0);
         world.removeItem(pickedUp.getPosition().getBlockPosition());
 
-        player.pickUpWeapon(pickedUp);
+        player.pickUpItem(pickedUp);
     }
 }

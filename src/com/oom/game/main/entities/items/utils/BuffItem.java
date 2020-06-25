@@ -1,8 +1,4 @@
-package com.oom.game.main.entities.utils;
-
-import com.oom.game.main.entities.WorldItem;
-import com.oom.game.main.entities.utils.InventoryItem;
-import com.oom.game.main.environment.Position;
+package com.oom.game.main.entities.items.utils;
 
 /**
  * After BuffItems get picked up by a player they cannot be displayed as an WorldItem class anymore, they

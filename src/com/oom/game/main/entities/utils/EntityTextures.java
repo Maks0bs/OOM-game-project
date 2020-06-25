@@ -31,7 +31,7 @@ public class EntityTextures {
         list.put("Sword", ImageIO.read((new File("res/entities/items/Sword.png")).getAbsoluteFile()));
         list.put("Axe", ImageIO.read((new File("res/entities/items/Axe.png")).getAbsoluteFile()));
         list.put("WeaponizedPlayer", ImageIO.read((new File("res/entities/creatures/WeaponizedPlayer.png")).getAbsoluteFile()));
-
+        list.put("Backpack", ImageIO.read((new File("res/entities/items/Backpack.png")).getAbsoluteFile()));
     }
 
     /**

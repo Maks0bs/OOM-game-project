@@ -2,11 +2,12 @@ package com.oom.game.main.process;
 
 import com.oom.game.main.entities.WorldItem;
 import com.oom.game.main.entities.items.Axe;
+import com.oom.game.main.entities.items.Backpack;
 import com.oom.game.main.entities.items.Sword;
 import com.oom.game.main.entities.mobs.Wolf;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.entities.player.commands.EnchantWeaponRandCommand;
-import com.oom.game.main.entities.player.commands.PickUpWeaponCommand;
+import com.oom.game.main.entities.player.commands.PickUpItemCommand;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.Barrel;
@@ -25,23 +26,15 @@ import com.oom.game.main.utils.command.TestLoggingCommand;
 import gameCore.Game;
 import gameCore.Renderer;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
-public class Process {
+public class Process{
     /*
         FIXME add normal docs to Process class
      */
     private MainRenderable mainRenderable = null;
     private World world;
-    /**
-        This player is the main game entity;
-     */
-    private Player player;
 
     //FIXME maybe create constructor with custom values (graphics / renderer / game)
     /**
@@ -70,7 +63,7 @@ public class Process {
         mainRenderable.setRenderer(defaultRenderer);
 
         GameKeyActionManager actionManager = GameKeyActionManager.getInstance();
-        actionManager.setCommandOnPress('s', new GameCommand() {
+        actionManager.setCommandOnPress('S', new GameCommand() {
             @Override
             public void execute() {
                 run();
@@ -97,16 +90,18 @@ public class Process {
 
         SerializationFacade sf = new SerializationFacade();
 
-        actionManager.setCommandOnPress('l', new GameCommand() {
+        actionManager.setCommandOnPress('L', new GameCommand() {
             @Override
             public void execute() {
                 World w = sf.load(game.getParent());
-                run(w);
+                if (w != null){
+                    run(w);
+                }
             }
         });
 
 
-        actionManager.setCommandOnPress('p', new GameCommand() {
+        actionManager.setCommandOnPress('P', new GameCommand() {
             @Override
             public void execute() {
                 sf.save(world);
@@ -118,49 +113,49 @@ public class Process {
     public static void setupBasicPlayerControl(PlayerControl playerControl){
         GameKeyActionManager actionManager = GameKeyActionManager.getInstance();
         //Setting up controls
-        actionManager.setCommandOnPress('a', new GameCommand() {
+        actionManager.setCommandOnPress('A', new GameCommand() {
             @Override
             public void execute() {
                 playerControl.activateDirection(PlayerControl.DIRECTIONS.LEFT);
             }
         });
-        actionManager.setCommandOnPress('s', new GameCommand() {
+        actionManager.setCommandOnPress('S', new GameCommand() {
             @Override
             public void execute() {
                 playerControl.activateDirection(PlayerControl.DIRECTIONS.DOWN);
             }
         });
-        actionManager.setCommandOnPress('d', new GameCommand() {
+        actionManager.setCommandOnPress('D', new GameCommand() {
             @Override
             public void execute() {
                 playerControl.activateDirection(PlayerControl.DIRECTIONS.RIGHT);
             }
         });
-        actionManager.setCommandOnPress('w', new GameCommand() {
+        actionManager.setCommandOnPress('W', new GameCommand() {
             @Override
             public void execute() {
                 playerControl.activateDirection(PlayerControl.DIRECTIONS.UP);
             }
         });
-        actionManager.setCommandsOnRelease('a', new GameCommand() {
+        actionManager.setCommandsOnRelease('A', new GameCommand() {
             @Override
             public void execute() {
                 playerControl.disableDirection(PlayerControl.DIRECTIONS.LEFT);
             }
         });
-        actionManager.setCommandsOnRelease('s', new GameCommand() {
+        actionManager.setCommandsOnRelease('S', new GameCommand() {
             @Override
             public void execute() {
                 playerControl.disableDirection(PlayerControl.DIRECTIONS.DOWN);
             }
         });
-        actionManager.setCommandsOnRelease('d', new GameCommand() {
+        actionManager.setCommandsOnRelease('D', new GameCommand() {
             @Override
             public void execute() {
                 playerControl.disableDirection(PlayerControl.DIRECTIONS.RIGHT);
             }
         });
-        actionManager.setCommandsOnRelease('w', new GameCommand() {
+        actionManager.setCommandsOnRelease('W', new GameCommand() {
             @Override
             public void execute() {
                 playerControl.disableDirection(PlayerControl.DIRECTIONS.UP);
@@ -178,7 +173,7 @@ public class Process {
         GameKeyActionManager actionManager = GameKeyActionManager.getInstance();
 
         this.world = world;
-        this.player = world.getPlayer();
+        Player player = world.getPlayer();
 
         WorldRenderable worldRenderable = new WorldRenderable(
                 this.world,
@@ -193,9 +188,21 @@ public class Process {
         world.assignMovement(player, playerControl);
         playerControl.enable();
 
-        actionManager.setCommandOnPress('e', new EnchantWeaponRandCommand(player));
-        actionManager.setCommandOnPress('f', new PickUpWeaponCommand(world, player));
-        actionManager.setCommandOnPress('m', new TestLoggingCommand('m'));
+        actionManager.setCommandOnPress('E', new EnchantWeaponRandCommand(player));
+        actionManager.setCommandOnPress('F', new GameCommand() {
+            @Override
+            public void execute() {
+                (new PickUpItemCommand(world, player)).execute();
+                mainRenderable.getGuiRenderable().updateInventoryGUI(player.getInventory());
+            }
+        });
+        actionManager.setCommandOnPress('I', new GameCommand() {
+            @Override
+            public void execute() {
+                mainRenderable.getGuiRenderable().updateInventoryGUI(player.getInventory());
+                mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.INVENTORY);
+            }
+        });
     }
 
     /**
@@ -214,7 +221,7 @@ public class Process {
             Creating some random world
          */
         this.world = World.generateDefaultWorld();
-        this.player = Player.generateDefaultPlayer();
+        Player player = Player.generateDefaultPlayer();
         world.addPlayer(player);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -246,9 +253,27 @@ public class Process {
         world.assignMovement(player, playerControl);
         playerControl.enable();
 
-        actionManager.setCommandOnPress('e', new EnchantWeaponRandCommand(player));
-        actionManager.setCommandOnPress('f', new PickUpWeaponCommand(world, player));
-        actionManager.setCommandOnPress('m', new TestLoggingCommand('m'));
+        actionManager.setCommandOnPress('E', new EnchantWeaponRandCommand(player));
+        actionManager.setCommandOnPress('F', new GameCommand() {
+            @Override
+            public void execute() {
+                (new PickUpItemCommand(world, player)).execute();
+                mainRenderable.getGuiRenderable().updateInventoryGUI(player.getInventory());
+            }
+        });
+        actionManager.setCommandOnPress('I', new GameCommand() {
+            @Override
+            public void execute() {
+                mainRenderable.getGuiRenderable().updateInventoryGUI(player.getInventory());
+                mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.INVENTORY);
+            }
+        });
+        actionManager.setCommandOnPress(27, new GameCommand() {
+            @Override
+            public void execute() {
+                mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.IN_GAME);
+            }
+        });
 
 
         Wolf wolf1 = new Wolf(new Position(8, 8, true));
@@ -268,6 +293,10 @@ public class Process {
         world.addItem(axeItem1);
         WorldItem axeItem2 = new WorldItem(new Position(250, 450), "Axe", new Axe());
         world.addItem(axeItem2);
+        WorldItem backpack1 = new WorldItem(new Position(150, 30), "Backpack", new Backpack());
+        world.addItem(backpack1);
+        WorldItem backpack2 = new WorldItem(new Position(180, 30), "Backpack", new Backpack());
+        world.addItem(backpack2);
 
 
 
@@ -283,33 +312,6 @@ public class Process {
                 },
                 2000
         );
-
-//        new java.util.Timer().schedule(
-//                new java.util.TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        World newWorld = World.generateDefaultWorld();
-//                        world.removePlayer();
-//                        newWorld.addPlayer(player);
-//
-//
-//                        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//                        WorldRenderable newWorldRenderable = new WorldRenderable(
-//                                newWorld,
-//                                (int) screenSize.getWidth() / 2,
-//                                (int) screenSize.getHeight() / 2
-//                        );
-//                        mainRenderable.setWorldRenderable(newWorldRenderable);
-//                        world = newWorld;
-//
-//                    }
-//                },
-//                1000
-//        );
-
-
-
-
     }
 
 

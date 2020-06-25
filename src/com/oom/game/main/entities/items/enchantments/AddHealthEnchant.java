@@ -1,7 +1,7 @@
-package com.oom.game.main.entities.items;
+package com.oom.game.main.entities.items.enchantments;
 
-import com.oom.game.main.entities.utils.BuffItem;
-import com.oom.game.main.entities.utils.BuffItemWrapper;
+import com.oom.game.main.entities.items.utils.BuffItem;
+import com.oom.game.main.entities.items.utils.BuffItemWrapper;
 
 /**
  * Enchants weapon to add 1 HP to wearer
@@ -29,5 +29,11 @@ public class AddHealthEnchant extends BuffItemWrapper {
     @Override
     public double getMultAttack() {
         return super.buffItem.getMultAttack();
+    }
+
+
+    @Override
+    public String getName() {
+        return null;
     }
 }
