@@ -1,9 +1,9 @@
-package com.oom.game.main.entities.utils;
+package com.oom.game.main.entities.items.utils;
 
-import com.oom.game.main.entities.items.AddAttackEnchant;
-import com.oom.game.main.entities.items.AddHealthEnchant;
-import com.oom.game.main.entities.items.MultAttackEnchant10;
-import com.oom.game.main.entities.items.MultHealthEnchant10;
+import com.oom.game.main.entities.items.enchantments.AddAttackEnchant;
+import com.oom.game.main.entities.items.enchantments.AddHealthEnchant;
+import com.oom.game.main.entities.items.enchantments.MultAttackEnchant10;
+import com.oom.game.main.entities.items.enchantments.MultHealthEnchant10;
 
 public abstract class BuffItemWrapper extends BuffItem {
     protected BuffItem buffItem;

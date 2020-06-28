@@ -1,12 +1,11 @@
 package com.oom.game.main.entities.player;
 
 import com.oom.game.main.entities.WorldItem;
-import com.oom.game.main.entities.utils.BuffItem;
+import com.oom.game.main.entities.items.Backpack;
+import com.oom.game.main.entities.items.utils.*;
 import com.oom.game.main.entities.Creature;
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.interaction.ProgressiveCreature;
-import com.oom.game.main.entities.utils.BuffItemWrapper;
-import com.oom.game.main.entities.utils.InventoryItem;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 
@@ -17,7 +16,7 @@ public class Player extends Creature implements ProgressiveCreature {
     public static String DEFAULT_STATE = "PlayerDefault", NAME = "Player";
     public static int DEFAULT_HEALTH_POINTS = 100, DEFAULT_ATTACK_POINTS = 5;
     //TODO MAYBE IT WOULD BE NECESSARY TO ADD WORLD REFERENCE FOR PLAYER TO KNOW POSITION AND BLOCK UNDER HIM, ETC.
-    private ArrayList<InventoryItem> inventory = new ArrayList<>();
+    private final InventoryContainer inventory = new Backpack();
     private BuffItem weapon = null, amulet = null;
 
     public static Player generateDefaultPlayer(){
@@ -61,14 +60,20 @@ public class Player extends Creature implements ProgressiveCreature {
 
     /**
      * Gets fired when F key is pressed
+     * Adds item to the inventory if it isn't full
      * Replaces current weapon with the given one
      */
-    public void pickUpWeapon(WorldItem item){
-        inventory.add(item.getInventoryItem());
-        if (item.getInventoryItem() instanceof BuffItem){
-            weapon = (BuffItem) item.getInventoryItem();
-            this.setState("WeaponizedPlayer");
+    public void pickUpItem(WorldItem item){
+        if (inventory.getAmount() < inventory.getMaxCapacity()){
+            inventory.add(item.getInventoryItem());
+            if (item.getInventoryItem() instanceof BuffItem){
+                weapon = (BuffItem) item.getInventoryItem();
+                this.setState("WeaponizedPlayer");
+            }
         }
+
+        this.observable.notifyObservers(this);
+
 
         System.out.println(
                 "New stats: \n" +
@@ -185,5 +190,9 @@ public class Player extends Creature implements ProgressiveCreature {
         } else{
             return super.getAttackPoints();
         }
+    }
+
+    public InventoryContainer getInventory() {
+        return inventory;
     }
 }
