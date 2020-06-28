@@ -29,7 +29,12 @@ public class SerializationFacade {
                     File file = fileChooser.getSelectedFile();
                 }*/
         try {
-            java.io.File file = new File("saves/gamesave.oomgp");
+
+            File dir = new File("saves/");
+            if (!dir.exists()){
+                dir.mkdirs();
+            }
+            File file = new File("saves/gamesave.oomgp");
             file.createNewFile();
             FileOutputStream fileOut = new FileOutputStream(file.getAbsoluteFile());
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
