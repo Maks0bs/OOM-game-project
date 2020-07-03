@@ -2,6 +2,7 @@ package com.oom.game.main.entities;
 
 import com.oom.game.main.entities.mobs.Rabbit;
 import com.oom.game.main.entities.mobs.Wolf;
+import com.oom.game.main.entities.state.NPCState;
 import com.oom.game.main.environment.Position;
 
 /**
@@ -16,7 +17,8 @@ public abstract class Creature extends Entity {
         NPCs exp value doesn't change. Players can increase their exp by killing Creatures
         (due to ProgressiveCreature interface)
      */
-    protected int healthPoints = 0, attackPoints = 0, expPoints = 0;
+    protected int healthPoints = 0, attackPoints = 0, expPoints = 0,
+            energyPoints = 0, hungerPoints = 0;
     protected String name = NAME_UNKNOWN;
 
     /**
@@ -46,10 +48,10 @@ public abstract class Creature extends Entity {
      * @param attackPoints attack points of new creature
      * @param expPoints experience points of new creature
      */
-    public Creature(String name, Position position, int sizeX, int sizeY, String state,
+    public Creature(String name, Position position, int sizeX, int sizeY, String appearance,
                     int healthPoints, int attackPoints, int expPoints
     ){
-        super(position, sizeX, sizeY, state);
+        super(position, sizeX, sizeY, appearance);
         this.name = name;
         this.healthPoints = healthPoints;
         this.attackPoints = attackPoints;
@@ -88,11 +90,29 @@ public abstract class Creature extends Entity {
      */
     public abstract void onDeathAction();
 
+
+
     /**
      * default counter attack action, when the creature is attacked
      * @param attacker the creature, that this one gets attacked by
      */
     public abstract void counterAttack(Creature attacker);
+
+    public int getEnergyPoints() {
+        return energyPoints;
+    }
+
+    public void setEnergyPoints(int energyPoints) {
+        this.energyPoints = energyPoints;
+    }
+
+    public int getHungerPoints() {
+        return hungerPoints;
+    }
+
+    public void setHungerPoints(int hungerPoints) {
+        this.hungerPoints = hungerPoints;
+    }
 
     public int getHealthPoints() {
         return healthPoints;

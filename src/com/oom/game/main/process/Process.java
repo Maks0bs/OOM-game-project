@@ -1,6 +1,7 @@
 package com.oom.game.main.process;
 
 import com.oom.game.main.entities.WorldItem;
+import com.oom.game.main.entities.items.Apple;
 import com.oom.game.main.entities.items.Axe;
 import com.oom.game.main.entities.items.Backpack;
 import com.oom.game.main.entities.items.Sword;
@@ -15,14 +16,13 @@ import com.oom.game.main.environment.blocks.StoneTileFloor;
 import com.oom.game.main.process.render.GUIRenderable;
 import com.oom.game.main.process.render.MainRenderable;
 import com.oom.game.main.process.render.WorldRenderable;
-import com.oom.game.main.process.utils.control.DefaultNPCMovement;
+import com.oom.game.main.process.utils.control.DefaultNPCBehaviour;
 import com.oom.game.main.process.utils.control.PlayerControl;
 import com.oom.game.main.utils.SerializationFacade;
 import com.oom.game.main.utils.command.GameCommand;
 import com.oom.game.main.utils.GameKeyActionManager;
 import com.oom.game.main.utils.SystemKeyEventManager;
 import com.oom.game.main.utils.command.NoneCommand;
-import com.oom.game.main.utils.command.TestLoggingCommand;
 import gameCore.Game;
 import gameCore.Renderer;
 
@@ -185,7 +185,7 @@ public class Process{
 
         PlayerControl playerControl = new PlayerControl(2);
         setupBasicPlayerControl(playerControl);
-        world.assignMovement(player, playerControl);
+        world.assignBehaviour(player, playerControl);
         playerControl.enable();
 
         actionManager.setCommandOnPress('E', new EnchantWeaponRandCommand(player));
@@ -222,6 +222,7 @@ public class Process{
          */
         this.world = World.generateDefaultWorld();
         Player player = Player.generateDefaultPlayer();
+        player.setPosition(new Position(2, 2, true));
         world.addPlayer(player);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -243,6 +244,16 @@ public class Process{
             }
         }
 
+        for (int i = 0; i < world.getBlockCountY(); i++){
+            world.removeBlock(i, 0);
+            world.removeBlock(i, world.getBlockCountY() - 1);
+        }
+
+        for (int i = 0; i < world.getBlockCountX(); i++){
+            world.removeBlock(0, i);
+            world.removeBlock(0, world.getBlockCountX() - 1);
+        }
+
         world.addBlock(2, 1, new Barrel());
         world.addBlock(5, 5, new Barrel());
 
@@ -250,7 +261,7 @@ public class Process{
 
         PlayerControl playerControl = new PlayerControl(2);
         setupBasicPlayerControl(playerControl);
-        world.assignMovement(player, playerControl);
+        world.assignBehaviour(player, playerControl);
         playerControl.enable();
 
         actionManager.setCommandOnPress('E', new EnchantWeaponRandCommand(player));
@@ -293,15 +304,17 @@ public class Process{
         world.addItem(axeItem1);
         WorldItem axeItem2 = new WorldItem(new Position(250, 450), "Axe", new Axe());
         world.addItem(axeItem2);
-        WorldItem backpack1 = new WorldItem(new Position(150, 30), "Backpack", new Backpack());
+        WorldItem backpack1 = new WorldItem(new Position(150, 60), "Backpack", new Backpack());
         world.addItem(backpack1);
-        WorldItem backpack2 = new WorldItem(new Position(180, 30), "Backpack", new Backpack());
+        WorldItem backpack2 = new WorldItem(new Position(180, 60), "Backpack", new Backpack());
         world.addItem(backpack2);
+        WorldItem apple1 = new WorldItem(new Position(210, 60), "Apple", new Apple());
+        world.addItem(apple1);
 
 
 
-        DefaultNPCMovement wolfMovement = new DefaultNPCMovement(2);
-        world.assignMovement(wolf1, wolfMovement);
+        DefaultNPCBehaviour wolfMovement = new DefaultNPCBehaviour(2);
+        world.assignBehaviour(wolf1, wolfMovement);
 
         new java.util.Timer().schedule(
                 new java.util.TimerTask() {

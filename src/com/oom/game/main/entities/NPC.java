@@ -4,12 +4,15 @@ import com.oom.game.main.entities.interaction.AggressiveBehaviour;
 import com.oom.game.main.entities.interaction.FearBehaviour;
 import com.oom.game.main.entities.mobs.strategies.NoneAggresion;
 import com.oom.game.main.entities.mobs.strategies.NoneFear;
+import com.oom.game.main.entities.state.NPCState;
 import com.oom.game.main.environment.Position;
+import com.oom.game.main.environment.World;
+import com.oom.game.main.environment.utils.Block;
 
 /**
  * NPC have some props that players should not have and vice versa
  */
-public class NPC extends Creature {
+public abstract class NPC extends Creature {
     /*
         In this case this.expPoints is the reward
         that players receive after defeating the NPC
@@ -25,16 +28,68 @@ public class NPC extends Creature {
      */
     protected AggressiveBehaviour aggresiveBehaviour = new NoneAggresion();
     protected FearBehaviour fearBehaviour = new NoneFear();
+    protected NPCState state;
+
+
+    /**
+     * Allows to safely move the npc to the given direction, so that the NPC doesn't get on any
+     * unwalkable blocks and smoothly moves further
+     * @param world world to perform moving action in
+     * @param npc npc that needs to be moved
+     * @param moveXInt amount of pixels to move in x direction
+     * @param moveYInt amount of pixels to move in y direction
+     */
+    public static void safelyMove(World world, NPC npc, int moveXInt, int moveYInt){
+        npc.move(moveXInt, 0);
+        Position blockPosNew = new Position(
+                npc.getPosition().getX() + (npc.getSizeX() / 2),
+                npc.getPosition().getY() + (npc.getSizeY() / 2)
+        );
+        Block blockUnderNew = world.getBlock(blockPosNew);
+        if (!blockUnderNew.getWalkAction().canWalk()){
+            npc.move(-moveXInt, 0);
+        }
+
+        npc.move(0, moveYInt);
+        blockPosNew = new Position(
+                npc.getPosition().getX() + (npc.getSizeX() / 2),
+                npc.getPosition().getY() + (npc.getSizeY() / 2)
+        );
+        blockUnderNew = world.getBlock(blockPosNew);
+        if (!blockUnderNew.getWalkAction().canWalk()){
+            npc.move(0, -moveYInt);
+        }
+    }
 
     /**
      * see constructor of {@link Creature}
      */
-    public NPC(String name, Position position, int sizeX, int sizeY, String state,
+    public NPC(String name, Position position, int sizeX, int sizeY, String appearance,
                int healthPoints, int attackPoints, int expPoints
     ){
-        super(name, position, sizeX, sizeY, state, healthPoints, attackPoints, expPoints);
+        super(name, position, sizeX, sizeY, appearance, healthPoints, attackPoints, expPoints);
     }
 
+    public NPCState getState() {
+        return state;
+    }
+
+    public void setState(NPCState state, World world) {
+        if(state == null) {
+            return;
+        }
+        if(this.state != null)
+            this.state.onExit(world, this);
+        this.state = state;
+        this.state.onEnter(world, this);
+    }
+
+    // These are the abstract states that each instance of npc should implement and define
+    protected abstract NPCState getIdleState();
+    protected abstract NPCState getSearchingFoodState();
+    protected abstract NPCState getSleepinState();
+    protected abstract NPCState getAggressiveState();
+    protected abstract NPCState getAfraidState();
 
     /**
      * {@link Creature}
@@ -55,14 +110,12 @@ public class NPC extends Creature {
         System.out.println(this.name + " was defeated and drops " + this.expPoints + " XP points");
     }
 
-    public AggressiveBehaviour getAggresiveBehaviour() {
-        return aggresiveBehaviour;
+    public FearBehaviour getFearBehaviour() {
+        return fearBehaviour;
     }
 
-
-
-    public void setAggresiveBehaviour(AggressiveBehaviour aggresiveBehaviour) {
-        this.aggresiveBehaviour = aggresiveBehaviour;
+    public AggressiveBehaviour getAggresiveBehaviour() {
+        return aggresiveBehaviour;
     }
 
 }

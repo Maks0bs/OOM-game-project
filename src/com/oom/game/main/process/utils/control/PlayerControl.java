@@ -5,18 +5,14 @@ import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.utils.Block;
-import com.oom.game.main.process.render.MainRenderable;
-import com.oom.game.main.utils.GameObservable;
-import com.oom.game.main.utils.GameObserver;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Class made for automating results of pressing keys and other actions to control player
  */
-public class PlayerControl extends CreatureMovement  {
+public class PlayerControl extends CreatureBehaviour {
     public static final class DIRECTIONS {
         public static final String UP = "U";
         public static final String RIGHT = "R";
@@ -78,6 +74,15 @@ public class PlayerControl extends CreatureMovement  {
             if (activeDirections.get(c)){
                 movePlayer(player, c, base * speed);
 
+                Position blockPosNew = new Position(
+                        player.getPosition().getX() + (player.getSizeX() / 2),
+                        player.getPosition().getY() + (player.getSizeY() / 2)
+                );
+                Block blockUnderNew = world.getBlock(blockPosNew);
+                if (!blockUnderNew.getWalkAction().canWalk()){
+                    movePlayer(player, c, - base * speed);
+                }
+
                 //FIXME perform action on walk
             }
         }
@@ -86,15 +91,6 @@ public class PlayerControl extends CreatureMovement  {
         //FIXME this approach disables walking into an unwalkable and walking in other direction (i know what i mean here)
 
         //Here we check if we walked on a non-walkable block and cancel this move if it happened
-        Position blockPosNew = new Position(
-                player.getPosition().getX() + (player.getSizeX() / 2),
-                player.getPosition().getY() + (player.getSizeY() / 2)
-        );
-        Block blockUnderNew = world.getBlock(blockPosNew);
-        if (!blockUnderNew.getWalkAction().canWalk()){
-            player.setPositionDeep(prevPos);
-            return false;
-        }
 
         return true;
     }

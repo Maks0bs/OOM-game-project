@@ -25,6 +25,6 @@ public class DefaultPredatorFear implements FearBehaviour {
 
     @Override
     public int getNoticeRadius() {
-        return 5;
+        return 3;
     }
 }

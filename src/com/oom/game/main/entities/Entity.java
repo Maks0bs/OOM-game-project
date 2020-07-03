@@ -2,7 +2,6 @@ package com.oom.game.main.entities;
 
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
-import com.oom.game.main.environment.utils.Block;
 import com.oom.game.main.utils.GameObservable;
 
 import java.io.Serializable;
@@ -13,7 +12,7 @@ import java.io.Serializable;
  */
 public abstract class Entity implements Serializable {
     // position of left top corner
-    protected String state = "Default";
+    protected String appearance = "Default";
     protected Position position;
     /**
         Clarification for sizeX and sizeY:
@@ -32,12 +31,21 @@ public abstract class Entity implements Serializable {
      * @param sizeX size of entity on the x-axis
      * @param sizeY size of entity on the y-axis
      */
-    public Entity(Position position, int sizeX, int sizeY, String state) {
+    public Entity(Position position, int sizeX, int sizeY, String appearance) {
         this.position = position;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
-        this.state = state;
+        this.appearance = appearance;
     }
+
+    public static final Entity DUMMY = new Entity(
+            new Position(0, 0), 2, 2, "Dummy"
+    ) {
+        @Override
+        public String getInfo() {
+            return "Dummy";
+        }
+    };
 
     /**
      * @param entity the entity you want to check if the current one overlaps with
@@ -85,7 +93,7 @@ public abstract class Entity implements Serializable {
      * Default info (mainly for console output) of entity
      * @return default info of entity
      */
-    abstract String getInfo();
+    public abstract String getInfo();
 
     public int getSizeX() {
         return sizeX;
@@ -128,12 +136,12 @@ public abstract class Entity implements Serializable {
     }
 
 
-    public String getState() {
-        return state;
+    public String getAppearance() {
+        return appearance;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setAppearance(String appearance) {
+        this.appearance = appearance;
         this.observable.notifyObservers(this);
     }
 

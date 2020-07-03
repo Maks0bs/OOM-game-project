@@ -9,11 +9,9 @@ import com.oom.game.main.entities.interaction.ProgressiveCreature;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 
-import java.util.ArrayList;
-
 
 public class Player extends Creature implements ProgressiveCreature {
-    public static String DEFAULT_STATE = "PlayerDefault", NAME = "Player";
+    public static String DEFAULT_APPEARANCE = "PlayerDefault", NAME = "Player";
     public static int DEFAULT_HEALTH_POINTS = 100, DEFAULT_ATTACK_POINTS = 5;
     //TODO MAYBE IT WOULD BE NECESSARY TO ADD WORLD REFERENCE FOR PLAYER TO KNOW POSITION AND BLOCK UNDER HIM, ETC.
     private final InventoryContainer inventory = new Backpack();
@@ -22,7 +20,7 @@ public class Player extends Creature implements ProgressiveCreature {
     public static Player generateDefaultPlayer(){
         return new Player(NAME, new Position(0, 0, true),
                 World.BLOCK_SIZE, World.BLOCK_SIZE,
-                DEFAULT_STATE, DEFAULT_HEALTH_POINTS, DEFAULT_ATTACK_POINTS, 0
+                DEFAULT_APPEARANCE, DEFAULT_HEALTH_POINTS, DEFAULT_ATTACK_POINTS, 0
         );
     }
 
@@ -30,10 +28,10 @@ public class Player extends Creature implements ProgressiveCreature {
      *
      * {@link Creature}
      */
-    public Player(String name, Position position, int sizeX, int sizeY, String state,
+    public Player(String name, Position position, int sizeX, int sizeY, String appearance,
                   int healthPoints, int attackPoints, int expPoints
     ){
-        super(name, position, sizeX, sizeY, state, healthPoints, attackPoints, expPoints);
+        super(name, position, sizeX, sizeY, appearance, healthPoints, attackPoints, expPoints);
     }
 
     /*
@@ -68,7 +66,7 @@ public class Player extends Creature implements ProgressiveCreature {
             inventory.add(item.getInventoryItem());
             if (item.getInventoryItem() instanceof BuffItem){
                 weapon = (BuffItem) item.getInventoryItem();
-                this.setState("WeaponizedPlayer");
+                this.setAppearance("WeaponizedPlayer");
             }
         }
 
@@ -151,7 +149,6 @@ public class Player extends Creature implements ProgressiveCreature {
     public void onDeathAction(){
         System.out.println("Player " + this.name + " has perished :(");
     }
-
 
     /**
      * {@link Entity}

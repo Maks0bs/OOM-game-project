@@ -16,14 +16,14 @@ import java.util.Map;
 /**
  * Class made for automating results of pressing keys and other actions to control player
  */
-public abstract class CreatureMovement implements Serializable {
+public abstract class CreatureBehaviour implements Serializable {
     private boolean enabled = false;
     protected double speed = 1d;
 
     /**
      * @param speed base movement speed of player in the given world
      */
-    public CreatureMovement(double speed){
+    public CreatureBehaviour(double speed){
         this.speed = speed;
     }
 

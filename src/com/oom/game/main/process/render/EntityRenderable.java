@@ -2,16 +2,13 @@ package com.oom.game.main.process.render;
 
 import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.utils.EntityTextures;
-import com.oom.game.main.environment.Position;
-import com.oom.game.main.process.render.NodeRenderable;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
-import gameCore.Renderer;
 
 public class EntityRenderable extends NodeRenderable {
 
     private Entity entity;
-    private String curState = null;
+    private String curAppearance = null;
     private GameObserver<Entity> observer = null;
 
     /**
@@ -20,22 +17,21 @@ public class EntityRenderable extends NodeRenderable {
      */
     public EntityRenderable(Entity entity) {
         super(null, entity.getPosition());
-        this.image = EntityTextures.getTextureByState(entity.getState());
+        this.image = EntityTextures.getTextureByAppearance(entity.getAppearance());
         observer = new GameObserver<Entity>() {
             @Override
             public void update(GameObservable<Entity> observable, Entity newData) {
-                if (!curState.equals(newData.getState())){
-                    image = EntityTextures.getTextureByState(newData.getState());
+                if (!curAppearance.equals(newData.getAppearance())){
+                    image = EntityTextures.getTextureByAppearance(newData.getAppearance());
                 }
 
-                curState = newData.getState();
-                //FIXME maybe change state to animate control
+                curAppearance = newData.getAppearance();
             }
         };
         entity.getObservable().registerObserver(observer);
 
         this.entity = entity;
-        curState = entity.getState();
+        curAppearance = entity.getAppearance();
     }
 
 

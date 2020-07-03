@@ -63,9 +63,9 @@ public class MainRenderable implements IRenderable, IUpdatable {
         this.observable.notifyObservers(this);
         if (worldRenderable != null) {
             World world = worldRenderable.getWorld();
-            Creature[] creatures = world.getCreaturesWithMovement();
+            Creature[] creatures = world.getCreaturesWithBehaviour();
             for (int i = 0; i < creatures.length; i++) {
-                world.getMovement(creatures[i]).update(world, creatures[i]);
+                world.getBehaviour(creatures[i]).update(world, creatures[i]);
             }
         }
 

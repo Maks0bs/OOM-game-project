@@ -2,6 +2,7 @@ package com.oom.game.main.entities.mobs;
 
 import com.oom.game.main.entities.NPC;
 import com.oom.game.main.entities.mobs.strategies.Level1Aggression;
+import com.oom.game.main.entities.state.*;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 
@@ -21,6 +22,31 @@ public class Wolf extends NPC {
     /*
         FIXME add a constructor to create a rabbit with custom stats
      */
+
+    @Override
+    protected NPCState getIdleState() {
+        return new IdleState(2);
+    }
+
+    @Override
+    protected NPCState getSearchingFoodState() {
+        return new SearchingFoodState(1.5);
+    }
+
+    @Override
+    protected NPCState getSleepinState() {
+        return new SleepingState(0);
+    }
+
+    @Override
+    protected NPCState getAggressiveState() {
+        return new AggressiveState(2);
+    }
+
+    @Override
+    protected NPCState getAfraidState() {
+        return new AfraidState(2.5);
+    }
 
     /**
      * {@link com.oom.game.main.entities.Entity}

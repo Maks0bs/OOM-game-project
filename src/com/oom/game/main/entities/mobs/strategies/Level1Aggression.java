@@ -25,6 +25,6 @@ public class Level1Aggression implements AggressiveBehaviour {
 
     @Override
     public int getNoticeRadius() {
-        return 5;
+        return 3;
     }
 }

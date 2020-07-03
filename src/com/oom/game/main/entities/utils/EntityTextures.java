@@ -32,6 +32,7 @@ public class EntityTextures {
         list.put("Axe", ImageIO.read((new File("res/entities/items/Axe.png")).getAbsoluteFile()));
         list.put("WeaponizedPlayer", ImageIO.read((new File("res/entities/creatures/WeaponizedPlayer.png")).getAbsoluteFile()));
         list.put("Backpack", ImageIO.read((new File("res/entities/items/Backpack.png")).getAbsoluteFile()));
+        list.put("Apple", ImageIO.read((new File("res/entities/items/Apple.png")).getAbsoluteFile()));
     }
 
     /**
@@ -39,7 +40,7 @@ public class EntityTextures {
      * @param key texture string key
      * @return correspondent texture as image
      */
-    public static BufferedImage getTextureByState(String key){//FIXME add string parameter to specify dimensions (32x32 or 64x64 or other)
+    public static BufferedImage getTextureByAppearance(String key){//FIXME add string parameter to specify dimensions (32x32 or 64x64 or other)
         return list.get(key);
     }
 }

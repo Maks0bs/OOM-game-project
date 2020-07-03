@@ -6,6 +6,7 @@ package com.oom.game.main.entities.mobs;
 
 import com.oom.game.main.entities.NPC;
 import com.oom.game.main.entities.mobs.strategies.DefaultPredatorFear;
+import com.oom.game.main.entities.state.*;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 
@@ -24,6 +25,31 @@ public class Rabbit extends NPC {
     /*
         FIXME add a constructor to create a rabbit with custom stats
      */
+
+    @Override
+    protected NPCState getIdleState() {
+        return new IdleState(1);
+    }
+
+    @Override
+    protected NPCState getSearchingFoodState() {
+        return new SearchingFoodState(1);
+    }
+
+    @Override
+    protected NPCState getSleepinState() {
+        return new SleepingState(0);
+    }
+
+    @Override
+    protected NPCState getAggressiveState() {
+        return new AggressiveState(1);
+    }
+
+    @Override
+    protected NPCState getAfraidState() {
+        return new AfraidState(3);
+    }
 
     /**
      * {@link com.oom.game.main.entities.Entity}
