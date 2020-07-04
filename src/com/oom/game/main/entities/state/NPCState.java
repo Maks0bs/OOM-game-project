@@ -44,5 +44,5 @@ public interface NPCState {
      *
      * @return
      */
-    int getSpeed();
+    double getSpeed();
 }

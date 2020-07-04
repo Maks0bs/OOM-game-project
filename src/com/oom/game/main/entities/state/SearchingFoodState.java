@@ -84,7 +84,7 @@ public class SearchingFoodState implements NPCState {
     }
 
     @Override
-    public int getSpeed() {
+    public double getSpeed() {
         return 0;
     }
 }

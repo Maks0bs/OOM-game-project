@@ -85,11 +85,11 @@ public abstract class NPC extends Creature {
     }
 
     // These are the abstract states that each instance of npc should implement and define
-    protected abstract NPCState getIdleState();
-    protected abstract NPCState getSearchingFoodState();
-    protected abstract NPCState getSleepinState();
-    protected abstract NPCState getAggressiveState();
-    protected abstract NPCState getAfraidState();
+    public abstract NPCState getCalmState();
+    public abstract NPCState getSearchingFoodState();
+    public abstract NPCState getSleepinState();
+    public abstract NPCState getAggressiveState();
+    public abstract NPCState getAfraidState();
 
     /**
      * {@link Creature}
@@ -100,7 +100,6 @@ public abstract class NPC extends Creature {
     public void counterAttack(Creature attacker){
         attacker.addHealthPoints(-this.getAttackPoints());
     }
-
     /**
      * {@link Creature}
      * Display who the creature was defeated by

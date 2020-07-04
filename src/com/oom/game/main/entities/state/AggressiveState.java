@@ -84,7 +84,7 @@ public class AggressiveState implements NPCState {
     }
 
     @Override
-    public int getSpeed() {
+    public double getSpeed() {
         return 0;
     }
 }

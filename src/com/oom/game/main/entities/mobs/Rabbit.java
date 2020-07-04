@@ -27,27 +27,27 @@ public class Rabbit extends NPC {
      */
 
     @Override
-    protected NPCState getIdleState() {
-        return new IdleState(1);
+    public NPCState getCalmState() {
+        return new CalmState(1);
     }
 
     @Override
-    protected NPCState getSearchingFoodState() {
+    public NPCState getSearchingFoodState() {
         return new SearchingFoodState(1);
     }
 
     @Override
-    protected NPCState getSleepinState() {
+    public NPCState getSleepinState() {
         return new SleepingState(0);
     }
 
     @Override
-    protected NPCState getAggressiveState() {
+    public NPCState getAggressiveState() {
         return new AggressiveState(1);
     }
 
     @Override
-    protected NPCState getAfraidState() {
+    public NPCState getAfraidState() {
         return new AfraidState(3);
     }
 

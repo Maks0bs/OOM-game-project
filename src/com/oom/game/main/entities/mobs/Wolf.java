@@ -24,27 +24,27 @@ public class Wolf extends NPC {
      */
 
     @Override
-    protected NPCState getIdleState() {
-        return new IdleState(2);
+    public NPCState getCalmState() {
+        return new CalmState(2);
     }
 
     @Override
-    protected NPCState getSearchingFoodState() {
+    public NPCState getSearchingFoodState() {
         return new SearchingFoodState(1.5);
     }
 
     @Override
-    protected NPCState getSleepinState() {
+    public NPCState getSleepinState() {
         return new SleepingState(0);
     }
 
     @Override
-    protected NPCState getAggressiveState() {
+    public NPCState getAggressiveState() {
         return new AggressiveState(2);
     }
 
     @Override
-    protected NPCState getAfraidState() {
+    public NPCState getAfraidState() {
         return new AfraidState(2.5);
     }
 
