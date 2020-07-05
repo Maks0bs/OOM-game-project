@@ -1,18 +1,23 @@
 package com.oom.game.main.process.render;
 
+import com.oom.game.main.entities.Creature;
 import com.oom.game.main.entities.Entity;
+import com.oom.game.main.entities.NPC;
 import com.oom.game.main.entities.utils.EntityTextures;
 import com.oom.game.main.environment.Position;
-import com.oom.game.main.process.render.NodeRenderable;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
 import gameCore.Renderer;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 public class EntityRenderable extends NodeRenderable {
 
     private Entity entity;
-    private String curState = null;
+    private String curAppearance = null;
     private GameObserver<Entity> observer = null;
+    private transient BufferedImage sleepingEntityImage = null;
 
     /**
      *
@@ -20,25 +25,59 @@ public class EntityRenderable extends NodeRenderable {
      */
     public EntityRenderable(Entity entity) {
         super(null, entity.getPosition());
-        this.image = EntityTextures.getTextureByState(entity.getState());
+        this.image = EntityTextures.getTextureByAppearance(entity.getAppearance());
+        this.sleepingEntityImage = GUIRenderable.deepCopy(
+                EntityTextures.getTextureByAppearance(entity.getAppearance())
+        );
+
+        Graphics g = sleepingEntityImage.createGraphics();
+        Font f = new Font("Dialog", Font.PLAIN, 12);
+        g.setFont(f);
+        g.setColor(Color.BLACK);
+        g.drawString("Sleeping", 0, 12);
+        g.dispose();
+
         observer = new GameObserver<Entity>() {
             @Override
             public void update(GameObservable<Entity> observable, Entity newData) {
-                if (!curState.equals(newData.getState())){
-                    image = EntityTextures.getTextureByState(newData.getState());
+                if (!curAppearance.equals(newData.getAppearance())){
+                    image = EntityTextures.getTextureByAppearance(newData.getAppearance());
                 }
 
-                curState = newData.getState();
-                //FIXME maybe change state to animate control
+                curAppearance = newData.getAppearance();
             }
         };
         entity.getObservable().registerObserver(observer);
 
         this.entity = entity;
-        curState = entity.getState();
+        curAppearance = entity.getAppearance();
     }
 
 
+    @Override
+    public void render(Renderer renderer) {
+        if (entity instanceof NPC){
+            NPC n = (NPC) entity;
+            if (n.getState() == n.getSleepingState()){
+                this.image = sleepingEntityImage;
+            }
+        }
+        super.render(renderer);
+        this.image = EntityTextures.getTextureByAppearance(entity.getAppearance());
+    }
+
+    @Override
+    public void render(Renderer renderer, Position pos) {
+        if (entity instanceof NPC){
+            NPC n = (NPC) entity;
+            if (n.getState() == n.getSleepingState()){
+                this.image = sleepingEntityImage;
+            }
+        }
+        super.render(renderer, pos);
+
+        this.image = EntityTextures.getTextureByAppearance(entity.getAppearance());
+    }
 
     @Override
     protected String getNodeType() {

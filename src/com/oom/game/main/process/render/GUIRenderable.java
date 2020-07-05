@@ -1,17 +1,13 @@
 package com.oom.game.main.process.render;
 
-import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.items.Axe;
 import com.oom.game.main.entities.items.Backpack;
 import com.oom.game.main.entities.items.utils.InventoryComponent;
-import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.entities.utils.EntityTextures;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.ui.utils.GUITextures;
 import com.oom.game.main.utils.GameKeyActionManager;
-import com.oom.game.main.utils.GameObservable;
-import com.oom.game.main.utils.GameObserver;
 import com.oom.game.main.utils.command.GameCommand;
 import gameCore.IRenderable;
 import gameCore.Renderer;
@@ -92,7 +88,7 @@ public class GUIRenderable implements IRenderable /*,IUpdatable*/ {
         }
         switch(mode){
             case MODES.MAIN_MENU: {
-                BufferedImage img = deepCopy(GUITextures.getTextureByState("canvas512x128"));
+                BufferedImage img = deepCopy(GUITextures.getTextureByAppearance("canvas512x128"));
                 Graphics g = img.createGraphics();
                 Font f = new Font("Dialog", Font.PLAIN, 32);
                 g.setFont(f);
@@ -110,7 +106,7 @@ public class GUIRenderable implements IRenderable /*,IUpdatable*/ {
                 break;
             }
             case MODES.IN_GAME: {
-                BufferedImage img = deepCopy(GUITextures.getTextureByState("canvas512x128"));
+                BufferedImage img = deepCopy(GUITextures.getTextureByAppearance("canvas512x128"));
                 Graphics g = img.createGraphics();
                 Font f = new Font("Dialog", Font.PLAIN, 32);
                 g.setFont(f);
@@ -129,7 +125,7 @@ public class GUIRenderable implements IRenderable /*,IUpdatable*/ {
                 break;
             }
             case MODES.INVENTORY: {
-                BufferedImage img = deepCopy(GUITextures.getTextureByState("canvas512x128"));
+                BufferedImage img = deepCopy(GUITextures.getTextureByAppearance("canvas512x128"));
                 Graphics g = img.createGraphics();
                 Font f = new Font("Dialog", Font.PLAIN, 24);
                 g.setFont(f);
@@ -155,7 +151,7 @@ public class GUIRenderable implements IRenderable /*,IUpdatable*/ {
 
     public void updateInventoryGUI(InventoryComponent component){
         int i = 0;
-        BufferedImage inv = deepCopy(GUITextures.getTextureByState("canvas512x128"));
+        BufferedImage inv = deepCopy(GUITextures.getTextureByAppearance("canvas512x128"));
         Graphics g = inv.createGraphics();
         GameKeyActionManager manager = GameKeyActionManager.getInstance();
         manager.setCommandOnPress('M', new GameCommand() {
@@ -181,7 +177,7 @@ public class GUIRenderable implements IRenderable /*,IUpdatable*/ {
         });
         for (InventoryComponent c : component){
             BufferedImage img = enlargeImage(
-                    EntityTextures.getTextureByState(c.getName()),
+                    EntityTextures.getTextureByAppearance(c.getName()),
                     2
             );
             g.drawImage(img, i * World.BLOCK_SIZE, 0, null);

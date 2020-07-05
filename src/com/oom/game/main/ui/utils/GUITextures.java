@@ -38,7 +38,7 @@ public class GUITextures {
      * @param key texture string key
      * @return correspondent texture as image
      */
-    public static BufferedImage getTextureByState(String key){//FIXME add string parameter to specify dimensions (32x32 or 64x64 or other)
+    public static BufferedImage getTextureByAppearance(String key){//FIXME add string parameter to specify dimensions (32x32 or 64x64 or other)
         return list.get(key);
     }
 }

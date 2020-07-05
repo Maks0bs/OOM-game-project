@@ -3,12 +3,8 @@ package com.oom.game.main.process.render;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.blocks.utils.BlockTextures;
 import com.oom.game.main.environment.utils.Block;
-import com.oom.game.main.process.render.NodeRenderable;
-import com.oom.game.main.utils.GameObservable;
-import com.oom.game.main.utils.GameObserver;
 import gameCore.Renderer;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class BlockRenderable extends NodeRenderable {
@@ -25,7 +21,7 @@ public class BlockRenderable extends NodeRenderable {
      */
     public BlockRenderable(Block block, Position position) {
         super(null, position);
-        this.image = BlockTextures.getTextureByState(block.getState());
+        this.image = BlockTextures.getTextureByAppearance(block.getAppearance());
         this.block = block;
     }
 
@@ -37,8 +33,8 @@ public class BlockRenderable extends NodeRenderable {
     public void displayTopBlock(){
         displayTop = true;
         if (block.hasBlockOnTop()){
-            BufferedImage bottom = BlockTextures.getTextureByState(block.getState());
-            BufferedImage top = BlockTextures.getTextureByState(block.getBlockOnTop().getState());
+            BufferedImage bottom = BlockTextures.getTextureByAppearance(block.getAppearance());
+            BufferedImage top = BlockTextures.getTextureByAppearance(block.getBlockOnTop().getAppearance());
             topRenderable = new BlockRenderable(block.getBlockOnTop(), this.position);
 
             /*BufferedImage combined = new BufferedImage(bottom.getWidth(), bottom.getHeight(), BufferedImage.TYPE_INT_RGB);

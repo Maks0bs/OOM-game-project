@@ -9,7 +9,7 @@ import com.oom.game.main.environment.blocks.Grass;
 import com.oom.game.main.environment.utils.exceptions.WorldResizeException;
 import com.oom.game.main.environment.utils.Block;
 import com.oom.game.main.process.render.WorldRenderable;
-import com.oom.game.main.process.utils.control.CreatureMovement;
+import com.oom.game.main.process.utils.control.CreatureBehaviour;
 import com.oom.game.main.utils.GameObservable;
 
 import java.io.Serializable;
@@ -50,7 +50,7 @@ public class World implements Serializable {
     private final ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
     private final ArrayList<Entity> entities = new ArrayList<Entity>();//FIXME save entities in a Set / Map
     private final Map<String, ArrayList<WorldItem> > items = new HashMap<>();
-    private final Map<Creature, CreatureMovement> movements = new HashMap<>();
+    private final Map<Creature, CreatureBehaviour> behaviours = new HashMap<>();
     //!!! Save items only to this map. Each position contains a list of items it currently has
 
     /*
@@ -447,6 +447,49 @@ public class World implements Serializable {
     }
 
     /**
+     * FIXME might need to remove this method and do area search manually in caller classes
+     * @param position center of the area to search in
+     * @param radius the radius of the inscribed circle of the square
+     * @return list of entities in given square, which has the given position in the centre
+     */
+    public Entity [] getBlocksInCenteredArea(Position position, int radius){
+        ArrayList<Entity> ans = new ArrayList<>();
+        Position leftTop = new Position(
+                position.getX() - radius * BLOCK_SIZE,
+                position.getY() - radius * BLOCK_SIZE
+        );
+        Entity e = new Entity(leftTop,
+                (radius * 2 + 1) * BLOCK_SIZE,
+                (radius * 2 + 1) * BLOCK_SIZE,
+                "test"
+        ){
+            @Override
+            public String getInfo() {
+                return null;
+            }
+        };
+
+
+        for (int i = 0; i < entities.size(); i++){
+            if (entities.get(i).overlapsWith(e)){
+                ans.add(entities.get(i));
+            }
+        }
+
+        if (player.overlapsWith(e)){
+            ans.add(player);
+        }
+
+
+        Entity [] res = new Entity[ans.size()];
+        for (int i = 0; i < ans.size(); i++){
+            res[i] = ans.get(i);
+        }
+
+        return res;
+    }
+
+    /**
      *
      * @param entity the entity you want to delete from the world.
      * @return true if entity was deleted, false if it wasn't present in the list of entities or on error
@@ -474,14 +517,14 @@ public class World implements Serializable {
     /**
      *
      * @param creature creature to associate with the given movement
-     * @param movement movement that has to occur for given creature
+     * @param behaviour movement that has to occur for given creature
      * @return true if the given creature is in the world and movement could be assigned to it, false otherwise
      */
-    public boolean assignMovement(Creature creature, CreatureMovement movement){
+    public boolean assignBehaviour(Creature creature, CreatureBehaviour behaviour){
         if (!(hasEntity(creature) || creature == player)){
             return false;
         }
-        movements.put(creature, movement);
+        behaviours.put(creature, behaviour);
         return true;
     }
 
@@ -489,8 +532,8 @@ public class World implements Serializable {
      *
      * @param creature remove movement for given creature
      */
-    public void removeMovement(Creature creature){
-        movements.remove(creature);
+    public void removeBehaviour(Creature creature){
+        behaviours.remove(creature);
     }
 
     /**
@@ -498,16 +541,16 @@ public class World implements Serializable {
      * @param creature creature you want to get the movement for
      * @return movement for specified creature
      */
-    public CreatureMovement getMovement(Creature creature){
-        return movements.get(creature);
+    public CreatureBehaviour getBehaviour(Creature creature){
+        return behaviours.get(creature);
     }
 
     /**
      *
      * @return a list of creature that have been assigned a movement
      */
-    public Creature[] getCreaturesWithMovement(){
-        Set<Creature> set = movements.keySet();
+    public Creature[] getCreaturesWithBehaviour(){
+        Set<Creature> set = behaviours.keySet();
         Creature[] result = new Creature[set.size()];
         set.toArray(result);
         return result;

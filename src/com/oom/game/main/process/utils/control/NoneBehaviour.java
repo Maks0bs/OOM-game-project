@@ -3,9 +3,9 @@ package com.oom.game.main.process.utils.control;
 import com.oom.game.main.entities.Creature;
 import com.oom.game.main.environment.World;
 
-public class NoneMovement extends CreatureMovement {
+public class NoneBehaviour extends CreatureBehaviour {
 
-    public NoneMovement(){
+    public NoneBehaviour(){
         super(0d);
     }
 

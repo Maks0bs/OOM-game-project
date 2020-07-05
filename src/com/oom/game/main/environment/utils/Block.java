@@ -4,15 +4,11 @@ import com.oom.game.main.environment.blocks.strategies.NoneMoveAction;
 import com.oom.game.main.environment.blocks.strategies.NonePlayerInteraction;
 import com.oom.game.main.environment.blocks.strategies.NoneSolidBlockAction;
 import com.oom.game.main.environment.blocks.strategies.NoneWalkAction;
-import com.oom.game.main.utils.GameObservable;
 
 import java.io.Serializable;
 
 public class Block implements Serializable {
-    /*
-        FIXME might need to replace state string member to int variable that can only take up certain constants, defined in block classes
-     */
-    protected String state = "Default"; //State defines the texture that will be used to display this block
+    protected String appearance = "Default"; //appearance defines the texture that will be used to display this block
     protected Block blockOnTop = null;
     protected PlayerInteraction playerInteraction = new NonePlayerInteraction();
     protected WalkAction walkAction = new NoneWalkAction();
@@ -25,10 +21,10 @@ public class Block implements Serializable {
 
     /**
      *
-     * @param state state of the block (currently int)
+     * @param appearance appearance code of the block (currently int)
      */
-    public Block(String state){
-        this.state = state;
+    public Block(String appearance){
+        this.appearance = appearance;
     }
 
     /**
@@ -39,15 +35,15 @@ public class Block implements Serializable {
         return (this.blockOnTop != null);
     }
 
-    public String getState() {
-        return state;
+    public String getAppearance() {
+        return appearance;
     }
 
     /**
-     * @param state new state
+     * @param appearance new appearance code
      */
-    public void setState(String state) {
-        this.state = state;
+    public void setAppearance(String appearance) {
+        this.appearance = appearance;
     }
 
     public Block getBlockOnTop() {

@@ -1,9 +1,11 @@
 package com.oom.game.main.process;
 
 import com.oom.game.main.entities.WorldItem;
+import com.oom.game.main.entities.items.Apple;
 import com.oom.game.main.entities.items.Axe;
 import com.oom.game.main.entities.items.Backpack;
 import com.oom.game.main.entities.items.Sword;
+import com.oom.game.main.entities.mobs.Rabbit;
 import com.oom.game.main.entities.mobs.Wolf;
 import com.oom.game.main.entities.player.Player;
 import com.oom.game.main.entities.player.commands.EnchantWeaponRandCommand;
@@ -15,14 +17,13 @@ import com.oom.game.main.environment.blocks.StoneTileFloor;
 import com.oom.game.main.process.render.GUIRenderable;
 import com.oom.game.main.process.render.MainRenderable;
 import com.oom.game.main.process.render.WorldRenderable;
-import com.oom.game.main.process.utils.control.DefaultNPCMovement;
+import com.oom.game.main.process.utils.control.DefaultNPCBehaviour;
 import com.oom.game.main.process.utils.control.PlayerControl;
 import com.oom.game.main.utils.SerializationFacade;
 import com.oom.game.main.utils.command.GameCommand;
 import com.oom.game.main.utils.GameKeyActionManager;
 import com.oom.game.main.utils.SystemKeyEventManager;
 import com.oom.game.main.utils.command.NoneCommand;
-import com.oom.game.main.utils.command.TestLoggingCommand;
 import gameCore.Game;
 import gameCore.Renderer;
 
@@ -185,7 +186,7 @@ public class Process{
 
         PlayerControl playerControl = new PlayerControl(2);
         setupBasicPlayerControl(playerControl);
-        world.assignMovement(player, playerControl);
+        world.assignBehaviour(player, playerControl);
         playerControl.enable();
 
         actionManager.setCommandOnPress('E', new EnchantWeaponRandCommand(player));
@@ -222,6 +223,7 @@ public class Process{
          */
         this.world = World.generateDefaultWorld();
         Player player = Player.generateDefaultPlayer();
+        player.setPosition(new Position(2, 2, true));
         world.addPlayer(player);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -243,6 +245,16 @@ public class Process{
             }
         }
 
+        for (int i = 0; i < world.getBlockCountY(); i++){
+            world.removeBlock(i, 0);
+            world.removeBlock(i, world.getBlockCountY() - 1);
+        }
+
+        for (int i = 0; i < world.getBlockCountX(); i++){
+            world.removeBlock(0, i);
+            world.removeBlock(0, world.getBlockCountX() - 1);
+        }
+
         world.addBlock(2, 1, new Barrel());
         world.addBlock(5, 5, new Barrel());
 
@@ -250,7 +262,7 @@ public class Process{
 
         PlayerControl playerControl = new PlayerControl(2);
         setupBasicPlayerControl(playerControl);
-        world.assignMovement(player, playerControl);
+        world.assignBehaviour(player, playerControl);
         playerControl.enable();
 
         actionManager.setCommandOnPress('E', new EnchantWeaponRandCommand(player));
@@ -276,14 +288,20 @@ public class Process{
         });
 
 
-        Wolf wolf1 = new Wolf(new Position(8, 8, true));
+        Wolf wolf1 = new Wolf(new Position(5, 8, true));
         world.addEntity(wolf1);
+
 
         Wolf wolf2 = new Wolf(new Position(18, 6, true));
         world.addEntity(wolf2);
 
         Wolf wolf3 = new Wolf(new Position(25, 6, true));
         world.addEntity(wolf3);
+
+        Wolf wolf4 = new Wolf(new Position(9, 8, true));
+        world.addEntity(wolf4);
+        Wolf wolf5 = new Wolf(new Position(14, 8, true));
+        world.addEntity(wolf5);
 
         WorldItem swordItem1 = new WorldItem(new Position(20, 120), "Sword", new Sword());
         world.addItem(swordItem1);
@@ -293,25 +311,56 @@ public class Process{
         world.addItem(axeItem1);
         WorldItem axeItem2 = new WorldItem(new Position(250, 450), "Axe", new Axe());
         world.addItem(axeItem2);
-        WorldItem backpack1 = new WorldItem(new Position(150, 30), "Backpack", new Backpack());
+        WorldItem backpack1 = new WorldItem(new Position(150, 60), "Backpack", new Backpack());
         world.addItem(backpack1);
-        WorldItem backpack2 = new WorldItem(new Position(180, 30), "Backpack", new Backpack());
+        WorldItem backpack2 = new WorldItem(new Position(180, 60), "Backpack", new Backpack());
         world.addItem(backpack2);
+        WorldItem apple1 = new WorldItem(new Position(210, 60), "Apple", new Apple());
+        world.addItem(apple1);
+        WorldItem apple2 = new WorldItem(new Position(420, 60), "Apple", new Apple());
+        world.addItem(apple2);
+        WorldItem apple3 = new WorldItem(new Position(630, 60), "Apple", new Apple());
+        world.addItem(apple3);
+        WorldItem apple4 = new WorldItem(new Position(840, 60), "Apple", new Apple());
+        world.addItem(apple4);
+
+        for (int i = 70; i < 2000; i += 100){
+            WorldItem apple = new WorldItem(new Position(i, 120), "Apple", new Apple());
+            world.addItem(apple);
+        }
+
+        for (int i = 80; i < 2000; i += 100){
+            WorldItem apple = new WorldItem(new Position(i, 140), "Apple", new Apple());
+            world.addItem(apple);
+        }
+
+        Rabbit rabbit1 = new Rabbit(new Position(400, 50));
+        world.addEntity(rabbit1);
+        Rabbit rabbit2 = new Rabbit(new Position(400, 80));
+        world.addEntity(rabbit2);
+        Rabbit rabbit3 = new Rabbit(new Position(400, 110));
+        world.addEntity(rabbit3);
+        Rabbit rabbit4 = new Rabbit(new Position(400, 140));
+        world.addEntity(rabbit4);
+        Rabbit rabbit5 = new Rabbit(new Position(6, 7, true));
+        world.addEntity(rabbit5);
 
 
 
-        DefaultNPCMovement wolfMovement = new DefaultNPCMovement(2);
-        world.assignMovement(wolf1, wolfMovement);
+        DefaultNPCBehaviour wolfMovement = new DefaultNPCBehaviour(2);
+        DefaultNPCBehaviour rabbitMovement = new DefaultNPCBehaviour(3);
+        world.assignBehaviour(wolf1, wolfMovement);
+        world.assignBehaviour(wolf3, wolfMovement);
+        world.assignBehaviour(wolf4, wolfMovement);
+        world.assignBehaviour(wolf5, wolfMovement);
+        world.assignBehaviour(rabbit1, rabbitMovement);
+        world.assignBehaviour(rabbit2, rabbitMovement);
+        world.assignBehaviour(rabbit3, rabbitMovement);
+        world.assignBehaviour(rabbit4, rabbitMovement);
+        world.assignBehaviour(rabbit5, rabbitMovement);
 
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        wolfMovement.enable();
-                    }
-                },
-                2000
-        );
+        rabbitMovement.enable();
+        wolfMovement.enable();
     }
 
 

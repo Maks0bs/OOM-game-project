@@ -23,14 +23,14 @@ public class WorldItem extends Entity {
      * {@link Entity}
      * @param inventoryItem inner inventory item for working with item and inventory logic
      */
-    public WorldItem(Position position, String state, InventoryComponent inventoryItem){
-        super(position, World.BLOCK_SIZE / 2, World.BLOCK_SIZE / 2, state);
+    public WorldItem(Position position, String appearance, InventoryComponent inventoryItem){
+        super(position, World.BLOCK_SIZE / 2, World.BLOCK_SIZE / 2, appearance);
         this.inventoryItem = inventoryItem;
     }
 
 
     @Override
-    String getInfo() {
+    public String getInfo() {
         return null;
     }
 
