@@ -11,71 +11,32 @@ public class SleepingState implements NPCState {
         this.speed = speed;
     }
 
+    private void sleep(World world, NPC npc){
+        if (npc.getEnergyPoints() >= 500){
+            npc.setState(npc.getCalmState(), world);
+        } else {
+            npc.setState(npc.getSleepingState(), world);
+        }
+    }
+
     @Override
     public void stayIdle(World world, NPC npc) {
-//        int moveXInt, moveYInt;
-//
-//        if (angryOn != null){
-//            Position vector = angryOn.getPosition().difference(npc.getPosition());
-//            double dist = Position.dist(npc.getPosition(), angryOn.getPosition());
-//
-//            if (dist < 0.0000001){
-//                return false;
-//            }
-//
-//            double vectorX = vector.getX() / dist;
-//            double vectorY = vector.getY() / dist;
-//
-//            if (Double.isNaN(vectorX) || Double.isNaN(vectorY)){
-//                return false;
-//            }
-//
-//            moveX += vectorX * speed * base;
-//            moveY += vectorY * speed * base;
-//
-//            moveXInt = (int) moveX;
-//            moveYInt = (int) moveY;
-//
-//            moveX -= moveXInt;
-//            moveY -= moveYInt;
-//        }
-//        else {
-//
-//            //Simply keep moving on a circle if not angry
-//
-//            moveX += Math.cos(defaultMotionAngle) * speed * base;
-//            moveY += Math.sin(defaultMotionAngle) * speed * base;
-//
-//            moveXInt = (int) moveX;
-//            moveYInt = (int) moveY;
-//
-//            moveX -= moveXInt;
-//            moveY -= moveYInt;
-//
-//
-//
-//            defaultMotionAngle += Math.PI / 36;
-//            if (defaultMotionAngle > 2 * Math.PI) {
-//                defaultMotionAngle -= 2 * Math.PI;
-//            }
-//        }
-//
-//        NPC.safelyMove(world, npc, moveXInt, moveYInt);
+        sleep(world, npc);
     }
 
     @Override
     public void followEntity(World world, NPC npc, Entity toFollow) {
-
+        sleep(world, npc);
     }
 
     @Override
     public void runFromEntity(World world, NPC npc, Entity toRunFrom) {
-
+        sleep(world, npc);
     }
 
     @Override
     public void onEnter(World world, NPC npc) {
-
+        npc.setEnergyPoints(npc.getEnergyPoints() + 2);
     }
 
     @Override
@@ -85,6 +46,6 @@ public class SleepingState implements NPCState {
 
     @Override
     public double getSpeed() {
-        return 0;
+        return speed;
     }
 }

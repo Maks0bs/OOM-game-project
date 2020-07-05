@@ -15,7 +15,7 @@ public class CalmState implements NPCState {
 
     @Override
     public void stayIdle(World world, NPC npc) {
-        if (npc.getHungerPoints() >= 100){
+        if (npc.getHungerPoints() >= 400){
             npc.setState(npc.getSearchingFoodState(), world);
         } else {
             npc.setState(npc.getCalmState(), world);
@@ -28,9 +28,9 @@ public class CalmState implements NPCState {
             Creature creature = (Creature) toFollow;
             if (npc.getAggresiveBehaviour().isAggressiveAgainst(creature)) {
                 npc.setState(npc.getAggressiveState(), world);
-                npc.getState().followEntity(world, npc, toFollow);
+                //npc.getState().followEntity(world, npc, toFollow);
             } else {
-                if (npc.getHungerPoints() >= 100){
+                if (npc.getHungerPoints() >= 400){
                     npc.setState(npc.getSearchingFoodState(), world);
                 } else {
                     npc.setState(npc.getCalmState(), world);
@@ -38,7 +38,7 @@ public class CalmState implements NPCState {
             }
 
         } else {
-            if (npc.getHungerPoints() >= 100){
+            if (npc.getHungerPoints() >= 400){
                 npc.setState(npc.getSearchingFoodState(), world);
             } else {
                 npc.setState(npc.getCalmState(), world);
@@ -50,16 +50,18 @@ public class CalmState implements NPCState {
     @Override
     public void runFromEntity(World world, NPC npc, Entity toRunFrom) {
         npc.setState(npc.getAfraidState(), world);
-        npc.getState().runFromEntity(world, npc, toRunFrom);
+        //npc.getState().runFromEntity(world, npc, toRunFrom);
     }
 
     @Override
     public void onEnter(World world, NPC npc) {
         npc.setHungerPoints(npc.getHungerPoints() + 1);
+        npc.defaultHPDecrease();
         int moveXInt, moveYInt;
+        double base = world.getBlock(npc.getCenterPosition()).getWalkAction().getBaseWalkingSpeed();
 
-        moveX += Math.cos(defaultMotionAngle) * speed;
-        moveY += Math.sin(defaultMotionAngle) * speed;
+        moveX += Math.cos(defaultMotionAngle) * speed * base;
+        moveY += Math.sin(defaultMotionAngle) * speed * base;
 
         moveXInt = (int) moveX;
         moveYInt = (int) moveY;

@@ -107,6 +107,10 @@ public class DefaultNPCBehaviour extends CreatureBehaviour {
             npc.getState().runFromEntity(world, npc, toRunFrom);
         }
 
+        if (nearestFood != Entity.DUMMY){
+            npc.getState().followEntity(world, npc, nearestFood);
+        }
+
         if (toFollow != Entity.DUMMY){
             npc.getState().followEntity(world, npc, toFollow);
         }
@@ -115,9 +119,7 @@ public class DefaultNPCBehaviour extends CreatureBehaviour {
             npc.getState().stayIdle(world, npc);
         }
 
-        if (nearestFood != Entity.DUMMY){
-            npc.getState().followEntity(world, npc, toFollow);
-        }
+
 
         return true;
     }

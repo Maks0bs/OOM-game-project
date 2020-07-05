@@ -18,7 +18,7 @@ public abstract class Creature extends Entity {
         (due to ProgressiveCreature interface)
      */
     protected int healthPoints = 0, attackPoints = 0, expPoints = 0,
-            energyPoints = 0, hungerPoints = 0;
+            energyPoints = 500, hungerPoints = 0;
     protected String name = NAME_UNKNOWN;
 
     /**

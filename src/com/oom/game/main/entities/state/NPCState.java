@@ -4,7 +4,9 @@ import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.NPC;
 import com.oom.game.main.environment.World;
 
-public interface NPCState {
+import java.io.Serializable;
+
+public interface NPCState extends Serializable {
 
     /**
      * Performed, when no events occur
@@ -42,7 +44,7 @@ public interface NPCState {
 
     /**
      *
-     * @return
+     * @return the speed of the entity in the current state
      */
     double getSpeed();
 }

@@ -11,12 +11,19 @@ public class Wolf extends NPC {
     public static final int SIZE_X = (3 * World.BLOCK_SIZE / 2), SIZE_Y = World.BLOCK_SIZE,
             HEALTH_POINTS = 25, ATTACK_POINTS = 8, EXP_POINTS = 20;
 
+    private static final NPCState CALM_STATE = new CalmState(1);
+    private static final NPCState SEARCHING_FOOD_STATE = new SearchingFoodState(1);
+    private static final NPCState SLEEPING_STATE = new SleepingState(0);
+    private static final NPCState AGGRESSIVE_STATE = new AggressiveState(1.4);
+    private static final NPCState AFRAID_STATE = new AfraidState(1.6);
+
     /**
      * see constructor of {@link NPC}
      */
     public Wolf(Position position){
         super(NAME, position, SIZE_X, SIZE_Y, DEFAULT_STATE, HEALTH_POINTS, ATTACK_POINTS, EXP_POINTS);
         super.aggresiveBehaviour = new Level1Aggression();
+        super.state = CALM_STATE;
     }
 
     /*
@@ -25,27 +32,27 @@ public class Wolf extends NPC {
 
     @Override
     public NPCState getCalmState() {
-        return new CalmState(2);
+        return CALM_STATE;
     }
 
     @Override
     public NPCState getSearchingFoodState() {
-        return new SearchingFoodState(1.5);
+        return SEARCHING_FOOD_STATE;
     }
 
     @Override
-    public NPCState getSleepinState() {
-        return new SleepingState(0);
+    public NPCState getSleepingState() {
+        return SLEEPING_STATE;
     }
 
     @Override
     public NPCState getAggressiveState() {
-        return new AggressiveState(2);
+        return AGGRESSIVE_STATE;
     }
 
     @Override
     public NPCState getAfraidState() {
-        return new AfraidState(2.5);
+        return AFRAID_STATE;
     }
 
     /**

@@ -11,6 +11,7 @@ public class DefaultPredatorFear implements FearBehaviour {
 
     public DefaultPredatorFear(){
         afraidOf.add("Wolf");
+        afraidOf.add("Player");
     }
 
     @Override

@@ -2,9 +2,11 @@ package com.oom.game.main.entities;
 
 import com.oom.game.main.entities.interaction.AggressiveBehaviour;
 import com.oom.game.main.entities.interaction.FearBehaviour;
+import com.oom.game.main.entities.mobs.Rabbit;
 import com.oom.game.main.entities.mobs.strategies.NoneAggresion;
 import com.oom.game.main.entities.mobs.strategies.NoneFear;
 import com.oom.game.main.entities.state.NPCState;
+import com.oom.game.main.entities.state.SleepingState;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.utils.Block;
@@ -28,7 +30,7 @@ public abstract class NPC extends Creature {
      */
     protected AggressiveBehaviour aggresiveBehaviour = new NoneAggresion();
     protected FearBehaviour fearBehaviour = new NoneFear();
-    protected NPCState state;
+    protected NPCState state = new SleepingState(0);
 
 
     /**
@@ -75,6 +77,7 @@ public abstract class NPC extends Creature {
     }
 
     public void setState(NPCState state, World world) {
+        //if (this instanceof Rabbit) System.out.println(energyPoints + " " + hungerPoints + " " + state);
         if(state == null) {
             return;
         }
@@ -84,10 +87,23 @@ public abstract class NPC extends Creature {
         this.state.onEnter(world, this);
     }
 
+    /**
+     * decrease hp for not having enough energy or being hungry
+     */
+    public void defaultHPDecrease(){
+        if (hungerPoints >= 1000){
+            healthPoints--;
+        }
+
+        if (energyPoints <= 0){
+            healthPoints--;
+        }
+    }
+
     // These are the abstract states that each instance of npc should implement and define
     public abstract NPCState getCalmState();
     public abstract NPCState getSearchingFoodState();
-    public abstract NPCState getSleepinState();
+    public abstract NPCState getSleepingState();
     public abstract NPCState getAggressiveState();
     public abstract NPCState getAfraidState();
 
