@@ -72,6 +72,7 @@ public final class GameKeyActionManager implements IEventListener {
      */
     @Override
     public void onEvent(IEvent event) {
+
         if (event instanceof KeyPressedEvent){
             int cur = ((KeyPressedEvent) event).getKeyCode();
             GameCommand command = commandsOnPress.get(cur);

@@ -15,8 +15,6 @@ import com.oom.game.main.environment.utils.Block;
 public class DefaultNPCBehaviour extends CreatureBehaviour {
     private Entity toFollow = null, toRunFrom = null, nearestFood = null;
     private int optimizationCounter = 0;
-    private double defaultMotionAngle = 0;
-    private double moveX = 0, moveY = 0;
 
     public DefaultNPCBehaviour(double speed){
         super(speed);
