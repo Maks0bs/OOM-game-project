@@ -27,6 +27,7 @@ import com.oom.game.main.utils.command.NoneCommand;
 import gameCore.Game;
 import gameCore.Renderer;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -58,9 +59,9 @@ public class Process{
 
         //DO NOT ADD ANY ENTITIES TO WORLD BEFORE creating mainRenderable
 
-        GUIRenderable guiRenderable = new GUIRenderable();
+
         //FIXME Set gui to main menu mode
-        this.mainRenderable = new MainRenderable(null, guiRenderable);
+        this.mainRenderable = new MainRenderable(null, null);
         mainRenderable.setRenderer(defaultRenderer);
 
         GameKeyActionManager actionManager = GameKeyActionManager.getInstance();
@@ -76,6 +77,7 @@ public class Process{
         //FIXME if world is smaller than the window, than adjust the window
 
         //Launching the game. In this class we have refs to all necessary Objects
+
         Game game = new Game(
                 "OOM GAME",
                 (int) screenSize.getWidth() / 2,
@@ -86,6 +88,11 @@ public class Process{
                 mainRenderable, //updatable
                 SystemKeyEventManager.getInstance()
         );
+
+        GUIRenderable guiRenderable = new GUIRenderable(game,  this);
+        mainRenderable.setGuiRenderable(guiRenderable);
+        mainRenderable.show();
+
 
 
 
@@ -204,6 +211,22 @@ public class Process{
                 mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.INVENTORY);
             }
         });
+
+        actionManager.setCommandOnPress(27, new GameCommand() {
+            @Override
+            public void execute() {
+                //mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.IN_GAME);
+                if (mainRenderable.getGuiRenderable().getMode() == GUIRenderable.MODES.IN_GAME){
+                    mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.IN_GAME_MENU);
+                    mainRenderable.disable();
+                } else {
+                    mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.IN_GAME);
+                    mainRenderable.show();
+                }
+
+
+            }
+        });
     }
 
     /**
@@ -216,7 +239,7 @@ public class Process{
         mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.IN_GAME);
 
         GameKeyActionManager actionManager = GameKeyActionManager.getInstance();
-        actionManager.setCommandOnPress('s', new NoneCommand());
+        actionManager.setCommandOnPress('S', new NoneCommand());
 
         /*
             Creating some random world
@@ -280,13 +303,22 @@ public class Process{
                 mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.INVENTORY);
             }
         });
+
         actionManager.setCommandOnPress(27, new GameCommand() {
             @Override
             public void execute() {
-                mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.IN_GAME);
+                //mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.IN_GAME);
+                if (mainRenderable.getGuiRenderable().getMode() == GUIRenderable.MODES.IN_GAME){
+                    mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.IN_GAME_MENU);
+                    mainRenderable.disable();
+                } else {
+                    mainRenderable.getGuiRenderable().toggle(GUIRenderable.MODES.IN_GAME);
+                    mainRenderable.show();
+                }
+
+
             }
         });
-
 
         Wolf wolf1 = new Wolf(new Position(5, 8, true));
         world.addEntity(wolf1);
@@ -361,6 +393,14 @@ public class Process{
 
         rabbitMovement.enable();
         wolfMovement.enable();
+    }
+
+    public void stop(){
+        System.exit(0);
+    }
+
+    public void showRenderables(){
+        mainRenderable.show();
     }
 
 

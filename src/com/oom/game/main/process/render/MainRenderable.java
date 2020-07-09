@@ -16,6 +16,7 @@ public class MainRenderable implements IRenderable, IUpdatable {
     private Renderer renderer = null; //FIXME encapsulate renderer
     private WorldRenderable worldRenderable = null;
     private GUIRenderable guiRenderable = null;
+    private boolean render = false;
     /**
      * This observable is mainly used to let subscribers know about tick / frame updates in game (currently 30 timer per second)
      */
@@ -35,6 +36,9 @@ public class MainRenderable implements IRenderable, IUpdatable {
      */
     @Override
     public void render(Renderer renderer) {
+        if (!render){
+            return;
+        }
         if (worldRenderable != null){
             worldRenderable.render(renderer);
         }
@@ -60,6 +64,9 @@ public class MainRenderable implements IRenderable, IUpdatable {
      */
     @Override
     public void update(long elapsedMillis) {
+        if (!render){
+            return;
+        }
         this.observable.notifyObservers(this);
         if (worldRenderable != null) {
             World world = worldRenderable.getWorld();
@@ -71,6 +78,14 @@ public class MainRenderable implements IRenderable, IUpdatable {
 
 
         render(this.renderer);
+    }
+
+    public void show(){
+        render = true;
+    }
+
+    public void disable(){
+        render = false;
     }
 
     public void setRenderer(Renderer renderer) {

@@ -30,6 +30,7 @@ public class GUITextures {
         list.put("canvas256x32", ImageIO.read((new File("res/gui/canvas256x32.png")).getAbsoluteFile()));
         list.put("canvas512x32", ImageIO.read((new File("res/gui/canvas512x32.png")).getAbsoluteFile()));
         list.put("canvas512x128", ImageIO.read((new File("res/gui/canvas512x128.png")).getAbsoluteFile()));
+        list.put("canvas512x512", ImageIO.read((new File("res/gui/canvas512x512.png")).getAbsoluteFile()));
 
     }
 
