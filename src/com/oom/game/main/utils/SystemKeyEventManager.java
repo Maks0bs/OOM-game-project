@@ -1,8 +1,9 @@
 package com.oom.game.main.utils;
 
-import gameCore.eventSystem.IEvent;
-import gameCore.eventSystem.IEventListener;
-import gameCore.eventSystem.IEventManager;
+
+import com.oom.game.main.gameCore.eventSystem.IEvent;
+import com.oom.game.main.gameCore.eventSystem.IEventListener;
+import com.oom.game.main.gameCore.eventSystem.IEventManager;
 
 import java.util.ArrayList;
 

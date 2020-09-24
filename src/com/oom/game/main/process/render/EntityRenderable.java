@@ -5,9 +5,9 @@ import com.oom.game.main.entities.Entity;
 import com.oom.game.main.entities.NPC;
 import com.oom.game.main.entities.utils.EntityTextures;
 import com.oom.game.main.environment.Position;
+import com.oom.game.main.gameCore.Renderer;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
-import gameCore.Renderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

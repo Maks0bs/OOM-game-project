@@ -2,10 +2,10 @@ package com.oom.game.main.process.render;
 
 import com.oom.game.main.entities.Creature;
 import com.oom.game.main.environment.World;
+import com.oom.game.main.gameCore.IRenderable;
+import com.oom.game.main.gameCore.IUpdatable;
+import com.oom.game.main.gameCore.Renderer;
 import com.oom.game.main.utils.GameObservable;
-import gameCore.IRenderable;
-import gameCore.IUpdatable;
-import gameCore.Renderer;
 
 /*
     This class has to deal with all system events like key strokes, clicks, etc.

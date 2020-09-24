@@ -3,7 +3,7 @@ package com.oom.game.main.process.render;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.blocks.utils.BlockTextures;
 import com.oom.game.main.environment.utils.Block;
-import gameCore.Renderer;
+import com.oom.game.main.gameCore.Renderer;
 
 import java.awt.image.BufferedImage;
 

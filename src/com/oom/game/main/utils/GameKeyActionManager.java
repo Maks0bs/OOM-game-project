@@ -1,12 +1,11 @@
 package com.oom.game.main.utils;
 
+import com.oom.game.main.gameCore.eventSystem.IEvent;
+import com.oom.game.main.gameCore.eventSystem.IEventListener;
+import com.oom.game.main.gameCore.keyboard.KeyPressedEvent;
+import com.oom.game.main.gameCore.keyboard.KeyReleasedEvent;
 import com.oom.game.main.utils.command.GameCommand;
 import com.oom.game.main.utils.command.NoneCommand;
-import gameCore.eventSystem.IEvent;
-import gameCore.eventSystem.IEventListener;
-import gameCore.input.keyboard.KeyPressedEvent;
-import gameCore.input.keyboard.KeyReleasedEvent;
-
 import java.util.HashMap;
 import java.util.Map;
 

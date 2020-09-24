@@ -4,10 +4,10 @@ import com.oom.game.main.entities.Entity;
 import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.utils.Block;
+import com.oom.game.main.gameCore.IRenderable;
+import com.oom.game.main.gameCore.Renderer;
 import com.oom.game.main.utils.GameObservable;
 import com.oom.game.main.utils.GameObserver;
-import gameCore.IRenderable;
-import gameCore.Renderer;
 
 /*
     NOTES: this class should invoke updates itself

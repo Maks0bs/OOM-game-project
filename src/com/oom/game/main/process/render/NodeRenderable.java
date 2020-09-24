@@ -1,8 +1,8 @@
 package com.oom.game.main.process.render;
 
 import com.oom.game.main.environment.Position;
-import gameCore.IRenderable;
-import gameCore.Renderer;
+import com.oom.game.main.gameCore.IRenderable;
+import com.oom.game.main.gameCore.Renderer;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;

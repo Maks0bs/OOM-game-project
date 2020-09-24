@@ -14,6 +14,8 @@ import com.oom.game.main.environment.Position;
 import com.oom.game.main.environment.World;
 import com.oom.game.main.environment.blocks.Barrel;
 import com.oom.game.main.environment.blocks.StoneTileFloor;
+import com.oom.game.main.gameCore.Game;
+import com.oom.game.main.gameCore.Renderer;
 import com.oom.game.main.process.render.GUIRenderable;
 import com.oom.game.main.process.render.MainRenderable;
 import com.oom.game.main.process.render.WorldRenderable;
@@ -24,10 +26,8 @@ import com.oom.game.main.utils.command.GameCommand;
 import com.oom.game.main.utils.GameKeyActionManager;
 import com.oom.game.main.utils.SystemKeyEventManager;
 import com.oom.game.main.utils.command.NoneCommand;
-import gameCore.Game;
-import gameCore.Renderer;
 
-import javax.swing.*;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 

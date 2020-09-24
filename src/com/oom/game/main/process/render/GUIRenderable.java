@@ -1,5 +1,7 @@
 package com.oom.game.main.process.render;
 
+import com.oom.game.main.gameCore.IRenderable;
+import com.oom.game.main.gameCore.Renderer;
 import com.oom.game.main.process.Process;
 import com.oom.game.main.entities.items.Axe;
 import com.oom.game.main.entities.items.Backpack;
@@ -11,8 +13,6 @@ import com.oom.game.main.ui.utils.GUITextures;
 import com.oom.game.main.utils.GameKeyActionManager;
 import com.oom.game.main.utils.SerializationFacade;
 import com.oom.game.main.utils.command.GameCommand;
-import gameCore.IRenderable;
-import gameCore.Renderer;
 
 import javax.swing.*;
 import java.awt.*;
