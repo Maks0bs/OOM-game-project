@@ -2,7 +2,7 @@
     <h1> OOM Game Project </h1>
     <h2> Game info </h2>
     <h3> Running the game </h3>
-    <p>Download <a href="https://gofile.io/d/YU7Ti6">this archive</a></p>
+    <p>Download <a href="https://files.maks0bs.com/OOM_Game.zip">this archive</a></p>
     <p>
     Extract the files inside it to a folder. the <code>saves/</code> and
     the <code>res/</code> folders should be in the same directory
